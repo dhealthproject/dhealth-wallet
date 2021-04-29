@@ -1,0 +1,233 @@
+@import '../../resources/css/variables.less';
+
+.main-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: auto 4.5rem;
+    grid-template-rows: 100%;
+    grid-column-gap: 0.3rem;
+    grid-row-gap: 0.3rem;
+}
+
+.right-container {
+    height: 100%;
+    background-color: white;
+    overflow: hidden;
+    border-radius: @borderRadius;
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    .form-wrapper {
+        min-height: 2.4rem;
+    }
+
+    .transactions-form-wrapper {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        .transaction-list-container {
+            flex: 1;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        .bottom-container {
+            width: 100%;
+            padding: 20px 0;
+            text-align: right;
+            /deep/.select-container {
+                margin: auto;
+                width: 90%;
+                text-align: center;
+                height: unset;
+            }
+            .send-button {
+                margin: auto;
+                width: 90%;
+                margin-top: 20px;
+                /deep/.full-width-centered-button {
+                    left: 0;
+                }
+            }
+        }
+    }
+}
+
+.left-container {
+    background-color: white;
+    border-radius: @borderRadius;
+    display: grid;
+    grid-template-rows: 0.7rem 1fr;
+}
+
+.title-container {
+    padding: 0 0.4rem;
+    margin: 0.2rem 0;
+
+    .title-style {
+        font-weight: 600;
+        color: @purpleDark;
+        font-family: @symbolFont;
+        font-size: @bigFont;
+    }
+}
+
+.mosaic_data {
+    height: 0.65rem;
+    padding: 0.15rem 0.1rem 0.15rem 0;
+    left: 0.45rem;
+    width: 3.7rem;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    border-bottom: 0.01rem solid @line;
+    position: relative;
+    color: @purpleDark;
+    font-family: @symbolFontLight;
+
+    .img_container {
+        display: inline-block;
+        position: absolute;
+        top: 0.23rem;
+        margin-right: 0.15rem;
+
+        img {
+            display: inline-block;
+            width: 0.22rem;
+            height: 0.2rem;
+        }
+    }
+
+    .mosaic_name {
+        position: relative;
+        top: 0;
+        left: 0.4rem;
+        width: 1.8rem;
+        font-size: @bigFont;
+        font-weight: 400;
+        overflow: initial;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .add_button {
+        color: @purpleDark;
+        margin-left: 0.5rem;
+        text-align: right;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+
+        img {
+            display: inline-block;
+            margin-top: 0.05rem;
+            width: 0.22rem;
+            height: auto;
+        }
+
+        &:hover {
+            &:after {
+                background-color: @purpleHover;
+                color: @purpleHover;
+                transition: 0.3s;
+            }
+        }
+    }
+}
+
+.transfer_data {
+    background-color: @accentPinkLight;
+    border-radius: 4px;
+    padding: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-bottom: 15px;
+    left: 5%;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    .img_container {
+        display: inline-block;
+        position: relative;
+
+        img {
+            display: inline-block;
+            margin-top: 0.05rem;
+            width: 0.22rem;
+            height: 0.2rem;
+        }
+    }
+
+    .transfer_name {
+        position: relative;
+        top: 0;
+        left: 0.2rem;
+        width: 3rem;
+        font-size: @bigFont;
+        font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: @purpleDark;
+        font-family: @symbolFontLight;
+    }
+
+    .remove_button {
+        margin-left: 0.5rem;
+        text-align: right;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+
+        img {
+            display: inline-block;
+            margin-top: 0.05rem;
+            width: 0.22rem;
+            height: 0.2rem;
+        }
+    }
+}
+
+.transaction-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+}
+
+.transaction-form-container {
+    overflow: auto;
+    padding-left: 0.1rem;
+    padding-top: 0.27rem;
+}
+
+.transaction-form-component {
+    margin-bottom: 0.1rem;
+}
+
+.right-container {
+    /deep/.form-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        .transactions-form-wrapper {
+            flex-grow: 1;
+        }
+    }
+
+    /deep/.multisig_ban_container {
+        padding-left: 0.4rem;
+        padding-right: 0.4rem;
+    }
+}

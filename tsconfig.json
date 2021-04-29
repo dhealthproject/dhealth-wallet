@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "strict": false,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "strictFunctionTypes": false,
+    "allowJs": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "baseUrl": ".",
+    "outDir": "./dist/",
+    "types": [
+      "webpack-env",
+      "jest"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@MOCKS/*": [
+        "__mocks__/*"
+      ]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "__tests__/**/*.ts",
+    "__tests__/**/*.tsx",
+    "__mocks__/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/views/resources/css",
+    "src/views/resources/img"
+  ]
+}

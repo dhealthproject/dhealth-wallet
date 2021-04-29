@@ -1,0 +1,26 @@
+@import '../../../../resources/css/variables.less';
+.create-mnemonic-sec {
+    position: relative;
+    width: 100%;
+
+    .set-title {
+        color: @purpleDark;
+    }
+
+    .buttons-container {
+        justify-content: flex-end;
+
+        .import-qr-button {
+            width: auto;
+            display: none;
+        }
+    }
+}
+
+/deep/.validation-create-button {
+    border: none;
+}
+
+.form {
+    padding: 5% 5% !important;
+}

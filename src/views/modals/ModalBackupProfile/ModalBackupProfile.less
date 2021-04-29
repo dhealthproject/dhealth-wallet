@@ -1,0 +1,83 @@
+/*
+ * Copyright 2020 NEM (https://nem.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+@import '../../resources/css/variables.less';
+
+.body {
+    width: 85%;
+    margin: 0 auto;
+    .explain {
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+        font-size: @normalFont;
+
+        .subtitle {
+            color: @primary;
+            font-weight: @boldest;
+        }
+
+        p {
+            line-height: 1.7em;
+            color: @primary;
+            font-size: @bigFont;
+            margin-top: 2em;
+            margin-bottom: 1em;
+            text-align: justify;
+        }
+    }
+}
+
+/deep/.ivu-modal {
+    width: 11rem !important;
+}
+
+.modal-footer {
+    width: 100%;
+    text-align: center;
+}
+
+/deep/.ivu-modal-footer {
+    height: max-content;
+    padding-bottom: 0.5rem;
+}
+
+.download-button {
+    height: max-content !important;
+    padding: 0.1rem 0.21rem 0.1rem 0.2rem;
+    display: inline-flex;
+
+    /deep/.ivu-load-loop {
+        margin-right: 0.06rem;
+    }
+
+    /deep/span {
+        display: flex;
+        align-items: center;
+        i {
+            padding-right: 0.08rem;
+            font-size: 0.17rem !important;
+        }
+    }
+}
+
+.download-button:hover,
+.download-button:active {
+    color: white;
+    border-color: white;
+}
+
+.download-button:focus {
+    box-shadow: none;
+}

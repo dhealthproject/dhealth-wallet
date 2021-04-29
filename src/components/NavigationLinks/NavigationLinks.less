@@ -1,0 +1,91 @@
+@import '../../views/resources/css/variables.less';
+
+.vertical {
+    .symbol-tab-nav {
+        height: 0.75rem;
+        display: table;
+        width: 100.5%;
+
+        .nav-item {
+            padding-left: 0.3rem;
+            font-size: @normalFont;
+            font-weight: 400;
+            color: @primary;
+            cursor: pointer;
+            display: table-cell;
+            vertical-align: middle;
+
+            &.active-item {
+                color: @primary;
+                font-family: @symbolFontSemiBold;
+            }
+        }
+        &.active-item {
+            background-color: #f3f4f8;
+        }
+    }
+}
+
+.horizontal {
+    display: grid;
+    grid-template-columns: auto;
+    grid-auto-flow: column;
+    justify-items: start;
+    justify-content: start;
+    background-color: transparent;
+
+    .empty {
+        display: flex;
+        height: 100%;
+        width: 100%;
+    }
+
+    .nav-item {
+        font-size: @bigFont;
+        position: relative;
+        font-weight: 600;
+        cursor: pointer;
+        height: 0.2rem;
+        padding: 0 0.4rem;
+        margin: 0.2rem 0;
+        line-height: 0.2rem;
+        text-align: center;
+        color: @grayLight;
+        img {
+            height: 0.2rem;
+            width: 0.2rem;
+            margin-top: 0.02rem;
+            display: inline-block;
+        }
+        &.active-item {
+            color: @primary;
+            font-family: @symbolFontSemiBold;
+        }
+        &.inactive-item {
+            color: @grayLight;
+            font-family: @symbolFont;
+            font-weight: 500;
+        }
+    }
+    .border {
+        border-left: 2px solid @primary;
+    }
+
+    .active-item {
+        color: @primary;
+        font-weight: 500;
+        cursor: not-allowed !important;
+    }
+
+    .active-item:after {
+        display: block;
+        position: absolute;
+        width: 0.3rem;
+        height: 0.04rem;
+        background: unset;
+        content: '';
+        left: -0.15rem;
+        margin-left: 50%;
+        bottom: 0;
+    }
+}

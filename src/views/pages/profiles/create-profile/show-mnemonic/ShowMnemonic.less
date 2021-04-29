@@ -1,0 +1,169 @@
+/*
+ * Copyright 2020 NEM (https://nem.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+
+@import '../../../../resources/css/variables.less';
+
+.create-mnemonic-sec {
+    position: relative;
+    width: 100%;
+
+    .create-mnemonic-col {
+        .create-mnemonic-left {
+            width: 100%;
+
+            .show-mnemonic {
+                width: 100%;
+                height: 260px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+
+                img {
+                    width: 60px;
+                    margin-bottom: 10px;
+                }
+
+                button {
+                    width: auto;
+                    margin-left: 0;
+                    margin-bottom: 0.2rem;
+                }
+            }
+
+            .button-container {
+                width: 100%;
+                clear: both;
+
+                .download-button:hover,
+                .download-button:active {
+                    color: white;
+                    border-color: white;
+                }
+            }
+        }
+
+        .create-mnemonic-right {
+            width: 100%;
+
+            /deep/.ivu-alert {
+                .ivu-alert-message {
+                    font-size: 0.22rem;
+                }
+
+                .ivu-alert-icon {
+                    font-size: 0.4rem;
+                    top: 0.25rem;
+                    left: 0.05rem;
+                }
+
+                &.ivu-alert-warning {
+                    background-color: transparent;
+                    border: 1px solid rgba(51, 51, 51, 0.2);
+                }
+
+                &.ivu-alert-success {
+                    background-color: transparent;
+                    border: 1px solid rgba(51, 51, 51, 0.2);
+                }
+
+                &.ivu-alert-with-desc.ivu-alert-with-icon {
+                    padding: 0.16rem 0.16rem 0.16rem 0.49rem;
+                }
+            }
+        }
+    }
+
+    .mnemonic-container {
+        padding-top: 5px;
+        height: 260px;
+        border: 1px solid rgba(51, 51, 51, 0.2);
+        border-radius: 5px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        position: relative;
+        .copy-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+
+            img {
+                height: 0.2rem;
+                width: 0.2rem;
+            }
+        }
+    }
+
+    .mnemonic-container > div:first-child {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .mnemonic-list {
+        padding: 10px;
+
+        span {
+            display: inline-block;
+            background-color: #d3d3d3;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin: 5px;
+            font-size: @smallFont;
+            color: @purpleDark;
+        }
+    }
+
+    .mnemonic-qrcode {
+        padding: 0.05rem 0.1rem;
+        text-align: center;
+
+        img {
+            width: 2rem;
+        }
+    }
+
+    .mnemonic-backup-options-desc {
+        display: grid;
+        grid-template-columns: 2.8rem 1.5rem;
+        column-gap: 0.1rem;
+
+        .ivu-icon {
+            font-size: 0.48rem;
+            color: @grayDark;
+        }
+
+        span {
+            margin: 0.1rem 0.05rem 0 0;
+            flex-direction: column;
+
+            p {
+                text-align: left;
+            }
+        }
+    }
+}
+.set-title-create {
+    color: #44004e;
+    font-size: 0.25rem;
+    font-family: 'noto-sans-semibold';
+    margin-bottom: 20px;
+}
+.clipboard-icon {
+    width: 25px;
+    margin-left: 10px;
+}

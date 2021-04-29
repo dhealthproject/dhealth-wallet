@@ -1,0 +1,52 @@
+@import '../../views/resources/css/variables.less';
+
+.button-container {
+    display: flex;
+    align-items: center;
+}
+
+.node-selector-container {
+    padding-top: 0;
+}
+
+.network-text {
+    color: @primary;
+    font-size: @smallFont;
+    margin-right: 10px;
+}
+
+.node-list-container {
+    margin-top: 0;
+
+    .node-list-head {
+        font-size: @smallFont;
+        color: @primary;
+        font-weight: 500;
+    }
+
+    .node-list-content {
+        border: none !important;
+        border: 0.02rem solid @line;
+        height: 2.5rem;
+        padding: 0.1rem 0;
+
+        ul {
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 100%;
+            position: relative;
+        }
+
+        .list-item {
+            font-size: @smallerFont;
+            color: @grayDark;
+            padding: 0.04rem 0.22rem;
+            width: 100%;
+            overflow: hidden;
+        }
+    }
+}
+
+.contact-selector {
+    -webkit-app-region: no-drag;
+}

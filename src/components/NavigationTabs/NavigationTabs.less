@@ -1,0 +1,103 @@
+/*
+ * Copyright 2020 NEM (https://nem.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+
+@import '../../views/resources/css/variables.less';
+.tabs {
+    border-bottom: none;
+}
+.horizontal {
+    display: grid;
+    grid-template-columns: auto;
+    grid-auto-flow: column;
+    justify-items: start;
+    justify-content: start;
+    height: 100%;
+    width: fit-content;
+    background-color: transparent;
+
+    .tab-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: @bigFont;
+        position: relative;
+        font-weight: 500;
+        cursor: pointer;
+        height: 0.2rem;
+        width: auto;
+        padding: 0 0.4rem;
+        margin: 0.2rem 0;
+        line-height: 0.2rem;
+        text-align: center;
+        color: @purpleDark;
+        opacity: 0.5;
+
+        img {
+            height: 0.15rem;
+            width: 0.15rem;
+            display: inline-block;
+        }
+
+        .tab-icon {
+            margin: auto;
+            margin-right: 1em;
+        }
+    }
+    .tab-item:not(:first-child) {
+        border-left: 2px solid @primary;
+    }
+
+    .active {
+        color: @purpleDark;
+        opacity: 1;
+        font-weight: 600;
+        cursor: default !important;
+    }
+
+    .active:after {
+        display: block;
+        position: absolute;
+        width: 0.3rem;
+        height: 0.04rem;
+        background: unset;
+        content: '';
+        left: -0.15rem;
+        margin-left: 50%;
+        bottom: 0;
+    }
+}
+
+.vertical {
+    display: grid;
+    grid-template-columns: auto;
+    padding-top: 70px;
+
+    .tab-item {
+        padding-bottom: 0.35rem;
+        font-size: 18px;
+        font-weight: 400;
+        color: @grayLight;
+        cursor: pointer;
+        padding-left: 80px;
+    }
+
+    .active {
+        font-size: 18px;
+        font-weight: 700;
+        color: @primary;
+        cursor: not-allowed !important;
+    }
+}

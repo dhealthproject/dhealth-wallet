@@ -1,0 +1,70 @@
+/*
+ * Copyright 2020 NEM (https://nem.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+@import '../../views/resources/css/variables.less';
+
+.select-style {
+    padding: 0 !important;
+    background: transparent;
+}
+
+/deep/ .ivu-select-arrow {
+    right: 0.32rem !important;
+}
+
+/deep/ .ivu-select-selection div {
+    display: flex;
+    align-items: center;
+
+    .ivu-select-prefix {
+        display: inline-flex !important;
+        padding: 0;
+    }
+}
+
+.navbar-icon {
+    display: inline;
+    margin-right: 10px;
+    width: 0.15rem;
+    height: 0.15rem;
+}
+
+.min-width {
+    /deep/.ivu-select-dropdown {
+        min-width: 1.6rem !important;
+    }
+}
+
+/deep/.ivu-select-dropdown {
+    background-color: @grayLightest !important;
+    left: auto !important;
+
+    .ivu-select-item-selected {
+        color: @primary !important;
+        background-color: @grayLightest !important;
+    }
+
+    .ivu-select-item-selected:hover {
+        background-color: @grayLightest !important;
+    }
+}
+
+/deep/ .ivu-select-item:hover {
+    background-color: @white !important;
+}
+
+/deep/ .select-style {
+    left: auto !important;
+}

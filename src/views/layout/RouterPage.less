@@ -1,0 +1,109 @@
+/*
+ * Copyright 2020 NEM (https://nem.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+@import './PageLayout/PageLayout.less';
+
+.page-wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 20px 70px 35px;
+    overflow-y: auto;
+    margin-left: -50px;
+    width: 100vw;
+
+    /deep/.step-bar-container {
+        padding-bottom: 70px;
+        position: relative;
+        width: 1500px;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .step-text-container {
+            width: 1500px;
+            position: absolute;
+
+            span {
+                font-size: 20px;
+                line-height: 55px;
+                display: inline-block;
+                text-align: center;
+            }
+        }
+    }
+
+    /deep/.form-input-item {
+        font-size: 20px;
+
+        input {
+            width: 850px;
+            height: 42px;
+            margin-top: 10px;
+        }
+
+        margin-top: 20px;
+    }
+
+    /deep/.white {
+        color: white;
+    }
+
+    /deep/.gray {
+        color: #888888;
+    }
+
+    /deep/.text1 {
+        color: #44004e;
+        font-size: 0.25rem;
+        font-family: 'noto-sans-semibold';
+        margin-bottom: 20px;
+    }
+
+    /deep/.text {
+        color: #44004e;
+        font-size: 18px;
+        margin-bottom: 2%;
+    }
+
+    /deep/.red {
+        color: rgba(255, 80, 67);
+    }
+
+    /deep/.inner-container {
+        width: 90%;
+        height: 95%;
+        overflow: hidden;
+        background-color: white;
+        padding: 0 40px 0 0;
+    }
+
+    /deep/.set-title {
+        margin-top: 30px;
+        height: 30px;
+        font-size: 0.26rem;
+        font-weight: 600;
+        margin-bottom: 19px;
+    }
+    //unused
+    .set-title-tips {
+        width: 850px;
+        font-size: 0.22rem;
+        color: rgba(136, 136, 136);
+    }
+}

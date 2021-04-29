@@ -1,0 +1,873 @@
+/*
+ * Copyright 2020 NEM (https://nem.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+
+@import 'variables';
+
+@formFieldHeight: 0.3rem;
+@formLabelWidth: 1.9rem;
+@formInputsWidth: 8rem;
+
+/*************************************************************
+ * Components
+ *************************************************************/
+.form-wrapper {
+    display: block;
+    position: relative;
+    max-width: @formLabelWidth + @formInputsWidth;
+}
+
+.select-container {
+    display: grid;
+    position: relative;
+    height: @formFieldHeight;
+}
+
+.input-container {
+    display: grid;
+    position: relative;
+    height: @formFieldHeight;
+}
+
+.rows-scroll-container {
+    max-height: @formFieldHeight * 10;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.rows-scroll-container.mt-0 {
+    .form-row {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+.form-row {
+    min-height: @formFieldHeight;
+    display: block;
+    width: @formLabelWidth + @formInputsWidth;
+    clear: both;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+
+    .input-size {
+        // width: @formInputsWidth;
+        width: 100%;
+        height: 100%;
+    }
+    .select-size {
+        width: 100%;
+        height: @formFieldHeight;
+    }
+    .auto-complete-size {
+        width: @formInputsWidth;
+        height: 100%;
+    }
+    .textarea-size {
+        width: @formInputsWidth;
+        height: 100%;
+    }
+
+    .form-row-inner-container {
+        display: grid;
+        width: 100%;
+        align-items: center;
+        height: 100%;
+        min-height: @formFieldHeight;
+        grid-template-columns: @formLabelWidth @formInputsWidth;
+    }
+
+    .form-row-inner-container-value-only {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        min-height: @formFieldHeight;
+        grid-template-columns: @formInputsWidth;
+    }
+
+    .form-row-vertical {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.form-label-container {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    text-align: right;
+    overflow: hidden;
+    align-items: center;
+    text-transform: capitalize;
+    word-spacing: 0px;
+
+    .form-label {
+        padding-left: 0.7rem;
+        font-style: normal;
+        font-weight: 500;
+        font-size: @bigFont;
+        font-family: @symbolFont;
+        line-height: 25px;
+        align-items: center;
+        text-align: left;
+        color: @purpleDark;
+    }
+
+    .form-label-description {
+        .label-description {
+            font-size: @smallFont;
+            color: @grayLight;
+        }
+    }
+}
+
+.gray-background {
+    background-color: @grayLight;
+}
+
+.accent-pink-background {
+    background-color: @accentPinkLight;
+}
+
+.green-background {
+    background-color: @accentGreenLight;
+}
+
+.red-background {
+    background-color: @redLight;
+}
+
+// FormRow modifiers classes
+.emphasis {
+    .form-label-container {
+        font-weight: @boldest;
+        color: @purpleDark;
+        border-radius: 4px 0 0 4px;
+    }
+}
+
+// FormRow inputs containers
+.row-centered-message {
+    display: grid;
+    align-items: center;
+    text-align: center;
+    font-size: @smallFont;
+    font-weight: @bolder;
+    color: @secondary;
+}
+
+.action-link {
+    a {
+        font-size: @normalFont;
+        color: @purpleDark;
+    }
+}
+
+.row-left-message {
+    display: grid;
+    align-items: center;
+    text-align: left;
+    font-size: @bigFont;
+    color: @purpleDark;
+    font-family: @symbolFontLight;
+    padding-top: 0.04rem;
+}
+
+.inline-field-description {
+    display: grid;
+    align-items: center;
+    text-align: left;
+    font-size: @smallFont;
+    color: @purpleDark;
+    font-style: italic;
+    height: 100%;
+}
+
+.row-75-25 {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 75% 25%;
+    grid-template-rows: 100%;
+}
+
+.signer-selector-single-signer-container {
+    height: @formFieldHeight;
+    line-height: @formFieldHeight;
+    width: 100%;
+    display: block;
+    font-size: @smallFont;
+    color: @purpleDark;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 0.2rem;
+    padding-right: 0.24rem;
+    border-radius: 0.04rem;
+    background-color: @grayLightest;
+}
+
+.row-mosaic-attachment-input {
+    display: grid;
+    width: 100%;
+    height: @formFieldHeight !important;
+    grid-template-columns: 55% 42.5%;
+    grid-template-rows: 100%;
+    position: relative;
+}
+
+.row-mosaic-attachment-display {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 55% auto 0.4rem;
+    grid-template-rows: 100%;
+}
+
+.row-cosignatory-modification-display {
+    display: grid;
+    width: 100%;
+    height: @formFieldHeight !important;
+    grid-template-columns: auto 0.2rem;
+    grid-template-rows: 100%;
+    font-size: 0.9em;
+    padding-left: 0.05rem;
+    font-weight: 400;
+    font-color: @purpleDark;
+
+    .cosignatory-removed {
+        text-decoration: line-through;
+    }
+}
+
+.row-cosignatory-modification-display.link {
+    display: flex;
+    justify-content: flex-end;
+    width: 82%;
+}
+
+.row-cosignatory-modification-display.empty-message {
+    display: flex;
+    justify-content: center;
+    width: 97%;
+    color: @purpleDark;
+    font-size: 0.9em;
+    font-weight: 400;
+}
+
+.row-cosignatory-modification-display-cosignature {
+    display: grid;
+    width: 100%;
+    height: @formFieldHeight !important;
+    grid-template-columns: 0.2 auto;
+    grid-template-rows: 100%;
+    font-size: @normalFont;
+    margin-left: 0.2rem;
+    padding-left: 0.05rem;
+}
+
+.row-approval-and-removal-input {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 55% auto;
+    grid-template-rows: 100%;
+}
+
+.row-cosignatory-action {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: auto 0.8rem;
+    grid-template-rows: 100%;
+}
+
+.cosignatory-address-container {
+    color: @purpleDark;
+}
+
+.submit-button {
+    width: 100% !important;
+}
+
+.align-right {
+    text-align: right;
+    text-align-last: right;
+}
+
+.inputs-container {
+    align-items: center;
+    width: 100%;
+    height: @formFieldHeight;
+
+    .ivu-tooltip {
+        width: 100%;
+        height: @formFieldHeight;
+        border-radius: 0.04rem;
+        background: #f2f2f2;
+        .ivu-tooltip-rel {
+            width: 100%;
+            height: @formFieldHeight;
+            border: none;
+            outline: none;
+        }
+    }
+    .display-value {
+        padding-top: 0.01rem;
+    }
+}
+
+.input-style {
+    height: @formFieldHeight;
+    border: none;
+    outline: none;
+    padding-left: 0.2rem;
+    padding-right: 0.15rem;
+    font-size: @smallFont;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 0.04rem;
+    &:-webkit-autofill::first-line {
+        font-size: @smallFont;
+        font-family: @symbolFontLight;
+    }
+}
+
+.textarea-style {
+    outline: none;
+    padding: 0.06rem 0.2rem;
+    font-size: @smallFont;
+    border-radius: 0.04rem;
+    background-color: @grayLightest;
+    overflow-y: hidden;
+}
+
+.ivu-select-dropdown {
+    background-color: @grayLightest;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    .ivu-select-item-selected {
+        color: @primary;
+    }
+
+    .ivu-select-item:hover {
+        background-color: @white;
+    }
+}
+
+.ivu-select-placeholder {
+    font-size: @smallFont;
+    padding-left: 0;
+    height: @formFieldHeight;
+    line-height: @formFieldHeight;
+    color: #c1b4b4 !important;
+}
+
+.ivu-select-selection {
+    box-shadow: unset !important;
+    border: unset;
+    background: @grayLightest;
+    border-radius: 3.4px;
+}
+
+.ivu-select-selected-value {
+    font-size: @smallFont !important;
+    padding-left: 0.16rem !important;
+    height: @formFieldHeight;
+    line-height: @formFieldHeight;
+    color: @purpleDark;
+}
+
+.select-style {
+    height: @formFieldHeight;
+    line-height: @formFieldHeight;
+    display: block;
+    font-size: @smallFont !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 0.24rem;
+    border-radius: 0.04rem;
+    background: @grayLightest;
+    border-radius: 3.42857px;
+}
+
+.ivu-checkbox {
+    line-height: unset;
+}
+
+.ivu-checkbox-inner {
+    background: @grayLightest;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+}
+
+.ivu-checkbox-checked {
+    background-color: white !important;
+
+    .ivu-checkbox-inner {
+        background: @primary;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+        border-radius: 2px;
+        border: none;
+    }
+}
+
+.auto-complete-style {
+    height: @formFieldHeight;
+    border-radius: 0.04rem;
+    padding: 0 0.2rem;
+    line-height: 1.5;
+    color: @selectedValue;
+    background-image: none;
+    cursor: text;
+    transition: border 0.2s ease-in-out, background 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background: #f2f2f2;
+    border-radius: 3.42857px;
+
+    .ivu-input {
+        height: 0.4rem;
+        font-size: @smallFont;
+        border-bottom: unset;
+        padding: 0;
+        background: #f2f2f2;
+        border-radius: 3.42857px;
+    }
+}
+
+// Styles common to all buttons
+.button-style {
+    text-align: center;
+
+    height: @formFieldHeight !important;
+    display: inline-block;
+    // width: auto !important;
+    font-size: @normalFont;
+    font-weight: bold;
+    border-radius: @buttonBorderRadius;
+    cursor: pointer;
+}
+
+.round-button {
+    color: @primary;
+    background-color: @white;
+    font-size: 0.3rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.validation-button {
+    border: 2px solid @primary;
+    background: @primary;
+    color: @white;
+}
+
+.validation-button:disabled {
+    border: 2px solid @grayLight;
+    background: @grayLight;
+    color: @grayDark;
+}
+
+/*
+.validation-button:hover:enabled {
+    background-color: @purple !important;
+    color: @white !important;
+    opacity: 0.8 !important;
+}
+*/
+
+.solid-button {
+    border: none;
+    background-color: none;
+    position: relative;
+    background-color: @primary;
+    color: white;
+    letter-spacing: 0.05em;
+    padding-top: 0.05em;
+    font-weight: 700;
+    z-index: 1;
+}
+
+.solid-button:hover {
+    background-color: @purpleHover;
+}
+
+.inverted-button {
+    border: none;
+    background-color: none;
+    position: relative;
+    background: linear-gradient(315.55deg, #44004e -1.68%, #5200c6 110.7%);
+    color: white;
+    letter-spacing: 0.05em;
+    padding-top: 0.05em;
+    font-weight: 700;
+    z-index: 1;
+    transition: background 0.5s linear;
+}
+
+.inverted-button:hover {
+    background: linear-gradient(315.55deg, lighten(#44004e, 10%) -1.68%, lighten(#5200c6, 10%) 110.7%);
+}
+
+.fat-button {
+    padding-left: 1em;
+    padding-right: 1em;
+    height: 0.47rem !important;
+}
+
+.full-width-centered-button {
+    width: 100%;
+    left: 5%;
+    align-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.inverted-button:disabled {
+    background: @grayLight;
+    color: @grayDark;
+}
+
+.back-button {
+    background: @grayDark;
+    color: @white;
+    border: 2px solid @grayDark;
+}
+
+.danger-button {
+    border: none;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    background-image: none;
+    background: none;
+    background-color: transparent;
+    color: @pink;
+    border: 2px solid @pink !important;
+}
+
+.danger-button:hover {
+    background-image: none;
+    background: none;
+    background-color: @pink;
+    color: white;
+    transition: 0.5s;
+}
+
+.danger-button:disabled {
+    border: 2px solid @grayLight !important;
+    color: @grayDark;
+    cursor: not-allowed;
+}
+
+.danger-button:disabled:hover {
+    background-color: transparent;
+}
+
+.secondary-outline-button {
+    background-color: white;
+    border: 0.02rem solid @purpleDark;
+    color: @purpleDark;
+    border-radius: 0.04rem;
+    padding: 0 0.15rem;
+    margin-right: 0.3rem;
+    cursor: pointer;
+    height: 0.3rem;
+    font-weight: 700;
+    font-size: 0.16rem;
+    letter-spacing: 0.05em;
+}
+
+.secondary-outline-button:hover {
+    background-color: @purpleDark;
+    color: white;
+    transition: 0.5s;
+}
+
+/*
+.back-button:hover {
+    box-shadow: 0 0 0.1rem @grayLight;
+    background-color: @grayLight !important;
+    color: #333 !important;
+    opacity: 0.8 !important;
+}
+*/
+
+.text-button {
+    border-color: transparent;
+    background: transparent;
+}
+
+.remove-button {
+    color: @red;
+}
+
+.button-add {
+    display: grid;
+}
+
+.right-side-button {
+    display: inline;
+    margin-left: 10px;
+}
+
+.left-side-button {
+    display: inline;
+}
+
+.right-side-round-button {
+    display: flex;
+    margin-left: 10px;
+}
+
+.form-headline {
+    margin-top: 0.1rem;
+    height: 0.5rem;
+    font-size: @biggestFont;
+    font-weight: 600;
+    margin-bottom: 0.1rem;
+}
+
+.form-text {
+    color: @grayDark;
+}
+
+/*************************************************************
+ * Containers
+ *************************************************************/
+.clearfix {
+    display: block;
+    width: 100%;
+    float: left;
+    clear: both;
+}
+
+.form-container {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.14rem;
+}
+
+.form-line-container {
+    display: block;
+    float: left;
+    clear: both;
+    width: 100%;
+    margin: 0.1rem 0;
+
+    .inline-container {
+        display: inline-flex;
+    }
+}
+
+.half-split-container {
+    display: grid;
+    width: 100%;
+    height: auto;
+    grid-template-columns: 50% 50%;
+    grid-column-gap: 0.1rem;
+}
+
+.half-width-item-container {
+    .right-item {
+        margin-left: 0.2rem;
+    }
+    .input-size {
+        width: 2.9rem;
+    }
+    .select-size {
+        width: 2.9rem;
+
+        .ivu-select-dropdown {
+            width: 2.9rem;
+            left: 1px !important;
+        }
+    }
+    .auto-complete-size {
+        width: 2.9rem;
+    }
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.float-right {
+    display: flex;
+    float: right;
+}
+
+// icons
+.delete-icon {
+    background-image: url('../img/account/account-detail/accountDetailsDelete.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    margin-top: 0.05rem;
+    float: right;
+    cursor: pointer;
+}
+
+.delete-mosaic-container {
+    position: absolute;
+    right: -0.3rem;
+    top: 0;
+    height: 100%;
+    display: grid;
+    align-items: center;
+    text-align-last: right;
+    justify-items: right;
+}
+
+.delete-mosaic-icon {
+    background-image: url('../img/account/account-detail/accountDetailsDelete.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: block;
+}
+
+.delete-icon:hover {
+    background-image: url('../img/account/account-detail/accountDetailsDeleteHover.png');
+}
+
+.modification-type-icon {
+    color: @primary;
+    font-size: 0.45rem;
+}
+
+// margin
+.mx-1 {
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+}
+
+.mt-3 {
+    margin-top: 0.15rem;
+}
+
+.ml-2 {
+    margin-left: 0.2rem;
+}
+
+// padding
+.pl-2 {
+    padding-left: 0.2rem;
+}
+
+.pl-4 {
+    padding-left: 0.4rem;
+}
+
+.pr-2 {
+    padding-right: 0.2rem;
+}
+.ivu-modal {
+    .form-wrapper {
+        max-width: 100%;
+    }
+    .form-row {
+        width: 100%;
+    }
+    .form-row-inner-container {
+        grid-template-columns: 28% 55%;
+        .form-label-container {
+            padding: 0;
+        }
+        .inputs-container {
+            padding-left: 0.1rem;
+        }
+    }
+}
+.icon-left-button {
+    width: 0.15rem;
+    height: 0.15rem;
+    color: @purpleDark;
+    margin-right: 10px;
+}
+
+.form-create-headline {
+    color: @purpleDark;
+    font-size: 25px;
+    font-family: @symbolFontSemiBold;
+    padding-left: 0.7rem;
+}
+
+.inputs-create-container {
+    align-items: center;
+    height: @formFieldHeight;
+
+    .ivu-tooltip {
+        width: 100%;
+        height: @formFieldHeight;
+        border-radius: 0.04rem;
+        background: #f2f2f2;
+        .ivu-tooltip-rel {
+            width: 100%;
+            height: @formFieldHeight;
+            border: none;
+            outline: none;
+        }
+    }
+    .display-value {
+        padding-top: 0.01rem;
+    }
+}
+
+.create-account-style {
+    margin-left: 0.15rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+}
+
+.back-create-button {
+    color: white;
+    background: @purpleDark;
+    border: none;
+}
+
+.validation-create-button {
+    border: 2px solid @primary;
+    background: linear-gradient(315.55deg, #44004e -1.68%, #5200c6 110.7%);
+    color: @white;
+}
+
+.validation-create-button:hover {
+    background: linear-gradient(315.55deg, lighten(#44004e, 10%) -1.68%, lighten(#5200c6, 10%) 110.7%);
+}
+
+.auto-complete-style .ivu-input {
+    height: @formFieldHeight;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0;
+}

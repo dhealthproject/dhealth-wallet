@@ -1,0 +1,48 @@
+@import '../../../views/resources/css/variables.less';
+
+.transaction-header-container {
+    display: grid;
+    padding-top: 0.1rem;
+    padding-left: 3%;
+    width: 100%;
+    grid-template-rows: 100%;
+    font-size: @normalFont;
+    text-align: left;
+    background-color: white;
+    font-family: @symbolFontMedium !important;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 0.01rem solid @line;
+
+    .address-header {
+        text-align: left;
+        line-height: 0.35rem;
+        margin-left: 0.5em;
+    }
+
+    .amount-header {
+        text-align: center;
+        line-height: 0.35rem;
+    }
+
+    .confirmation-header {
+        text-align: center;
+        line-height: 0.35rem;
+    }
+
+    .hash-header {
+        text-align: left;
+        line-height: 0.35rem;
+    }
+
+    span {
+        font-size: @normalFont;
+        color: @purpleDark;
+        font-weight: normal;
+    }
+
+    .account {
+        padding-left: 0.7rem;
+    }
+}

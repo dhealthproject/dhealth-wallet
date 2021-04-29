@@ -1,0 +1,295 @@
+/*
+ * Copyright 2020 NEM (https://nem.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+@import '../../resources/css/variables.less';
+
+.main-outer-container {
+    margin: 0 50px;
+    height: calc(100% - 200px);
+}
+
+/deep/ .logo-container {
+    img {
+        padding: 0.225rem !important;
+    }
+}
+
+.wrap {
+    height: 100vh;
+    .alert {
+        margin-left: 50%;
+        left: -380px;
+        top: 10px;
+        position: absolute;
+        z-index: 999999999;
+        min-width: 765px;
+        font-size: 16px;
+        line-height: 40px;
+        color: #eee;
+        text-align: center;
+        height: 55px;
+
+        i {
+            position: relative;
+            bottom: 2px;
+            font-size: 20px;
+        }
+    }
+
+    .alert.success_alert {
+        color: #000;
+    }
+
+    .error_alert {
+        background-color: #cc3835;
+        border: 1px solid #cc3835;
+    }
+
+    .warning_alert {
+        background-color: #fd8c4a;
+        border: 1px solid #fd8c4a;
+    }
+
+    .point {
+        -webkit-app-region: no-drag;
+    }
+    //unused
+    .input_point {
+        padding-top: 20px;
+
+        .connection_letter {
+            font-size: 18px;
+            color: #ddd;
+            letter-spacing: 2px;
+        }
+
+        input {
+            width: 100%;
+            border-bottom: 1px solid @border;
+            padding-left: 10px;
+            margin-right: 20px;
+            padding-bottom: 5px;
+        }
+
+        input::placeholder {
+            font-size: 16px;
+        }
+
+        .reset-icon,
+        .sure_button {
+            display: inline-block;
+            text-align: center;
+            font-size: 35px;
+            line-height: 40px;
+            height: 40px !important;
+            width: 40px !important;
+            background-color: @purpleLight;
+            color: white;
+            justify-self: center;
+        }
+        .reset-icon:hover,
+        .sure_button:hover {
+            box-shadow: 0 0 10px @purpleLight;
+        }
+        .reset-icon {
+            font-size: 25px;
+            i {
+                height: 40px !important;
+                width: 40px !important;
+                background-color: transparent !important;
+            }
+            i:before {
+                right: 8px;
+            }
+        }
+    }
+    //unused
+    .node_list_container {
+        max-height: 160px;
+    }
+    //unused
+    .node_list {
+        max-height: 250px;
+
+        .ivu-input {
+            border: none;
+        }
+    }
+    //unused
+    .point_item {
+        margin: 10px 20px;
+        padding-right: 30px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        position: relative;
+
+        img {
+            width: 15px;
+            height: 15px;
+            margin-right: 10px;
+        }
+
+        span {
+            text-align: left;
+            //width: 500px;
+            font-size: 20px;
+        }
+    }
+
+    .top_window {
+        flex: 1;
+        background-color: transparent;
+        padding: 0.38rem;
+        font-size: @minimumFont;
+
+        .navbar-item {
+            margin: 0 15px;
+        }
+
+        /deep/.navbar-item {
+            line-height: 1.5 !important;
+        }
+
+        /deep/.debug-console-trigger  {
+            color: @purpleDark;
+            font-size: @smallFont !important;
+            cursor: pointer;
+        }
+
+        /deep/.trigger-importqr {
+            color: @purpleDark;
+        }
+
+        .debug-console-trigger-icon {
+        }
+
+        /deep/.ivu-icon {
+            color: @purpleDark;
+        }
+
+        /deep/.ivu-select-selection {
+            background-color: transparent;
+            border: none;
+            box-shadow: none;
+            height: auto !important;
+            .ivu-select-placeholder,
+            .ivu-select-selected-value {
+                font-size: @normalFont !important;
+                color: @purpleDark;
+                padding: 0 !important;
+            }
+            i::before {
+                display: none;
+            }
+        }
+
+        /deep/.ivu-select-selection {
+            line-height: 1.5 !important;
+            height: 1.5 !important;
+            color: @purpleDark;
+        }
+    }
+
+    .right_content {
+        width: 100%;
+        height: 100%;
+    }
+
+    .fade-enter-active {
+        transition: all 0.2s ease;
+        -webkit-transition: all 0.2s ease;
+    }
+
+    .fade-leave-active {
+        transition: all 0.3s ease;
+        -webkit-transition: all 0.3s ease;
+    }
+
+    .fade-enter {
+        transform: translateX(50px);
+        -webkit-transform: translateX(50px);
+        opacity: 0;
+    }
+
+    .fade-leave-active {
+        opacity: 0;
+    }
+
+    .remove_icon {
+        position: absolute;
+        right: -15px;
+    }
+
+    .remove_icon:hover {
+        opacity: 0.5;
+    }
+
+    .ivu-poptip-popper {
+        z-index: 9;
+    }
+
+    /deep/.ivu-select-dropdown-list {
+        .ivu-select-item-focus {
+            background-color: transparent;
+        }
+
+        .ivu-select-item-focus:hover {
+            background-color: #f3f3f3;
+        }
+
+        .ivu-select-item-selected,
+        .ivu-select-item-selected:hover {
+            background-color: #f3f3f3;
+        }
+    }
+
+    .ivu-select-dropdown {
+        z-index: 2147483647 !important;
+    }
+
+    //unused
+    .node-input-container {
+        width: 100%;
+        margin-right: 20px;
+    }
+    .general_view {
+        .footer {
+            height: 100px;
+            margin: 0 50px;
+            display: flex;
+            align-items: center;
+
+            .footer-phrase {
+                color: @purpleDark;
+                font-size: 14px;
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+.trigger-accountlink {
+    font-size: @normalFont !important;
+    color: @purpleDark;
+}
+
+.navbar-icon {
+    display: inline;
+    margin-right: 10px;
+    width: 0.15rem;
+    height: 0.15rem;
+}

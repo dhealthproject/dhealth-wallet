@@ -1,0 +1,102 @@
+/*
+ * Copyright 2020 NEM (https://nem.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+.mnemonic_container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    .mnemonicWordDiv {
+        width: 100%;
+        height: 200px;
+        background: #fff;
+        border: 1px solid #cccccc;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        overflow-y: scroll;
+
+        span {
+            font-size: 14px;
+            color: #44004e;
+            padding: 0.1rem 0.2rem;
+            background: #d3d3d3;
+            margin: 8px;
+            float: left;
+            cursor: pointer;
+            border-radius: 4px;
+
+            .ivu-tag {
+                background: transparent;
+                border: none;
+                font-size: 14px;
+                color: #44004e !important;
+                padding-left: 0px;
+                margin: 0px;
+            }
+            .ivu-tag-text {
+                color: none;
+                font-family: noto-sans-regular;
+            }
+            .ivu-icon {
+                color: #44004e !important;
+            }
+        }
+
+        .ghost {
+            border-left: 6px solid rgb(0, 183, 255);
+            box-shadow: 10px 10px 5px 01px rgba(0, 0, 0, 0.14);
+            opacity: 0.7;
+        }
+    }
+
+    .mnemonicWordDiv::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .wordDiv {
+        width: 100%;
+
+        .confirmed_word {
+            background-color: #44004e;
+            color: white;
+        }
+
+        span {
+            font-size: 16px;
+            font-weight: 400;
+            color: #44004e;
+            background: #d3d3d3;
+            padding: 8px 18px 10px;
+            border-radius: 4px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            float: left;
+            cursor: pointer;
+        }
+    }
+
+    .buttons {
+        width: 70%;
+        button {
+            height: 40px;
+            vertical-align: center;
+        }
+    }
+}
