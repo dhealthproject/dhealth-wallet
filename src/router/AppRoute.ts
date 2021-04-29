@@ -14,19 +14,29 @@
  *
  */
 // external dependencies
-import RouteConfig from 'vue-router';
+import Vue, { ComponentOptions, AsyncComponent } from 'vue'
+import RouteRecordPublic from 'vue-router';
 
 // internal dependencies
 import { RouteMeta } from './RouteMeta';
 
+type Component = ComponentOptions<Vue> | typeof Vue | AsyncComponent
+type Dictionary<T> = { [key: string]: T }
+
 /**
  * Vue Router route extension
  * @interface AppRoute
- * @extends {RouteConfig}
+ * @extends {RouteRecordPublic}
  */
-export interface AppRoute extends RouteConfig {
+export interface AppRoute extends RouteRecordPublic {
     name: string;
     meta: RouteMeta;
-    path?: string;
+    path: string;
     children?: AppRoute[];
+    components: Dictionary<Component>;
+    instances: Dictionary<Vue>;
+    props: 
+        | boolean
+        | Object
+        | Dictionary<boolean | Object>;
 }

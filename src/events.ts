@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import Vue from 'vue';
+import Vue from 'vue'
 
 /// region event bus (events propagated on parallel thread)
 /**
@@ -22,6 +22,7 @@ import Vue from 'vue';
  * - newConnection with \a nodeUrl
  * - onProfileChange with \a profileName
  * - onAccountChange with \a accountAddress
+ * - onPluginsReady with \a plugins
  */
-export const $eventBus = new Vue();
+export const $eventBus = new Vue()
 /// end-region event bus

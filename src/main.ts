@@ -24,17 +24,7 @@ import 'view-design/dist/styles/iview.css';
 import infiniteScroll from 'vue-infinite-scroll';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
-
-// internal dependencies
-import { UIBootstrapper } from '@/app/UIBootstrapper';
-import { AppStore } from '@/app/AppStore';
-import i18n from '@/language/index.ts';
-import router from '@/router/AppRouter';
 import VueNumber from 'vue-number-animation';
-import { VeeValidateSetup } from '@/core/validation/VeeValidateSetup';
-// @ts-ignore
-import App from '@/app/App.vue';
-import clickOutsideDirective from '@/directives/clickOutside';
 import { PluginOptions } from 'vue-toastification/dist/types/src/types';
 // @ts-ignore
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -42,6 +32,17 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faFileCsv } from '@fortawesome/free-solid-svg-icons';
 // @ts-ignore
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+// internal dependencies
+import { UIBootstrapper } from '@/app/UIBootstrapper';
+import { AppStore } from '@/app/AppStore';
+import i18n from '@/language/index.ts';
+import router from '@/router/AppRouter';
+import { VeeValidateSetup } from '@/core/validation/VeeValidateSetup';
+// @ts-ignore
+import App from '@/app/App.vue';
+import clickOutsideDirective from '@/directives/clickOutside';
+import { $eventBus } from './events'
 
 /// region UI plugins
 Vue.use(iView, { locale });
@@ -80,4 +81,19 @@ const app = new Vue({
 });
 
 app.$mount('#app');
+
+if ('ipcRenderer' in window) {
+    console.log("[DEBUG][main.ts] initializing ipcRenderer onPluginsResolved channel")
+
+    // Proxy IPC handler
+    window['ipcProxy'] = (data?: string) => {
+        console.log(`[INFO][main.ts] received onPluginsResolved with ${data} from main process`);
+        $eventBus.$emit('onPluginsReady', JSON.parse(!!data && data.length ? data : '{}'))
+        console.log(`[INFO][main.ts] forwarded ${data} to renderer process in onPluginsReady`);
+    }
+
+    // Forward onPluginsResolved to IPC proxy
+    window['ipcRenderer'].receive("onPluginsResolved", window['ipcProxy'])
+}
+
 export default app;

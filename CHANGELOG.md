@@ -15,3 +15,4 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 - Some missing re-branding items for dHealth logos.
 
 [1.0.0]: https://github.com/dhealthproject/dhealth-wallet/releases/tag/v1.0.0
+
