@@ -120,7 +120,7 @@ class AppWindow {
     // initial window setup
     this.options.windowConfig = {
       webPreferences: {
-        contextIsolation: true, // @link https://github.com/electron/electron/blob/master/docs/tutorial/context-isolation.md
+        contextIsolation: false, // @link https://github.com/electron/electron/blob/master/docs/tutorial/context-isolation.md
         nodeIntegration: false,
         nodeIntegrationInWorker: false,
         enableRemoteModule: false,
@@ -215,7 +215,7 @@ class AppWindow {
     const menu = Menu.buildFromTemplate(options.template)
     Menu.setApplicationMenu(menu)
 
-    this.setupPlugins()
+    setTimeout(() => this.setupPlugins(), 4000)
   }
 
   onUniversalReady(options) {
@@ -255,7 +255,7 @@ class AppWindow {
       event.preventDefault()
     })
 
-    this.setupPlugins()
+    setTimeout(() => this.setupPlugins(), 4000)
   }
 
   create() {

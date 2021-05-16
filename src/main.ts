@@ -32,6 +32,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faFileCsv } from '@fortawesome/free-solid-svg-icons';
 // @ts-ignore
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+//import { ipcRenderer } from 'electron';
 
 // internal dependencies
 import { UIBootstrapper } from '@/app/UIBootstrapper';
@@ -42,7 +43,7 @@ import { VeeValidateSetup } from '@/core/validation/VeeValidateSetup';
 // @ts-ignore
 import App from '@/app/App.vue';
 import clickOutsideDirective from '@/directives/clickOutside';
-import { $eventBus } from './events'
+import { $eventBus } from './events';
 
 /// region UI plugins
 Vue.use(iView, { locale });
@@ -82,18 +83,12 @@ const app = new Vue({
 
 app.$mount('#app');
 
-if ('ipcRenderer' in window) {
-    console.log("[DEBUG][main.ts] initializing ipcRenderer onPluginsResolved channel")
-
-    // Proxy IPC handler
-    window['ipcProxy'] = (data?: string) => {
+// Enable IPC communicator from main process to renderer
+if ('electron' in window && 'ipcRenderer' in window['electron']) {
+    window['electron']['ipcRenderer'].on('onPluginsResolved', (event, data) => {
         console.log(`[INFO][main.ts] received onPluginsResolved with ${data} from main process`);
-        $eventBus.$emit('onPluginsReady', JSON.parse(!!data && data.length ? data : '{}'))
-        console.log(`[INFO][main.ts] forwarded ${data} to renderer process in onPluginsReady`);
-    }
-
-    // Forward onPluginsResolved to IPC proxy
-    window['ipcRenderer'].receive("onPluginsResolved", window['ipcProxy'])
+        $eventBus.$emit('onPluginsReady', JSON.parse(!!data && data.length ? data : '[]'));
+    });
 }
 
 export default app;

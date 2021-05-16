@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import Vue from 'vue';
-
-/// region event bus (events propagated on parallel thread)
-/**
- * This event bus channels following events:
- *
- * - newConnection with \a nodeUrl
- * - onProfileChange with \a profileName
- * - onAccountChange with \a accountAddress
- * - onPluginsReady with \a plugins
- */
-export const $eventBus = new Vue();
-/// end-region event bus
+export class PluginModel {
+    constructor(
+        public readonly npmModule: string,
+        public readonly name: string,
+        public readonly version: string,
+        public readonly path: string,
+        public readonly installedAt: number,
+    ) {}
+}

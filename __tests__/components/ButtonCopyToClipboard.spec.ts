@@ -32,7 +32,7 @@ describe('ButtonCopyToClipboard', () => {
         expect(UIHelpers.copyToClipboard).toBeCalledWith('123');
     });
     test('Click on Button should not call method "copyToClipboard" when prop "value" does not exists', () => {
-        const rewrapper = shallowMount(ButtonCopyToClipboard, Object.assign({}, options, {propsData: {}}));
+        const rewrapper = shallowMount(ButtonCopyToClipboard, Object.assign({}, options, { propsData: {} }));
         UIHelpers.copyToClipboard = jest.fn();
         rewrapper.setProps({ value: null });
         rewrapper.find('Button').trigger('click');
