@@ -16,7 +16,7 @@
 import Vue from 'vue';
 
 // internal dependencies
-import { PluginModel } from '@/core/database/entities/PluginModel';
+import { PluginInstallStatus, PluginModel } from '@/core/database/entities/PluginModel';
 import { PluginService } from '@/services/PluginService';
 import { $eventBus } from '../events';
 import { AwaitLock } from './AwaitLock';
@@ -29,13 +29,13 @@ const Lock = AwaitLock.create();
 interface PluginState {
     initialized: boolean;
     plugins: PluginModel[];
-    isLoadingPlugins: boolean;
+    currentPlugin: PluginModel;
 }
 
 const initialState: PluginState = {
     initialized: false,
     plugins: [],
-    isLoadingPlugins: false,
+    currentPlugin: null,
 };
 /// end-region state
 
@@ -46,10 +46,14 @@ export default {
     getters: {
         getInitialized: (state) => state.initialized,
         plugins: (state: PluginState) => state.plugins,
+        currentPlugin: (state: PluginState) => state.currentPlugin,
     },
     mutations: {
         setInitialized: (state, initialized) => (state.initialized = initialized),
         plugins: (state, plugins) => Vue.set(state, 'plugins', plugins),
+        currentPlugin: (state: PluginState, pluginModel: PluginModel) => {
+            state.currentPlugin = pluginModel;
+        },
     },
     actions: {
         async initialize({ commit, dispatch, getters }) {
@@ -62,7 +66,8 @@ export default {
                     dispatch('SAVE_PLUGINS', [
                         ...plugins.map((p) => ({
                             ...p,
-                            discoveredAt: new Date().getTime(),
+                            status: PluginInstallStatus.Installed,
+                            createdAt: new Date().getTime(),
                         })),
                     ]);
                 });
@@ -80,8 +85,18 @@ export default {
             };
             await Lock.uninitialize(callback, { getters });
         },
+
+        async SET_CURRENT_PLUGIN({ commit, dispatch }, currentPlugin: PluginModel) {
+            dispatch('diagnostic/ADD_DEBUG', 'Store action plugin/SET_CURRENT_PLUGIN dispatched with ' + currentPlugin.npmModule, {
+                root: true,
+            });
+
+            // set current plugin
+            commit('currentPlugin', currentPlugin);
+        },
+
         RESET_PLUGINS({ commit }) {
-            commit('plugins', []);
+            commit('currentPlugin', null);
         },
 
         async LOAD_PLUGINS({ commit }) {
@@ -89,9 +104,17 @@ export default {
             commit('plugins', plugins);
         },
 
-        async SAVE_PLUGINS({ commit }, plugins) {
-            console.log('[INFO][store/Plugin.ts] saving plugins: ', plugins);
-            await new PluginService().savePlugins(plugins);
+        async SAVE_PLUGINS({ commit, getters }, plugins) {
+            const prevPlugins = await new PluginService().getPlugins();
+
+            if (prevPlugins && prevPlugins.length) {
+                console.log('[DEBUG][store/Plugin.ts] updating plugins: ', plugins);
+                await new PluginService().updatePlugins(plugins);
+            } else {
+                console.log('[DEBUG][store/Plugin.ts] installing plugins: ', plugins);
+                await new PluginService().installPlugins(plugins);
+            }
+
             commit('plugins', plugins);
         },
     },

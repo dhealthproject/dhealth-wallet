@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +29,20 @@ import { ProfileService } from '@/services/ProfileService';
  * @extends {Router}
  */
 export class AppRouter extends Router {
+    public static MODULES: string[] = [
+        'dashboard',
+        'mosaics',
+        'multisig',
+        'namespaces',
+        'settings',
+        'accounts',
+        'community',
+        'harvesting',
+        'aggregate',
+        'plugins',
+        'faq',
+    ];
+
     /**
      * Application routes
      */
@@ -109,18 +124,7 @@ export class AppRouter extends Router {
         }
 
         // - find requested top level route
-        const modules = [
-            'dashboard',
-            'mosaics',
-            'multisig',
-            'namespaces',
-            'settings',
-            'accounts',
-            'community',
-            'harvesting',
-            'aggregate',
-            'faq',
-        ];
+        const modules = AppRouter.MODULES;
 
         // - app modules
         const moduleRoutes = appRoute.children.filter(({ name }) => modules.includes(name));

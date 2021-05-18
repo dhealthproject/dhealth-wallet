@@ -1,0 +1,76 @@
+/*
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+@import '../../../views/resources/css/variables.less';
+
+.table-row-container {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-auto-flow: column;
+    border-bottom: 1px solid @line;
+    grid-auto-rows: 0.6rem;
+
+    &:hover {
+        background-color: @accentPinkLight;
+        cursor: pointer;
+    }
+}
+
+.table-columns {
+    .table-cell > div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.table-columns ::v-deep {
+    .normal {
+        font-size: 0.16rem;
+    }
+    .integer-part {
+        opacity: 1;
+    }
+}
+
+.table-cell {
+    padding: 0.2rem 0.1rem 0 0.1rem;
+}
+
+.balance-cell {
+    padding-top: 0.16rem;
+}
+
+.amount-display {
+    text-align: right;
+}
+
+.edit-icon-cell {
+    text-align: center;
+    cursor: pointer;
+    line-height: 0.6rem;
+
+    .edit-icon {
+        font-size: 0.25rem;
+    }
+}
+
+.row-action-section {
+    text-align: left;
+    p {
+        font-size: @normalFont;
+    }
+}

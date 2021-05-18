@@ -13,12 +13,57 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
+import Vue, { ComponentOptions, AsyncComponent } from 'vue';
+import { AppRoute } from '@/router/AppRoute'
+import { VersionedObjectStorage } from '@/core/database/backends/VersionedObjectStorage';
+import { SettingsModel } from '@/core/database/entities/SettingsModel';
+
+export enum PluginInstallStatus {
+    Installed = 'installed',
+    Enabled = 'enabled',
+    Disabled = 'disabled',
+    Uninstalled = 'uninstalled',
+}
+
+export type PluginAuthor = {
+    name: string;
+    email?: string;
+    url?: string;
+};
+
+export type PluginRepository = {
+    type: string;
+    url: string;
+};
+
+export type PluginDependencies = {
+    [npmModule: string]: string;
+};
+
+export type PluginClassMap = {
+    [identifier: string]: string
+}
+
+type Component = ComponentOptions<Vue> | typeof Vue | AsyncComponent;
+type Dictionary<T> = { [key: string]: T };
+
 export class PluginModel {
     constructor(
         public readonly npmModule: string,
+        public readonly installPath: string,
         public readonly name: string,
         public readonly version: string,
-        public readonly path: string,
-        public readonly installedAt: number,
+        public readonly author: PluginAuthor,
+        public readonly description: string,
+        public readonly homepage: string,
+        public readonly repository: PluginRepository,
+        public readonly dependencies: PluginDependencies,
+        public readonly status: PluginInstallStatus,
+        public readonly routes: AppRoute[],
+        public readonly components: Dictionary<Component>,
+        public readonly storages: VersionedObjectStorage<any>[],
+        public readonly settings: SettingsModel[],
+        public readonly createdAt: number,
+        public readonly updatedAt: number,
     ) {}
 }

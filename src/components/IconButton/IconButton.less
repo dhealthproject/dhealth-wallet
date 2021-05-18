@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
  * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +13,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
+@import '../../views/resources/css/variables.less';
+@import '../../views/resources/css/forms.less';
 
-export enum TableAssetType {
-    Mosaic = 'mosaic',
-    Namespace = 'namespace',
-    Metadata = 'metadata',
-    AccountRestrictions = 'accountRestrictions',
-    Plugin = 'plugin',
+button.icon-button.normal {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    padding-left: 10px;
 }

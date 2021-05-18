@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import TableRow from '@/components/TableRow/TableRow.vue';
 // @ts-ignore
 import AmountDisplay from '@/components/AmountDisplay/AmountDisplay.vue';
 import { TableAssetType } from '@/components/TableDisplay/TableAssetType';
+import { officialIcons } from '@/views/resources/Images';
 
 @Component({
     components: {
@@ -141,5 +143,9 @@ export class TableRowTs extends Vue {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
         return visible;
+    }
+
+    public get externalLinkIcon() {
+        return officialIcons.voting;
     }
 }

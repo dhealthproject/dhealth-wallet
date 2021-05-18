@@ -2,12 +2,25 @@
     <div
         :class="[
             'table-row-container',
-            assetType !== 'metadata' ? (assetType === 'mosaic' ? 'mosaic-columns' : 'namespace-columns') : 'metadata-columns',
+            assetType !== 'metadata'
+                ? assetType === 'mosaic'
+                    ? 'mosaic-columns'
+                    : assetType === 'namespace'
+                    ? 'namespace-columns'
+                    : 'plugin-columns'
+                : 'metadata-columns',
         ]"
+        @click="$emit('click')"
     >
         <div v-for="(value, name, index) in visibleRowValues" :key="index" :class="['table-cell', `${name}-cell`]">
             <div v-if="name === 'balance'">
                 <AmountDisplay :value="value" />
+            </div>
+            <div v-else-if="['homepage', 'repository'].includes(name)">
+                <a class="trigger-link pointer" :href="value" target="_blank">
+                    <img class="link-icon" :src="externalLinkIcon" />
+                    <span>{{ $t('plugins_open_website') }}</span>
+                </a>
             </div>
             <div v-else-if="name !== 'metadataList'">
                 {{ value }}

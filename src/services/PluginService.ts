@@ -16,7 +16,7 @@
 import * as _ from 'lodash';
 
 import { PluginModelStorage } from '@/core/database/storage/PluginModelStorage';
-import { PluginModel } from '@/core/database/entities/PluginModel';
+import { PluginInstallStatus, PluginModel } from '@/core/database/entities/PluginModel';
 
 export class PluginService {
     /**
@@ -33,8 +33,31 @@ export class PluginService {
         }
     }
 
-    public savePlugins(plugins: PluginModel[]) {
+    public installPlugins(plugins: PluginModel[]) {
         this.pluginModelStorage.set(plugins);
+    }
+
+    public updatePlugins(plugins: PluginModel[]) {
+        // read from database to identify uninstalls
+        const fromStorage = this.getPlugins();
+        const discovered = plugins.map((p) => p.npmModule);
+
+        // check for manually uninstalled plugins
+        let uninstalled = fromStorage.filter((p) => !discovered.includes(p.npmModule));
+
+        // set "uninstalled" flags
+        uninstalled = uninstalled.map((p) =>
+            Object.assign({}, p, {
+                status: PluginInstallStatus.Uninstalled,
+                updatedAt: new Date().getTime(),
+            }),
+        );
+
+        // update storage with newly discovered plugins
+        const updated = _.uniqBy(plugins.concat(uninstalled), 'npmModule');
+        console.log('Updating plugins with: ', updated);
+
+        this.pluginModelStorage.set(updated);
     }
 
     public reset(): void {

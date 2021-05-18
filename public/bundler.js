@@ -211,11 +211,13 @@ class AppWindow {
     AppMainWindow.on('closed', function () {
       AppMainWindow = null
     })
+    AppMainWindow.webContents.on('did-finish-load', () => {
+      this.setupPlugins()
+    })
 
     const menu = Menu.buildFromTemplate(options.template)
     Menu.setApplicationMenu(menu)
 
-    setTimeout(() => this.setupPlugins(), 4000)
   }
 
   onUniversalReady(options) {
@@ -254,8 +256,9 @@ class AppWindow {
     AppMainWindow.on('will-resize', (event) => {
       event.preventDefault()
     })
-
-    setTimeout(() => this.setupPlugins(), 4000)
+    AppMainWindow.webContents.on('did-finish-load', () => {
+      this.setupPlugins()
+    })
   }
 
   create() {
@@ -358,9 +361,18 @@ class AppPluginManager {
 
         this.plugins.push({
           npmModule: pkg.name,
+          installPath: pluginPath,
           name: pluginSlug,
           version: v,
-          path: pluginPath,
+          author: typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
+          description: pkg.description ?? '',
+          homepage: pkg.homepage ?? '',
+          repository: pkg.repository ?? '',
+          dependencies: pkg.dependencies ?? {},
+          routes: [],
+          components: [],
+          storages: [],
+          settings: [],
         })
       }
       catch (e) {

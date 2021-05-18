@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
  * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +13,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
+import { Vue, Component } from 'vue-property-decorator';
+import { mapGetters } from 'vuex';
+import { PluginModel } from '@/core/database/entities/PluginModel';
 
-export enum TableAssetType {
-    Mosaic = 'mosaic',
-    Namespace = 'namespace',
-    Metadata = 'metadata',
-    AccountRestrictions = 'accountRestrictions',
-    Plugin = 'plugin',
+@Component({
+    components: {},
+    computed: {
+        ...mapGetters({
+            selectedPlugin: 'plugin/currentPlugin',
+        }),
+    },
+})
+export default class PluginInformationSidebarTs extends Vue {
+    public selectedPlugin: PluginModel;
+
+    public get mailtoAuthor(): string {
+        return 'mailto:' + this.selectedPlugin.author.email;
+    }
 }

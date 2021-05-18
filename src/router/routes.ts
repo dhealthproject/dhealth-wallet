@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,16 +74,6 @@ export const routes: AppRoute[] = [
                         // @ts-ignore
                         component: () => import('@/views/pages/dashboard/invoice/DashboardInvoicePage.vue'),
                     },
-                    // {
-                    //   path: '/harvesting',
-                    //   name: 'dashboard.harvesting',
-                    //   meta: {
-                    //     protected: true,
-                    //     title: 'page_title_harvesting',
-                    //   },
-                    //   // @ts-ignore
-                    //   component: () => import('@/views/pages/dashboard/harvesting/DashboardHarvestingPage.vue'),
-                    // }
                 ],
             },
             {
@@ -348,6 +339,42 @@ export const routes: AppRoute[] = [
                         },
                         // @ts-ignore
                         component: () => import('@/views/pages/faq/Dashboard/Dashboard.vue'),
+                    }
+                ]
+            },
+            {
+                path: '/plugins',
+                name: 'plugins',
+                meta: {
+                    protected: true,
+                    clickable: true,
+                    title: 'sidebar_item_plugins',
+                    icon: officialIcons.enterprise,
+                },
+                redirect: '/pluginsList',
+                // @ts-ignore
+                component: () => import('@/views/pages/plugins/Manager/Manager.vue'),
+                children: [
+                    {
+                        path: '/pluginsList',
+                        name: 'plugins.list',
+                        meta: {
+                            protected: true,
+                            title: 'page_title_plugins',
+                        },
+                        // @ts-ignore
+                        component: () => import('@/views/pages/plugins/List/List.vue'),
+                    },
+                    {
+                        path: '/info',
+                        name: 'plugins.info',
+                        meta: {
+                            protected: true,
+                            hideFromMenu: true,
+                            title: 'page_title_plugins_info',
+                        },
+                        // @ts-ignore
+                        component: () => import('@/views/pages/plugins/Info/Info.vue'),
                     },
                 ],
             },
