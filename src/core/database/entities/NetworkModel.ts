@@ -16,6 +16,7 @@
 
 import { NetworkType, NodeInfo, TransactionFees } from 'symbol-sdk';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
+import { networkConfig } from '@/config';
 
 /**
  * Stored POJO that holds network information.
@@ -26,13 +27,37 @@ import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfi
  *
  */
 export class NetworkModel {
+    public readonly networkName: string;
+
     constructor(
         public readonly url: string,
         public readonly networkType: NetworkType,
-        public readonly networkName: string,
         public readonly generationHash: string,
         public readonly networkConfiguration: NetworkConfigurationModel,
         public readonly transactionFees: TransactionFees,
         public readonly nodeInfo: NodeInfo,
-    ) {}
+    ) {
+        this.networkName = NetworkModel.getNetworkName(this.generationHash);
+    }
+
+    /**
+     * This method identifies a network by generation hash
+     * and returns its network name or defaults to testnet.
+     *
+     * @param   {string}    genHash
+     * @returns {string}
+     */
+    public static getNetworkName(genHash: string): string {
+        // find network by generation hash
+        const identifier = Object.keys(networkConfig).filter(
+            (n) => networkConfig[n].networkConfigurationDefaults.generationHash === genHash,
+        );
+
+        // default to testnet
+        if (!identifier.length) {
+            return networkConfig[NetworkType.TEST_NET].networkName;
+        }
+
+        return networkConfig[identifier.shift()].networkName;
+    }
 }

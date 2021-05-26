@@ -3,6 +3,7 @@
     "description": "dHealth Wallet",
     "homepage": "https://github.com/dhealthproject/dhealth-wallet",
     "version": "1.1.0",
+    "license": "Apache-2.0",
     "author": {
         "name": "Using Blockchain Ltd",
         "email": "info@ubc.digital",
@@ -27,31 +28,31 @@
         "type": "git",
         "url": "https://github.com/dhealthproject/dhealth-wallet.git"
     },
-    "license": "Apache-2.0",
+    "main": "public/bundler.js",
     "scripts": {
         "start": "npm run node-hid:prebuild-install && electron .",
-        "test": "vue-cli-service test:unit",
-        "dev": "vue-cli-service serve ",
         "build": "npm run build:web",
-        "build:web": "rimraf dist && mkdir dist && tsc && vue-cli-service build",
-        "release": "npm run build && npm run release:all",
-        "release:all": "npm run release:win && npm run release:lin && npm run release:mac && npm run release:zip",
-        "release:mac": "npm run node-hid:prebuild-install:mac && electron-builder --mac",
-        "release:win": "npm run node-hid:prebuild-install:win && electron-builder --win",
-        "release:lin": "npm run node-hid:prebuild-install:lin && electron-builder --linux deb snap tar.xz",
-        "release:zip": "npm-build-zip --source=dist --destination=release --name=all",
+        "test": "vue-cli-service test:unit",
         "lint": "npm run prettier && npm run eslint",
-        "lint:fix": "npm run prettier:fix && npm run eslint:fix",
+        "dev": "vue-cli-service serve",
+        "version": "echo $npm_package_version",
+        "build:web": "rimraf dist && mkdir dist && tsc && vue-cli-service build",
+        "electron-rebuild": "$(npm bin)/electron-rebuild",
         "eslint": "eslint src/ --ext .ts && eslint src/ --ext .vue && eslint __tests__/ --ext .ts && eslint __mocks__/ --ext .ts",
         "eslint:fix": "eslint src/ --ext .ts --fix && eslint src/ --ext .vue --fix && eslint __tests__/ --ext .ts --fix && eslint __mocks__/ --ext .ts --fix",
-        "prettier": "prettier --check ./src ./__tests__ ./__mocks__",
-        "prettier:fix": "prettier --write ./src ./__tests__ ./__mocks__",
-        "electron-rebuild": "$(npm bin)/electron-rebuild",
+        "lint:fix": "npm run prettier:fix && npm run eslint:fix",
         "node-hid:prebuild-install": "cd ./node_modules/node-hid && npm run install && cd ../..",
+        "node-hid:prebuild-install:lin": "export npm_config_platform=linux && npm run node-hid:prebuild-install",
         "node-hid:prebuild-install:mac": "export npm_config_platform=darwin && npm run node-hid:prebuild-install",
         "node-hid:prebuild-install:win": "export npm_config_platform=win32 && npm run node-hid:prebuild-install",
-        "node-hid:prebuild-install:lin": "export npm_config_platform=linux && npm run node-hid:prebuild-install",
-        "version": "echo $npm_package_version"
+        "prettier": "prettier --check ./src ./__tests__ ./__mocks__",
+        "prettier:fix": "prettier --write ./src ./__tests__ ./__mocks__",
+        "release": "npm run build && npm run release:all",
+        "release:all": "npm run release:win && npm run release:lin && npm run release:mac && npm run release:zip",
+        "release:lin": "npm run node-hid:prebuild-install:lin && electron-builder --linux deb snap tar.xz",
+        "release:mac": "npm run node-hid:prebuild-install:mac && electron-builder --mac",
+        "release:win": "npm run node-hid:prebuild-install:win && electron-builder --win",
+        "release:zip": "npm-build-zip --source=dist --destination=release --name=all"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -60,6 +61,7 @@
         "@js-joda/core": "^3.2.0",
         "@ledgerhq/hw-transport-node-hid-noevents": "^5.51.1",
         "@ledgerhq/hw-transport-webusb": "^5.51.1",
+        "@dhealth/wallet-api-bridge": "latest",
         "animate.css": "^3.7.2",
         "await-lock": "^2.0.1",
         "axios": "0.21.1",
@@ -74,7 +76,7 @@
         "lodash": "^4.17.21",
         "request": "^2.88.0",
         "rss-parser": "^3.12.0",
-        "rxjs": "^6.6.7",
+        "rxjs": "^6.5.2",
         "trezor-connect": "^7.0.5",
         "utf8": "^3.0.0",
         "vee-validate": "^3.2.3",
@@ -102,7 +104,7 @@
         "@types/jest": "^23.3.1",
         "@types/json2csv": "^5.0.2",
         "@types/lodash": "^4.14.169",
-        "@types/node": "^9.6.50",
+        "@types/node": "^12.20.13",
         "@types/request": "^2.47.1",
         "@types/vue-moment": "^4.0.0",
         "@typescript-eslint/eslint-plugin": "^2.15.0",
@@ -155,10 +157,6 @@
         "vue-jest": "^3.0.5",
         "vue-template-compiler": "^2.6.10"
     },
-    "resolutions": {
-        "@babel/preset-env": "7.5.5"
-    },
-    "main": "./public/bundler.js",
     "build": {
         "appId": "network.dhealth.wallet",
         "extends": null,
@@ -189,6 +187,14 @@
             }
         ]
     },
+    "dmg": {
+        "window": {
+            "x": 100,
+            "y": 100,
+            "width": 500,
+            "height": 400
+        }
+    },
     "mac": {
         "category": "public.app-category.finance",
         "target": "dmg",
@@ -210,14 +216,6 @@
             ]
         }
     },
-    "dmg": {
-        "window": {
-            "x": 100,
-            "y": 100,
-            "width": 500,
-            "height": 400
-        }
-    },
     "nsis": {
         "oneClick": false,
         "perMachine": false,
@@ -228,5 +226,8 @@
     "linux": {
         "category": "Finance",
         "icon": "./dist/assets/icons/Icon.icns"
+    },
+    "resolutions": {
+        "@babel/preset-env": "7.5.5"
     }
 }

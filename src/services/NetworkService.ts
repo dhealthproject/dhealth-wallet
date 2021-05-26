@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-
+import { Currency, MosaicId, NamespaceId, NetworkCurrencies } from 'symbol-sdk';
 import { networkConfig } from '@/config';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
 import { NetworkModel } from '@/core/database/entities/NetworkModel';
@@ -57,7 +57,6 @@ export class NetworkService {
         nodeUrl: string,
         defaultNetworkType: NetworkType = NetworkType.TEST_NET,
         isOffline = false,
-        networkName: string = 'mainnet',
     ): Observable<{
         networkModel: NetworkModel;
         repositoryFactory: RepositoryFactory;
@@ -75,7 +74,7 @@ export class NetworkService {
 
                         const networkPropertiesObservable = networkRepository
                             .getNetworkProperties()
-                            .pipe(map((d) => this.toNetworkConfigurationModel(d, defaultNetworkType)));
+                            .pipe(map((d: NetworkConfiguration) => this.toNetworkConfigurationModel(d, defaultNetworkType)));
                         const nodeInfoObservable = nodeRepository.getNodeInfo();
 
                         const transactionFeesObservable = repositoryFactory.createNetworkRepository().getTransactionFees();
@@ -92,7 +91,6 @@ export class NetworkService {
                                     networkModel: new NetworkModel(
                                         url,
                                         networkType,
-                                        networkName,
                                         generationHash,
                                         networkProperties,
                                         transactionFees,
@@ -114,13 +112,13 @@ export class NetworkService {
         isOffline = false,
         networkType = NetworkType.TEST_NET,
     ): Observable<{ url: string; repositoryFactory: RepositoryFactory }> {
-        // console.log(`Testing ${url}`);
+        //console.log(`Testing ${url}`);
         const repositoryFactory = NetworkService.createRepositoryFactory(url, isOffline, networkType);
         return defer(() => {
             return repositoryFactory.getGenerationHash();
         }).pipe(
             map(() => {
-                // console.log(`Peer ${url} seems OK`);
+                //console.log(`Peer ${url} seems OK`);
                 return { url, repositoryFactory };
             }),
             catchError((e) => {
@@ -164,11 +162,30 @@ export class NetworkService {
      * @param url the url.
      */
     public static createRepositoryFactory(url: string, isOffline: boolean = false, networkType = NetworkType.TEST_NET): RepositoryFactory {
+        const config = networkConfig[networkType].networkConfigurationDefaults;
         return isOffline
             ? new OfflineRepositoryFactory(networkType)
             : new RepositoryFactoryHttp(url, {
                   websocketUrl: URLHelpers.httpToWsUrl(url) + '/ws',
                   websocketInjected: WebSocket,
+                  networkCurrencies: new NetworkCurrencies(
+                      new Currency({
+                          namespaceId: new NamespaceId(config.currencyName),
+                          mosaicId: new MosaicId(config.currencyMosaicId),
+                          divisibility: 6,
+                          transferable: true,
+                          supplyMutable: false,
+                          restrictable: false,
+                      }),
+                      new Currency({
+                          namespaceId: new NamespaceId(config.harvestingName),
+                          mosaicId: new MosaicId(config.harvestingMosaicId),
+                          divisibility: 6,
+                          transferable: true,
+                          supplyMutable: false,
+                          restrictable: false,
+                      }),
+                  ),
               });
     }
 }
