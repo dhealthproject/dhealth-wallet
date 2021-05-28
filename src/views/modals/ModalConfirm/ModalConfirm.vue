@@ -10,7 +10,7 @@
                         <img :src="officialIcons.warning" class="warning-icon" />
                     </div>
                 </div>
-                <div class="bottom-space body-text">{{ $t(message) }}</div>
+                <div :class="['bottom-space', 'body-text', useBiggerFont ? 'bigger-font' : '']">{{ $t(message) }}</div>
                 <div v-if="showCheckbox" class="checkbox-container bottom-space">
                     <Checkbox id="Confirmed" :value="isCheckboxChecked" @input="onCheckboxCheck">
                         <span class="checkbox-label">

@@ -1,34 +1,27 @@
 <template>
-    <div class="table-container">
+    <div
+        :class="{
+            'table-container': true,
+            'without-header': disableHeaders,
+        }"
+    >
         <!-- PRE-HEADER (ACTIONS) -->
         <div v-if="canRefresh || (!!actionButtons && actionButtons.length)" class="upper-section-container">
             <div class="table-title-container section-title">
                 <div class="user-operation">
-<!--
-                    <!-- ACTION CHECKBOXES >
-                    <div
-                        v-for="({fieldName, filteringType}, index) in actionCheckboxes"
-                        :key="index"
-                        :class="['table-action-checkbox-wrapper', `${name}-action-checkbox`]"
-                    >
-                        <Checkbox v-model="model" class="table-action-checkbox">
-                            <span>{{$t(fieldName)}}</span>
-                        </Checkbox>
-                    </div>
--->
-
                     <!-- ACTION BUTTONS -->
                     <div
-                        v-for="({id, label, icon}, index) in actionButtons"
+                        v-for="({ id, label, icon }, index) in actionButtons"
                         :key="index"
                         :class="['table-action-button-wrapper', `${name}-action-button`]"
                     >
                         <IconButton
-                            class="align-right" 
+                            class="align-right"
                             size="18"
                             :icon="icon"
                             :title="$t(`table_action_name_${name}`)"
-                            @click="$emit('on-clicked-action', id)" />
+                            @click="$emit('on-clicked-action', id)"
+                        />
                     </div>
 
                     <!-- REFRESH BUTTON -->
@@ -37,7 +30,7 @@
             </div>
         </div>
         <!-- TABLE HEADER (COLUMN TITLES) -->
-        <div class="table-header-container table-columns">
+        <div v-if="!disableHeaders" class="table-header-container table-columns">
             <div
                 v-for="({ name, label }, index) in tableFields"
                 :key="index"
@@ -83,12 +76,8 @@
             </div>
         </div>
 
-        <div class="table-footer-container">
-            <Page 
-                class="page"
-                :total="displayedValues.length"
-                :page-size="pageSize"
-                @on-change="handlePageChange" />
+        <div v-if="!disableSinglePageLinks || displayedValues.length / pageSize > 1" class="table-footer-container">
+            <Page class="page" :total="displayedValues.length" :page-size="pageSize" @on-change="handlePageChange" />
         </div>
     </div>
 </template>

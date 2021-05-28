@@ -51,16 +51,10 @@ export class GenericTableRowTs extends Vue {
     }
 
     public isAmountField(field: string) {
-        return [
-            'amount',
-            'balance',
-        ].includes(field);
+        return ['amount', 'balance'].includes(field);
     }
 
     public isLinkField(field: string) {
-        return [
-            'homepage',
-            'repository',
-        ].includes(field);
+        return ['homepage', 'repository'].includes(field);
     }
 }

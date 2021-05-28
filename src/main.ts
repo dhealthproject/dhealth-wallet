@@ -32,18 +32,17 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faFileCsv } from '@fortawesome/free-solid-svg-icons';
 // @ts-ignore
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-//import { ipcRenderer } from 'electron';
 
 // internal dependencies
 import { UIBootstrapper } from '@/app/UIBootstrapper';
 import { AppStore } from '@/app/AppStore';
-import i18n from '@/language/index.ts';
+import i18n from '@/language/index';
 import router from '@/router/AppRouter';
 import { VeeValidateSetup } from '@/core/validation/VeeValidateSetup';
 // @ts-ignore
 import App from '@/app/App.vue';
 import clickOutsideDirective from '@/directives/clickOutside';
-import { $eventBus } from './events';
+import { $pluginBus } from './events';
 
 /// region UI plugins
 Vue.use(iView, { locale });
@@ -85,9 +84,15 @@ app.$mount('#app');
 
 // Enable IPC communicator from main process to renderer
 if ('electron' in window && 'ipcRenderer' in window['electron']) {
+    // forwarding onPluginsResolved as onPluginsReady on renderer process
     window['electron']['ipcRenderer'].on('onPluginsResolved', (event, data) => {
         console.log(`[INFO][main.ts] received onPluginsResolved with ${data} from main process`);
-        $eventBus.$emit('onPluginsReady', JSON.parse(!!data && data.length ? data : '[]'));
+        $pluginBus.$emit('onPluginsReady', JSON.parse(!!data && data.length ? data : '[]'));
+    });
+
+    // onPluginLoad
+    window['electron']['ipcRenderer'].on('epm-loaded', (event, plugin) => {
+        console.log(`[DEBUG][main.ts] received epm-load with ${plugin} from main process`);
     });
 }
 

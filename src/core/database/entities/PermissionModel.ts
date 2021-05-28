@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-@import '../../../resources/css/variables.less';
+import { PluginBridge } from '@yourdlt/wallet-api-bridge';
 
-.plugin-list-container {
-    background-color: @white;
+/**
+ * @description Permissions describe in-app entities or items that can be
+ * accessed by specific plugins. A plugin *always* requests permission to
+ * the active user when it gets enabled. This model describes the item to
+ * be shared and is linked to a specific plugin NPM module.
+ */
+export class PermissionModel {
+    constructor(
+        public readonly profileName: string,
+        public readonly npmModule: string,
+        public readonly permission: PluginBridge.PluginPermission,
+        public readonly createdAt: number,
+        public readonly deletedAt?: number | undefined,
+    ) {}
 }

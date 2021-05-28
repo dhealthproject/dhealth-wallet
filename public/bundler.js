@@ -24,7 +24,7 @@
 
 const path = require('path')
 const fs = require('fs')
-const { app, BrowserWindow, ipcMain, Menu, shell, contextBridge } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron')
 const name = app.getName()
 const electronLocalshortcut = require('electron-localshortcut')
 const contextMenu = require('electron-context-menu')
@@ -305,12 +305,14 @@ class AppPluginManager {
     this.setupFilesystem()
 
     // Load plugins for registration
-    this.loadInstalledPlugins()
-    console.log("YourDLT plugins resolved: ", this.plugins)
+    this.loadPlugins().then(
+      (plugins) => {
+        console.log("YourDLT plugins loaded: ", plugins)
 
-    // Send information about loaded plugins to App
-    //AppMainWindow.webContents.send('toMain', JSON.stringify(this.plugins))
-    AppMainWindow.webContents.send('onPluginsResolved', JSON.stringify(this.plugins))
+        // Send information about loaded plugins to App
+        AppMainWindow.webContents.send('onPluginsResolved', JSON.stringify(plugins))
+      }
+    )
   }
 
   setupFilesystem() {
@@ -327,61 +329,98 @@ class AppPluginManager {
     return this
   }
 
-  loadInstalledPlugins() {
-
-    // Discover all plugin subfolders
-    const plugins = fs.readdirSync(this.pluginsPath, { withFileTypes: true })
-      .filter(socket => socket.isDirectory())
-      .map(folder => folder.name)
+  async loadPlugins() {
 
     // Link plugin manager to main IPC event emitter
     pluginManager.manager(ipcMain);
 
-    // Load installable plugins
-    this.plugins = []
-    plugins.forEach((pluginSlug, i) => {
-      const pluginPath = path.join(this.pluginsPath, pluginSlug)
+    // Reads the plugins.json configuration file
+    const pluginsConfig = JSON.parse(fs.readFileSync(this.pluginsConfPath))
+    const plugins = Object.keys(pluginsConfig)
 
-      // Verify that the plugin folder is compatible
-      if (! fs.readdirSync(pluginPath).includes('package.json')) {
-        return ;
+    return new Promise(async (resolve) => {
+
+      // Each plugin is *installed* and loaded individually
+      this.plugins = []
+      for (let i in plugins) {
+        // Read basic plugin information
+        const pluginSlug = plugins[i]
+        const pluginVer  = pluginsConfig[pluginSlug]
+        const installPath = path.join(this.pluginsPath, pluginSlug)
+
+        try {
+          // Try installing the plugin
+          console.log(`Now installing ${pluginSlug}...`)
+          const loadedPlugin = await this.installPlugin(pluginSlug, pluginVer)
+
+          // Verify that the plugin folder is compatible
+          if (! fs.readdirSync(installPath).includes('package.json')) {
+            console.error(`Could not find a package.json for ${pluginSlug}`)
+            continue // incompatibiliy should not break install process
+          }
+
+          // Read package information
+          const json = fs.readFileSync(path.join(installPath, 'package.json'))
+          const pkg  = JSON.parse(json)
+
+          // Merge loaded plugin and package information
+          this.plugins.push({
+            npmModule: pkg.name,
+            installPath: installPath,
+            name: pluginSlug,
+            version: pluginVer,
+            // data from `package.json`
+            author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
+            description: pkg && 'description' in pkg ? pkg.description : '',
+            homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
+            repository: pkg && 'repository' in pkg ? pkg.repository : '',
+            dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
+            // data from *loaded module*
+            routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
+            components: loadedPlugin && 'components' in loadedPlugin ? loadedPlugin.components : {},
+            storages: loadedPlugin && 'storages' in loadedPlugin ? loadedPlugin.storages : [],
+            settings: loadedPlugin && 'settings' in loadedPlugin ? loadedPlugin.settings : [],
+            permissions: loadedPlugin && 'permissions' in loadedPlugin ? loadedPlugin.permissions : [],
+          })
+        }
+        catch (e) {
+          console.log(`Aborting installation for ${pluginSlug}@${pluginVer} located at ${installPath}.`)
+          console.error(e)
+          continue // incompatibiliy should not break install process
+        }
       }
 
-      // Load the plugin's package.json
-      try {
-        const json = fs.readFileSync(path.join(pluginPath, 'package.json'))
-        const pkg  = JSON.parse(json)
-        const v = pkg.version ?? '0.0.1-alpha'
-        console.log("Now loading: ", pluginSlug, '@'+v)
-
-        // must pass "dataPath" because underlying electron-plugin-manager
-        // automatically suffixes the path with `plugins` in their path.js
-        // @link https://github.com/pksunkara/electron-plugin-manager/blob/master/lib/path.js
-        pluginManager.load(this.dataPath, pluginSlug)
-
-        this.plugins.push({
-          npmModule: pkg.name,
-          installPath: pluginPath,
-          name: pluginSlug,
-          version: v,
-          author: typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
-          description: pkg.description ?? '',
-          homepage: pkg.homepage ?? '',
-          repository: pkg.repository ?? '',
-          dependencies: pkg.dependencies ?? {},
-          routes: [],
-          components: [],
-          storages: [],
-          settings: [],
-        })
-      }
-      catch (e) {
-        console.log("Aborting plugin installation. Error encountered while parsing of a package.json for the plugin located at: " + pluginPath)
-        console.error(e)
-      }
+      return resolve(this.plugins)
     })
+  }
 
-    return this
+  async installPlugin(plugin, version) {
+    // must pass "dataPath" because underlying electron-plugin-manager
+    // automatically suffixes the path with `plugins` in their path.js
+    // @link https://github.com/pksunkara/electron-plugin-manager/blob/master/lib/path.js
+
+    return new Promise((resolve, reject) => {
+      // plugin already installed, loading now
+      // if (fs.existsSync(path.join(this.pluginsPath, plugin))) {
+      //   console.log(`Plugin already installed: ${plugin}`)
+      //   console.log(`Now loading ${plugin}...`)
+      //   return resolve(pluginManager.load(
+      //     this.dataPath, plugin
+      //   ).default)
+      // }
+
+      pluginManager.install(this.dataPath, plugin, version, (err, pluginPath) => {
+        if (!! err) {
+          console.error(`Error occured installing ${plugin}: ${err}`)
+          return reject(err)
+        }
+
+        console.log(`Installed at ${pluginPath}`)
+        console.log(`Now loading ${plugin}...`)
+        const module = pluginManager.load(this.dataPath, plugin).default
+        return resolve(module)
+      });
+    })
   }
 }
 

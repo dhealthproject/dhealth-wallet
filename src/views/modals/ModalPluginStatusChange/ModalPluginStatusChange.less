@@ -1,7 +1,22 @@
+/*
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
 @import '../../resources/css/variables.less';
 @import '../../resources/css/forms.less';
 
-.modal-confirm {
+.modal-plugin-status-change-wrapper {
     /deep/.ivu-modal {
         width: 9rem !important;
         overflow-wrap: break-word;
@@ -37,31 +52,59 @@
 
     /deep/.body-text {
         color: @purpleDark;
-        font-size: @normalFont;
-        font-family: @symbolFontSemiBold;
-        line-height: @normalFontLineHeight;
-        white-space: pre-wrap;
-        text-align: justify;
-    }
-
-    /deep/.body-text.bigger-font {
-        color: @purpleDark;
         font-size: @biggerFont;
         font-family: @symbolFontSemiBold;
         line-height: 30px;
+        white-space: pre-wrap;
+        text-align: justify;
+
+        label {
+            color: @accentPink;
+        }
+
+        table {
+            border: 0;
+            margin-left: 0;
+            margin-top: 15px;
+
+            thead {
+                display: none;
+            }
+
+            tbody tr {
+                padding: 0;
+                padding-bottom: 10px;
+                vertical-align: top;
+
+                td {
+                    line-height: 30px;
+                }
+            }
+
+            tbody tr td.emphasized {
+                width: 40%;
+                color: @purpleLight;
+            }
+
+            tbody tr td.optional {
+                width: 60%;
+                color: @purpleDark;
+                opacity: 0.7;
+            }
+        }
     }
 
-    /deep/.checkbox-label {
-        color: @purpleDark;
-        font-size: @normalFont;
-        font-family: @symbolFont;
-        line-height: @normalFontLineHeight;
+    hr.separator {
+        opacity: 0.2;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
 
     /deep/.footer {
         width: 100%;
         display: flex;
         justify-content: flex-end;
+        margin-top: 15px;
     }
 
     /deep/.button {
@@ -90,7 +133,6 @@
 
 .container {
     display: flex;
-    align-items: center;
     flex-direction: column;
 
     #Confirmed {
@@ -99,9 +141,5 @@
         }
 
         font-size: @bigFont;
-    }
-
-    .checkbox-container {
-        width: 100%;
     }
 }

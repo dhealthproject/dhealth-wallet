@@ -22,7 +22,15 @@ import Vue from 'vue';
  * - newConnection with \a nodeUrl
  * - onProfileChange with \a profileName
  * - onAccountChange with \a accountAddress
- * - onPluginsReady with \a plugins
  */
 export const $eventBus = new Vue();
 /// end-region event bus
+
+/// region plugin bus (events propagated on parallel thread)
+/**
+ * This plugin bus channels following events:
+ *
+ * - onPluginsReady with \a plugins
+ */
+export const $pluginBus = new Vue();
+/// end-region plugin bus

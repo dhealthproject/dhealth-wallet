@@ -13,39 +13,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import Vue, { ComponentOptions, AsyncComponent } from 'vue';
-import { AppRoute } from '@/router/AppRoute'
-import { VersionedObjectStorage } from '@/core/database/backends/VersionedObjectStorage';
-import { SettingsModel } from '@/core/database/entities/SettingsModel';
+import { PluginBridge } from '@yourdlt/wallet-api-bridge';
 
-export enum PluginInstallStatus {
-    Installed = 'installed',
-    Enabled = 'enabled',
-    Disabled = 'disabled',
-    Uninstalled = 'uninstalled',
-}
-
-export type PluginAuthor = {
-    name: string;
-    email?: string;
-    url?: string;
-};
-
-export type PluginRepository = {
-    type: string;
-    url: string;
-};
-
-export type PluginDependencies = {
-    [npmModule: string]: string;
-};
-
-export type PluginClassMap = {
-    [identifier: string]: string
-}
-
-type Component = ComponentOptions<Vue> | typeof Vue | AsyncComponent;
-type Dictionary<T> = { [key: string]: T };
+// internal dependencies
+import { AppRoute } from '@/router/AppRoute';
 
 export class PluginModel {
     constructor(
@@ -53,16 +24,17 @@ export class PluginModel {
         public readonly installPath: string,
         public readonly name: string,
         public readonly version: string,
-        public readonly author: PluginAuthor,
+        public readonly author: PluginBridge.PackageAuthor,
         public readonly description: string,
         public readonly homepage: string,
-        public readonly repository: PluginRepository,
-        public readonly dependencies: PluginDependencies,
-        public readonly status: PluginInstallStatus,
+        public readonly repository: PluginBridge.PackageRepository,
+        public readonly dependencies: PluginBridge.PackageDependencies,
+        public readonly status: PluginBridge.PluginInstallStatus,
         public readonly routes: AppRoute[],
-        public readonly components: Dictionary<Component>,
-        public readonly storages: VersionedObjectStorage<any>[],
-        public readonly settings: SettingsModel[],
+        public readonly components: PluginBridge.ComponentDictionary,
+        public readonly storages: PluginBridge.PluginStorage[],
+        public readonly settings: PluginBridge.PluginSetting[],
+        public readonly permissions: PluginBridge.PluginPermission[],
         public readonly createdAt: number,
         public readonly updatedAt: number,
     ) {}

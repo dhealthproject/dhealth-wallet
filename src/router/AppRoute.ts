@@ -14,27 +14,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-// external dependencies
-import Vue, { ComponentOptions, AsyncComponent } from 'vue';
-import RouteRecordPublic from 'vue-router';
-
 // internal dependencies
-import { RouteMeta } from './RouteMeta';
-
-type Component = ComponentOptions<Vue> | typeof Vue | AsyncComponent;
-type Dictionary<T> = { [key: string]: T };
+import { AppRoute } from '@yourdlt/wallet-api-bridge';
 
 /**
  * Vue Router route extension
  * @interface AppRoute
  * @extends {RouteRecordPublic}
  */
-export interface AppRoute extends RouteRecordPublic {
-    name: string;
-    meta: RouteMeta;
-    path: string;
-    children?: AppRoute[];
-    components: Dictionary<Component>;
-    instances: Dictionary<Vue>;
-    props: boolean | Record<string, any> | Dictionary<boolean | Record<string, any>>;
-}
+export { AppRoute };

@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
+import { PluginBridge } from '@yourdlt/wallet-api-bridge';
+import { PluginModel } from '@/core/database/entities/PluginModel';
 
-import { PluginInstallStatus, PluginModel } from '@/core/database/entities/PluginModel';
+// child components
+// @ts-ignore
+import IconButton from '@/components/IconButton/IconButton.vue';
+
 @Component({
+    components: {
+        IconButton,
+    },
     computed: {
         ...mapGetters({
             selectedPlugin: 'plugin/currentPlugin',
@@ -27,16 +35,45 @@ import { PluginInstallStatus, PluginModel } from '@/core/database/entities/Plugi
 export class PluginStatusPanelTs extends Vue {
     public selectedPlugin: PluginModel;
 
-    public get pluginStatusIndicator() {
+    /**
+     * Controls the checkbox state
+     * @type {boolean}
+     */
+    private isEnabled: boolean = false;
+
+    public get pluginActionDescriptor() {
         switch (this.selectedPlugin.status) {
-            case PluginInstallStatus.Installed:
-                return { cls: 'status-indicator amber', text: this.$t('plugin_status_installed') };
-            case PluginInstallStatus.Enabled:
-                return { cls: 'status-indicator green', text: this.$t('plugin_status_enabled') };
-            case PluginInstallStatus.Disabled:
-                return { cls: 'status-indicator red', text: this.$t('plugin_status_disabled') };
-            case PluginInstallStatus.Uninstalled:
-                return { cls: 'status-indicator red', text: this.$t('plugin_status_uninstalled') };
+            case PluginBridge.PluginInstallStatus.Installed:
+                return {
+                    event: 'on-clicked-enable',
+                    action: true,
+                    cls: 'success-button',
+                    text: this.$t('plugin_action_enable_text') + this.selectedPlugin.name,
+                    icon: 'md-checkmark',
+                };
+            case PluginBridge.PluginInstallStatus.Enabled:
+                return {
+                    event: 'on-clicked-disable',
+                    action: true,
+                    cls: 'danger-button',
+                    text: this.$t('plugin_action_disable_text') + this.selectedPlugin.name,
+                    icon: 'md-trash',
+                };
+            case PluginBridge.PluginInstallStatus.Disabled:
+                return {
+                    event: 'on-clicked-enable',
+                    action: true,
+                    cls: 'success-button',
+                    text: this.$t('plugin_action_enable_text') + this.selectedPlugin.name,
+                    icon: 'md-checkmark',
+                };
+            case PluginBridge.PluginInstallStatus.Uninstalled:
+                return { action: false, text: this.$t('plugin_status_uninstalled') };
         }
+    }
+
+    @Watch('selectedPlugin', { immediate: true })
+    protected watchCurrentPlugin() {
+        this.$store.dispatch('plugin/LOAD_PLUGINS');
     }
 }

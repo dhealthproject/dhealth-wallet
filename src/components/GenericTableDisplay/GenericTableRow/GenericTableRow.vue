@@ -1,12 +1,6 @@
 <template>
-    <div class="table-row-container table-columns"
-        @click="$emit('click')"
-    >
-        <div
-            v-for="(value, name, index) in visibleRowValues"
-            :key="index"
-            :class="['table-cell', `${name}-cell`]"
-        >
+    <div class="table-row-container table-columns" @click="$emit('click')">
+        <div v-for="(value, name, index) in visibleRowValues" :key="index" :class="['table-cell', `${name}-cell`]">
             <div v-if="isAmountField(name)">
                 <AmountDisplay :value="value" />
             </div>

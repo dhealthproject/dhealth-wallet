@@ -16,10 +16,10 @@
 import Vue from 'vue';
 
 // internal dependencies
-import { PluginInstallStatus, PluginModel } from '@/core/database/entities/PluginModel';
+import { PluginModel } from '@/core/database/entities/PluginModel';
 import { PluginService } from '@/services/PluginService';
-import { $eventBus } from '../events';
 import { AwaitLock } from './AwaitLock';
+import { $pluginBus } from '../events';
 
 /// region globals
 const Lock = AwaitLock.create();
@@ -58,16 +58,14 @@ export default {
     actions: {
         async initialize({ commit, dispatch, getters }) {
             const callback = async () => {
-                console.log('[DEBUG][store/Plugins.ts] initializing $eventBus onPluginsReady handler');
+                console.log('[DEBUG][store/Plugins.ts] initializing $pluginBus onPluginsReady handler');
 
                 // onPluginsReady
-                $eventBus.$on('onPluginsReady', (plugins: PluginModel[]) => {
+                $pluginBus.$on('onPluginsReady', (plugins: PluginModel[]) => {
                     console.log('[INFO][store/Plugin.ts] caught onPluginsReady: ', plugins);
-                    dispatch('SAVE_PLUGINS', [
+                    dispatch('SAVE_DISCOVERED_PLUGINS', [
                         ...plugins.map((p) => ({
                             ...p,
-                            status: PluginInstallStatus.Installed,
-                            createdAt: new Date().getTime(),
                         })),
                     ]);
                 });
@@ -104,17 +102,17 @@ export default {
             commit('plugins', plugins);
         },
 
-        async SAVE_PLUGINS({ commit, getters }, plugins) {
-            const prevPlugins = await new PluginService().getPlugins();
+        async SAVE_DISCOVERED_PLUGINS({ commit }, plugins) {
+            await new PluginService().setPlugins(plugins);
+            commit('plugins', plugins);
+        },
 
-            if (prevPlugins && prevPlugins.length) {
-                console.log('[DEBUG][store/Plugin.ts] updating plugins: ', plugins);
-                await new PluginService().updatePlugins(plugins);
-            } else {
-                console.log('[DEBUG][store/Plugin.ts] installing plugins: ', plugins);
-                await new PluginService().installPlugins(plugins);
-            }
+        async UPDATE_CACHE({ commit, dispatch }, plugins) {
+            dispatch('diagnostic/ADD_DEBUG', 'Store action plugin/UPDATE_PLUGINS dispatched with ' + plugins.length + ' plugins', {
+                root: true,
+            });
 
+            // first update entries cache
             commit('plugins', plugins);
         },
     },

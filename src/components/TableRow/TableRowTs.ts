@@ -17,13 +17,16 @@
 // external dependencies
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
+// internal dependencies
+import { TableAssetType } from '@/components/TableDisplay/TableAssetType';
+import { officialIcons } from '@/views/resources/Images';
+import { PluginBridge } from '@yourdlt/wallet-api-bridge';
+
 // child components
 // @ts-ignore
 import TableRow from '@/components/TableRow/TableRow.vue';
 // @ts-ignore
 import AmountDisplay from '@/components/AmountDisplay/AmountDisplay.vue';
-import { TableAssetType } from '@/components/TableDisplay/TableAssetType';
-import { officialIcons } from '@/views/resources/Images';
 
 @Component({
     components: {
@@ -147,5 +150,20 @@ export class TableRowTs extends Vue {
 
     public get externalLinkIcon() {
         return officialIcons.voting;
+    }
+
+    public getStatusIndicator(status: string) {
+        switch (status) {
+            case PluginBridge.PluginInstallStatus.Installed:
+                return { cls: 'status-indicator amber', text: this.$t('plugin_status_installed') };
+            case PluginBridge.PluginInstallStatus.Enabled:
+                return { cls: 'status-indicator green', text: this.$t('plugin_status_enabled') };
+            case PluginBridge.PluginInstallStatus.Disabled:
+                return { cls: 'status-indicator amber', text: this.$t('plugin_status_disabled') };
+            case PluginBridge.PluginInstallStatus.Uninstalled:
+                return { cls: 'status-indicator red', text: this.$t('plugin_status_uninstalled') };
+        }
+
+        return { cls: 'status-indicator red', text: this.$t('plugin_status_uninstalled') };
     }
 }

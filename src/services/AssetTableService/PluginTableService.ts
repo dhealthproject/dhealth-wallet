@@ -29,6 +29,7 @@ export class PluginTableService extends AssetTableService {
      */
     public getTableFields(): TableField[] {
         return [
+            { name: 'status', label: 'table_header_status' },
             { name: 'npmModule', label: 'table_header_npm_module' },
             { name: 'name', label: 'table_header_name' },
             { name: 'author', label: 'table_header_author' },
@@ -46,6 +47,7 @@ export class PluginTableService extends AssetTableService {
             .map((pluginInfo) => {
                 // - map table fields
                 return {
+                    status: pluginInfo.status,
                     npmModule: pluginInfo.npmModule + '@v' + pluginInfo.version,
                     name: pluginInfo.name || pluginInfo.npmModule,
                     author: pluginInfo.author.name,

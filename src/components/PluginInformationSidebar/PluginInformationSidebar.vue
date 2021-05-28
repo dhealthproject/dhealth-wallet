@@ -17,9 +17,7 @@
             <a v-if="!!selectedPlugin.author.url" :href="selectedPlugin.author.url" target="_blank">{{ selectedPlugin.author.name }}</a>
             <span v-else>{{ selectedPlugin.author.name }}</span>
             <br />
-            <a v-if="!!selectedPlugin.author.email" :href="mailtoAuthor" target="_blank">{{
-                $t('plugin_info_email_author')
-            }}</a>
+            <a v-if="!!selectedPlugin.author.email" :href="mailtoAuthor" target="_blank">{{ $t('plugin_info_email_author') }}</a>
         </div>
     </div>
 </template>

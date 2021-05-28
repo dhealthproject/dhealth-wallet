@@ -3,14 +3,23 @@
         <div class="plugin-status-inner-container">
             <div class="status-container">
                 <div class="title">
-                    <span class="title_txt">{{ $t('plugins_panel_status') }}</span>
+                    <span class="title_txt">{{ $t('plugins_panel_action_enable') }}</span>
                 </div>
                 <div class="level">
                     <div class="level-left">
-                        <div class="level-item">
-                            <div :class="pluginStatusIndicator.cls"></div>
+                        <div class="action-wrapper">
+                            <IconButton
+                                v-if="pluginActionDescriptor.action"
+                                :title="pluginActionDescriptor.text"
+                                :size="'20'"
+                                :icon="pluginActionDescriptor.icon"
+                                :class="pluginActionDescriptor.cls"
+                                @click="$emit(pluginActionDescriptor.event)"
+                            />
+                            <div v-else>
+                                <span class="txt_err">{{ pluginActionDescriptor.text }}</span>
+                            </div>
                         </div>
-                        <div class="level-item txt-small">{{ pluginStatusIndicator.text }}</div>
                     </div>
                 </div>
             </div>

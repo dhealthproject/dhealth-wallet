@@ -17,46 +17,63 @@
 @import '../../views/resources/css/common.less';
 
 .plugin-details-container {
-  background-color: transparent;
-  height: 100%;
-  width: 100%;
-
-  .plugin-details-inner-container {
+    background-color: transparent;
     height: 100%;
     width: 100%;
-    padding: 20px;
 
-    .subpage {
-      display: flex;
-      align-items: center;
-
-      .subpage-field {
-        padding: 20px;
-
-        label {
-          display: block;
-          color: @primary;
-          font-size: @biggerFont;
-          font-family: @symbolFontMedium;
-          font-weight: @bold;
-        }
-
-        span {
-          color: @primary;
-          font-size: @biggerFont;
-          font-family: @symbolFontMedium;
-        }
-
-        a {
-            font-size: @biggerFont;
-            font-family: @symbolFontMedium;
-        }
-      }
-
-      .subpage-table {
-        padding: 20px;
+    .plugin-details-inner-container {
+        height: 90%;
         width: 100%;
-      }
+        padding: 20px;
+
+        .subpage {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: top;
+
+            .w50 {
+                width: 50%;
+            }
+
+            .subpage-field {
+                padding: 20px;
+
+                label {
+                    display: block;
+                    color: @primary;
+                    font-size: @biggerFont;
+                    font-family: @symbolFontMedium;
+                    font-weight: @bold;
+                }
+
+                span {
+                    color: @primary;
+                    font-size: @biggerFont;
+                    font-family: @symbolFontMedium;
+                }
+
+                a {
+                    font-size: @biggerFont;
+                    font-family: @symbolFontMedium;
+                }
+            }
+
+            .subpage-table {
+                padding: 20px;
+                width: 100%;
+            }
+
+            hr.separator {
+                border-color: #5200c6;
+                border-top: 1px;
+                opacity: 0.2;
+                margin: 10px;
+            }
+
+            .break {
+                flex-basis: 100%;
+                height: 0;
+            }
+        }
     }
-  }
 }

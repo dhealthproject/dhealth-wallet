@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-@import '../../../resources/css/variables.less';
+import { PluginBridge } from '@yourdlt/wallet-api-bridge';
 
-.plugin-list-container {
-    background-color: @white;
+/**
+ * @description This model describes plugin settings values that
+ * can be set per profile. In case no value is set for a specific
+ * profile, the `defaultValue` field of PluginSettingModel is used.
+ */
+export class PluginSettingModel {
+    constructor(
+        public readonly profileName: string,
+        public readonly npmModule: string,
+        public readonly optionName: string,
+        public readonly optionValue: PluginBridge.ScalarValueType,
+        public readonly createdAt: number,
+        public readonly updatedAt: number,
+    ) {}
 }

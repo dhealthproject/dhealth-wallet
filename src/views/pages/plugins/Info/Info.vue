@@ -2,11 +2,10 @@
     <div v-if="!!selectedPlugin" class="dashboard-container">
         <div class="dashboard-left-container">
             <div class="dashboard-top-left-container">
-                <PluginStatusPanel />
+                <PluginStatusPanel @on-clicked-enable="requestEnablePlugin" @on-clicked-disable="requestDisablePlugin" />
             </div>
             <div class="dashboard-bottom-left-container">
-                <PluginDetailMultiPanel
-                  @on-clicked-readme="console.log('should display readme modal')" />
+                <PluginDetailMultiPanel @on-clicked-readme="openReadme" />
             </div>
         </div>
         <div class="dashboard-right-container">
@@ -17,32 +16,30 @@
                 <PluginInformationSidebar :plugin="selectedPlugin" />
             </div>
         </div>
+
+        <ModalConfirm
+            v-model="showConfirmOpenPluginStatusChangeModal"
+            :title="$t('modal_title_confirm_plugin_status_change')"
+            :message="$t('modal_text_confirm_plugin_status_change')"
+            :use-bigger-font="true"
+            @confirmed="showPluginStatusChangeModal = true"
+            @cancelled="nextPluginStatus = null"
+        />
+
+        <ModalPluginStatusChange
+            v-if="showPluginStatusChangeModal"
+            :visible="showPluginStatusChangeModal"
+            :title="$t('modal_title_plugin_status_change')"
+            :status="nextPluginStatus"
+            @confirmed="confirmStatusChange"
+            @cancelled="showPluginStatusChangeModal = false"
+        />
     </div>
 </template>
 
 <script lang="ts">
-// external dependencies
-import { Component, Vue } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
-
-// child components
-import NavigationTabs from '@/components/NavigationTabs/NavigationTabs.vue';
-import PluginDetailMultiPanel from '@/components/PluginDetailMultiPanel/PluginDetailMultiPanel.vue';
-import PluginStatusPanel from '@/components/PluginStatusPanel/PluginStatusPanel.vue';
-import PluginInformationSidebar from '@/components/PluginInformationSidebar/PluginInformationSidebar.vue';
-
-@Component({
-    components: { NavigationTabs, PluginDetailMultiPanel, PluginStatusPanel, PluginInformationSidebar },
-    computed: {
-        ...mapGetters({
-            selectedPlugin: 'plugin/currentPlugin',
-        }),
-    },
-    data() {
-        return {};
-    },
-})
-export default class Info extends Vue {}
+import { InfoTs } from './InfoTs';
+export default class Info extends InfoTs {}
 </script>
 <style lang="less" scoped>
 @import './Info.less';

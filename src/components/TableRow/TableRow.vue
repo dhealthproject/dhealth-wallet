@@ -22,6 +22,14 @@
                     <span>{{ $t('plugins_open_website') }}</span>
                 </a>
             </div>
+            <div v-else-if="'status' === name" class="item-status-container">
+                <div class="level-item">
+                    <div :class="getStatusIndicator(value).cls"></div>
+                </div>
+                <div class="level-item txt-small">
+                    <span>{{ getStatusIndicator(value).text }}</span>
+                </div>
+            </div>
             <div v-else-if="name !== 'metadataList'">
                 {{ value }}
             </div>

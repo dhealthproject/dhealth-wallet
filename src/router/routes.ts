@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
+import { PluginService } from '@/services/PluginService';
 import { createStepImage, importStepImage, officialIcons, walletTypeImages } from '@/views/resources/Images';
 import { AppRoute } from './AppRoute';
 
@@ -376,7 +377,7 @@ export const routes: AppRoute[] = [
                         // @ts-ignore
                         component: () => import('@/views/pages/plugins/Info/Info.vue'),
                     },
-                ],
+                ].concat(...new PluginService().getPlugins().map((p) => p.routes)),
             },
         ],
         /// end-region PageLayout children

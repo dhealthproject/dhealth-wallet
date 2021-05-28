@@ -18,12 +18,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 
 // internal dependencies
-import {
-    AssetTableService,
-    SortingDirections,
-    TableField,
-    TableSortingOptions,
-} from '@/services/AssetTableService/AssetTableService';
+import { AssetTableService, SortingDirections, TableField, TableSortingOptions } from '@/services/AssetTableService/AssetTableService';
 import { GenericTableService, TableAction } from '@/services/AssetTableService/GenericTableService';
 
 // child components
@@ -47,7 +42,6 @@ import ButtonRefresh from '@/components/ButtonRefresh/ButtonRefresh';
     },
 })
 export class GenericTableDisplayTs extends Vue {
-
     /**
      * Pagination page size
      * @type {number}
@@ -58,10 +52,13 @@ export class GenericTableDisplayTs extends Vue {
      * Current table sorting state
      * @var {TableSortingOptions}
      */
-    @Prop({ default: {
-        fieldName: undefined,
-        direction: undefined,
-    } }) public sortedBy: TableSortingOptions;
+    @Prop({
+        default: {
+            fieldName: undefined,
+            direction: undefined,
+        },
+    })
+    public sortedBy: TableSortingOptions;
 
     /**
      * Table action buttons.
@@ -92,6 +89,18 @@ export class GenericTableDisplayTs extends Vue {
      * @type {boolean}
      */
     @Prop({ default: undefined }) public refreshGetter: string;
+
+    /**
+     * Whether headers are disabled
+     * @type {boolean}
+     */
+    @Prop({ default: false }) public disableHeaders: boolean;
+
+    /**
+     * Whether pagination is disabled if it has only one page.
+     * @type {boolean}
+     */
+    @Prop({ default: false }) public disableSinglePageLinks: boolean;
 
     /**
      * avoid multiple clicks
@@ -141,7 +150,7 @@ export class GenericTableDisplayTs extends Vue {
         // }
 
         // Could not determine data source
-        return []
+        return [];
     }
 
     /**
@@ -168,10 +177,7 @@ export class GenericTableDisplayTs extends Vue {
      * @return {TableRowValues[]}
      */
     get currentPageRows(): any[] {
-        return this.displayedValues.slice(
-            (this.currentPage - 1) * this.pageSize,
-            this.currentPage * this.pageSize
-        );
+        return this.displayedValues.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
     }
     /// end-region getters and setters
 
@@ -191,11 +197,7 @@ export class GenericTableDisplayTs extends Vue {
      * @return {AssetTableService}
      */
     protected getService(): AssetTableService {
-        return new GenericTableService(
-            this.currentHeight,
-            this.items,
-            this.fields,
-        )
+        return new GenericTableService(this.currentHeight, this.items, this.fields);
     }
 
     /**
@@ -244,13 +246,16 @@ export class GenericTableDisplayTs extends Vue {
     }
 
     protected async onRefresh() {
-        if (this.isRefreshing || !this.canRefresh) {
-            return ;
+        if (this.isRefreshing || !this.canRefresh) {
+            return;
         }
 
         this.isRefreshing = true;
-        try { await this.refresh(); }
-        catch (e) { console.log('Cannot refresh', e); }
+        try {
+            await this.refresh();
+        } catch (e) {
+            console.log('Cannot refresh', e);
+        }
         this.isRefreshing = false;
     }
 }

@@ -28,10 +28,7 @@ export type TableAction = {
 };
 
 export class GenericTableService extends AssetTableService {
-    constructor(
-      currentHeight: number,
-      private readonly rows: any[],
-      private readonly fields: TableField[]) {
+    constructor(currentHeight: number, private readonly rows: any[], private readonly fields: TableField[]) {
         super(currentHeight);
     }
 
@@ -48,8 +45,6 @@ export class GenericTableService extends AssetTableService {
      */
     public getTableRows(): any[] {
         // - get reactive rows data from the store
-        return this.rows
-            .map((currentRow) => ({...currentRow}))
-            .filter((x) => x); // filter out rows that are not yet available
+        return this.rows.map((currentRow) => ({ ...currentRow })).filter((x) => x); // filter out rows that are not yet available
     }
 }
