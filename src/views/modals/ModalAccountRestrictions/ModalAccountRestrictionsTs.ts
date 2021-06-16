@@ -15,18 +15,17 @@
  */
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
+import { NavigationLinks } from '@yourdlt/wallet-components';
 import { AccountModel } from '@/core/database/entities/AccountModel';
 // @ts-ignore
 import FormAccountRestrictionTransaction from '@/views/forms/FormAccountRestrictionTransaction/FormAccountRestrictionTransaction.vue';
 // @ts-ignore
 import AboutPage from '@/views/pages/settings/AboutPage/AboutPage.vue';
 // @ts-ignore
-import NavigationLinks from '@/components/NavigationLinks/NavigationLinks.vue';
-//@ts-ignore
 import FormNodeEdit from '@/views/forms/FormNodeEdit/FormNodeEdit.vue';
-//@ts-ignore
+// @ts-ignore
 import AccountRestrictionsList from '@/components/AccountRestrictionsList/AccountRestrictionsList.vue';
-//@ts-ignore
+// @ts-ignore
 import ButtonAdd from '@/components/ButtonAdd/ButtonAdd.vue';
 import { AccountRestriction } from 'symbol-sdk';
 

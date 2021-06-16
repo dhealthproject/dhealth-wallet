@@ -60,6 +60,7 @@ import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
 // @ts-ignore
 import Alert from '@/components/Alert/Alert.vue';
 import { ValidationProvider } from 'vee-validate';
+import { NavigationLinks } from '@yourdlt/wallet-components';
 
 import { HarvestingStatus } from '@/store/Harvesting';
 import { AccountTransactionSigner, TransactionAnnouncerService, TransactionSigner } from '@/services/TransactionAnnouncerService';
@@ -81,8 +82,6 @@ import ModalFormProfileUnlock from '@/views/modals/ModalFormProfileUnlock/ModalF
 import { officialIcons } from '@/views/resources/Images';
 // @ts-ignore
 import ModalImportPrivateKey from '@/views/modals/ModalImportPrivateKey/ModalImportPrivateKey.vue';
-// @ts-ignore
-import NavigationLinks from '@/components/NavigationLinks/NavigationLinks.vue';
 // @ts-ignore
 import ModalConfirm from '@/views/modals/ModalConfirm/ModalConfirm.vue';
 // @ts-ignore

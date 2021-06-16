@@ -31,6 +31,7 @@ export const $eventBus = new Vue();
  * This plugin bus channels following events:
  *
  * - onPluginsReady with \a plugins
+ * - onPluginLoaded with \a pluginData
  */
 export const $pluginBus = new Vue();
 /// end-region plugin bus

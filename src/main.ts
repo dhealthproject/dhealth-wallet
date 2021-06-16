@@ -14,7 +14,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
+// external dependencies
 import Vue from 'vue';
+// @ts-ignore
+import { library } from '@fortawesome/fontawesome-svg-core';
+// @ts-ignore
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons';
+// @ts-ignore
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+// import vue plugins
 import Router from 'vue-router';
 import VueRx from 'vue-rx';
 import moment from 'vue-moment';
@@ -25,13 +34,7 @@ import infiniteScroll from 'vue-infinite-scroll';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import VueNumber from 'vue-number-animation';
-import { PluginOptions } from 'vue-toastification/dist/types/src/types';
-// @ts-ignore
-import { library } from '@fortawesome/fontawesome-svg-core';
-// @ts-ignore
-import { faFileCsv } from '@fortawesome/free-solid-svg-icons';
-// @ts-ignore
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import LoadScript from 'vue-plugin-load-script';
 
 // internal dependencies
 import { UIBootstrapper } from '@/app/UIBootstrapper';
@@ -42,9 +45,15 @@ import { VeeValidateSetup } from '@/core/validation/VeeValidateSetup';
 // @ts-ignore
 import App from '@/app/App.vue';
 import clickOutsideDirective from '@/directives/clickOutside';
-import { $pluginBus } from './events';
 
-/// region UI plugins
+// plugins provider/injection
+import './injecter';
+if ('PluginInjecter' in window) {
+    console.log('[DEBUG][main.ts] PluginInjecter is now defined');
+    Vue.use(window['PluginInjecter']);
+}
+
+// define usage of UI plugins
 Vue.use(iView, { locale });
 Vue.use(moment as any);
 Vue.use(Router);
@@ -52,21 +61,18 @@ Vue.use(VueRx);
 Vue.use(VueNumber);
 VeeValidateSetup.initialize();
 Vue.use(infiniteScroll);
-const toastDefaultOptions: PluginOptions = {
+Vue.use(Toast, {
     closeButton: false,
     timeout: 3000,
     transition: 'Vue-Toastification__fade',
     transitionDuration: 300,
-};
-Vue.use(Toast, toastDefaultOptions);
+});
+Vue.use(LoadScript);
 library.add(faFileCsv);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-/// end-region UI plugins
-
-/// directives
 Vue.directive('click-outside', clickOutsideDirective);
-/// end-region directives
 
+// create root instance
 const app = new Vue({
     router,
     store: AppStore,
@@ -80,20 +86,7 @@ const app = new Vue({
     render: (h) => h(App),
 });
 
+// mount virtual DOM
 app.$mount('#app');
-
-// Enable IPC communicator from main process to renderer
-if ('electron' in window && 'ipcRenderer' in window['electron']) {
-    // forwarding onPluginsResolved as onPluginsReady on renderer process
-    window['electron']['ipcRenderer'].on('onPluginsResolved', (event, data) => {
-        console.log(`[INFO][main.ts] received onPluginsResolved with ${data} from main process`);
-        $pluginBus.$emit('onPluginsReady', JSON.parse(!!data && data.length ? data : '[]'));
-    });
-
-    // onPluginLoad
-    window['electron']['ipcRenderer'].on('epm-loaded', (event, plugin) => {
-        console.log(`[DEBUG][main.ts] received epm-load with ${plugin} from main process`);
-    });
-}
 
 export default app;

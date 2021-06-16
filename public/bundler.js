@@ -21,7 +21,6 @@
  * @description   This file defines routines to create a cross-platform Electron App.
  * --------------------------------------------------------------------------------------
  */
-
 const path = require('path')
 const fs = require('fs')
 const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron')
@@ -300,17 +299,31 @@ class AppPluginManager {
     this.dataPath = app.getPath('userData')
     this.pluginsPath = path.join(app.getPath('userData'), 'plugins')
     this.pluginsConfPath = path.join(this.pluginsPath, 'plugins.json')
+    this.injecterPath = path.join(this.pluginsPath, 'plugins.js')
 
     // Evaluate filesystem and setup
     this.setupFilesystem()
+
+    // Handles loaded plugins to send components details to App
+    ipcMain.once('onPluginLoaded', (event, pluginJson) => {
+      AppMainWindow.webContents.send('onPluginLoaded', pluginJson);
+    });
 
     // Load plugins for registration
     this.loadPlugins().then(
       (plugins) => {
         console.log("YourDLT plugins loaded: ", plugins)
 
-        // Send information about loaded plugins to App
+        // Send information about resolved plugins to App
         AppMainWindow.webContents.send('onPluginsResolved', JSON.stringify(plugins))
+
+        // plugins.forEach(p =>  {
+        //   const entryPoint = p.installPath + '/' + p.main;
+        //   AppMainWindow.webContents.send('onPluginLoaded', JSON.stringify({
+        //     entryPoint,
+        //     installPath: p.installPath,
+        //   }))
+        // })
       }
     )
   }
@@ -351,7 +364,7 @@ class AppPluginManager {
         try {
           // Try installing the plugin
           console.log(`Now installing ${pluginSlug}...`)
-          const loadedPlugin = await this.installPlugin(pluginSlug, pluginVer)
+          await this.installPlugin(pluginSlug, pluginVer)
 
           // Verify that the plugin folder is compatible
           if (! fs.readdirSync(installPath).includes('package.json')) {
@@ -368,19 +381,14 @@ class AppPluginManager {
             npmModule: pkg.name,
             installPath: installPath,
             name: pluginSlug,
-            version: pluginVer,
+            version: pkg.version,
+            main: pkg.main,
             // data from `package.json`
             author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
             description: pkg && 'description' in pkg ? pkg.description : '',
             homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
             repository: pkg && 'repository' in pkg ? pkg.repository : '',
             dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
-            // data from *loaded module*
-            routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
-            components: loadedPlugin && 'components' in loadedPlugin ? loadedPlugin.components : {},
-            storages: loadedPlugin && 'storages' in loadedPlugin ? loadedPlugin.storages : [],
-            settings: loadedPlugin && 'settings' in loadedPlugin ? loadedPlugin.settings : [],
-            permissions: loadedPlugin && 'permissions' in loadedPlugin ? loadedPlugin.permissions : [],
           })
         }
         catch (e) {
@@ -390,6 +398,7 @@ class AppPluginManager {
         }
       }
 
+      this.createInjecter()
       return resolve(this.plugins)
     })
   }
@@ -417,10 +426,94 @@ class AppPluginManager {
 
         console.log(`Installed at ${pluginPath}`)
         console.log(`Now loading ${plugin}...`)
-        const module = pluginManager.load(this.dataPath, plugin).default
-        return resolve(module)
+        //const module = pluginManager.load(this.dataPath, plugin).default
+        //console.log('Installed module: ', module)
+        //return resolve(module)
+        return resolve(pluginPath)
       });
     })
+  }
+
+  createInjecter() {
+    // Adds auto-generation notice
+    let injecterSource = `/**
+ * This file is auto-generated using YourDLT Wallet
+ *
+ * You should never modify the content of this file
+ * unless you know what you are doing.
+ *
+ * The method AppPluginManager.createInjecter()  is
+ * responsible for generating this file.
+ */\n`;
+
+    // Adds plugins "require" calls
+    this.plugins.forEach(
+      (p, i) => injecterSource += `
+const plugin${i} = require('./${p.npmModule}');`);
+
+    // Prepares Vue components available in plugins
+    injecterSource += `
+window.PluginPackages = [];
+`;
+
+    // Checks for Vue components registration function
+    this.plugins.forEach(
+      (p, i) => injecterSource += `
+if ('registerComponents' in plugin${i}) {
+  console.log('[DEBUG][plugins/plugins.js] plugin is: ', plugin${i});
+
+  window.PluginPackages.push({
+    plugin: '${p.npmModule}',
+    module: plugin${i}.default,
+    path: '${p.installPath}',
+    main: '${p.main}'
+  });
+}
+`);
+
+    // Creates plugin injecter function to be used in renderer
+    injecterSource += `
+window.PluginInjecter = {
+  install(Vue, opts) {
+    window.PluginPackages.forEach(
+      p => {
+        console.log("[DEBUG][plugins/plugins.js] components are: ", p.module.components);
+
+        // Registers components
+        Object.keys(p.module.components).forEach(
+          k => Vue.component(k, p.module.components[k])
+        );
+
+        setTimeout(() => {
+          // Persists loaded plugin details
+          // Component data is ignored here
+          const entryPoint = p.path + '/' + p.main;
+          const loadedPlugin = p.module;
+          window.electron.ipcRenderer.send('onPluginLoaded', JSON.stringify({
+            npmModule: p.plugin,
+            entryPoint,
+            installPath: p.path,
+            view: loadedPlugin && 'view' in loadedPlugin ? loadedPlugin.view : '',
+            routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
+            components: loadedPlugin && 'components' in loadedPlugin ? Object.keys(loadedPlugin.components) : [],
+            storages: loadedPlugin && 'storages' in loadedPlugin ? loadedPlugin.storages : [],
+            settings: loadedPlugin && 'settings' in loadedPlugin ? loadedPlugin.settings : [],
+            permissions: loadedPlugin && 'permissions' in loadedPlugin ? loadedPlugin.permissions : [],
+          }));
+        }, 10000);
+      }
+    )
+  }
+}
+`;
+
+    console.log(`[INFO][public/bundler.js] Now creating injecter at ${this.injecterPath}`);
+
+    //XXX add file hash to identify updates to injecter
+    //XXX add tree hash to identify plugin updates
+
+    // Saves plugins.js in plugins/
+    fs.writeFileSync(this.injecterPath, injecterSource, {mode: 0o644});
   }
 }
 

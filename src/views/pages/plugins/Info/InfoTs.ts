@@ -116,12 +116,5 @@ export class InfoTs extends Vue {
         // update component/page state
         this.nextPluginStatus = this.nextPluginStatus === 'enabled' ? 'disabled' : 'enabled';
         this.showPluginStatusChangeModal = false;
-
-        // determine if we need a redirect
-        console.log('status: ', this.selectedPlugin.status);
-        if (this.selectedPlugin.status === 'enabled' && this.selectedPlugin.routes.length) {
-            console.log('redirect to: ', this.selectedPlugin.routes[0].name);
-            this.$router.push({ name: this.selectedPlugin.routes[0].name });
-        }
     }
 }

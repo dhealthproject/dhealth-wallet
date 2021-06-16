@@ -16,6 +16,7 @@
 // external dependencies
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
+import { NavigationLinks } from '@yourdlt/wallet-components';
 
 // internal dependencies
 // child components
@@ -27,8 +28,6 @@ import AccountSelectorPanel from '@/components/AccountSelectorPanel/AccountSelec
 import ContactSelectorPanel from '@/components/ContactSelectorPanel/ContactSelectorPanel.vue';
 // @ts-ignore
 import ContactDetailPanel from '@/components/ContactDetailPanel/ContactDetailPanel.vue';
-// @ts-ignore
-import NavigationLinks from '@/components/NavigationLinks/NavigationLinks.vue';
 // @ts-ignore
 import ButtonAdd from '@/components/ButtonAdd/ButtonAdd.vue';
 // @ts-ignore

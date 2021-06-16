@@ -30,57 +30,6 @@ export class PluginService {
      */
     private readonly pluginModelStorage = PluginModelStorage.INSTANCE;
 
-    /// region static API
-    /**
-     * This method *globally registers* component to make them
-     * available to a Vue instance that created afterwards. It
-     * is important to call this method *before* creating  the
-     * new instance and before rendering of the instance.
-     *
-     * @returns {number}    The number of components attached.
-     * @throws  {Error}     On invalid \a npmModule, not found in local cache.
-     */
-    // public static attachComponents(): number {
-    //     const plugins = new PluginService().getPlugins();
-    //     const attached = [];
-
-    //     // register components of enabled plugins
-    //     for (const i in plugins) {
-    //         const plugin = plugins[i];
-
-    //         // registering only for enabled plugins
-    //         if (plugin.status !== PluginBridge.PluginInstallStatus.Enabled) {
-    //             continue;
-    //         }
-
-    //         console.log('found enabled plugin: ', plugin.npmModule);
-
-    //         // register individual components
-    //         const components = Object.keys(plugin.components);
-    //         components.forEach((c: string) => {
-    //             console.log('registering component: ', c, plugin.components[c]);
-    //             Vue.component(c, plugin.components[c]);
-    //             attached.push(c);
-    //         });
-    //     }
-
-    //     return attached.length;
-    // }
-
-    /**
-     *
-     * @param npmModule
-     * @returns {number}    The number of components detached.
-     * @throws  {Error}     On invalid \a npmModule, not found in local cache.
-     */
-    // public static detachComponents(npmModule: string): number {
-    //     const plugin = new PluginService().getPluginOrFail(npmModule);
-    //     const components = Object.keys(plugin.components);
-
-    //     return components.length;
-    // }
-    /// end-region static API
-
     /// region public API
     /**
      * Construct a plugin service around an optional \a $app
@@ -164,7 +113,7 @@ export class PluginService {
                 },
                 // then storage info
                 fromStorage.find((s) => s.npmModule === p.npmModule),
-                // then *discovered* info
+                // then filesystem info
                 p,
             ),
         );
@@ -179,7 +128,7 @@ export class PluginService {
 
         // update storage with newly discovered plugins
         const updated = _.uniqBy(augmented.concat(uninstalled), 'npmModule');
-        console.log('Updating plugins with: ', updated);
+        console.log('[PluginService.ts] Updating plugins with: ', updated);
 
         this.pluginModelStorage.set(updated);
         return this;
@@ -194,18 +143,35 @@ export class PluginService {
      * @throws  {Error}     On invalid \a npmModule, not found in local cache.
      */
     public updatePlugin(npmModule: string, fields: { [key: string]: any }): PluginService {
-        // check for presence
-        this.assertPluginExists(npmModule);
+        let updated = [];
+        try {
+            // determines if its an update or a create
+            this.assertPluginExists(npmModule);
 
-        // update one entry's "fields"
-        const updated = this.getPlugins().map((p) => {
-            if (p.npmModule !== npmModule) {
-                return p;
-            }
-            return Object.assign({}, p, fields);
-        });
+            console.log("Will update ", npmModule, " with: ", fields);
 
-        console.log('Performing update of DB with: ', updated);
+            // update one entry's "fields"
+            updated = this.getPlugins().map((p) => {
+                if (p.npmModule !== npmModule) {
+                    return p;
+                }
+                return Object.assign({}, p, fields);
+            });
+            console.log('Performing update in DB with: ', updated);
+        }
+        catch (e) {
+            console.log("Will create ", npmModule, " with: ", fields);
+
+            // create new plugin entry
+            let p = new PluginModel(npmModule);
+            p = Object.assign({}, p, fields);
+
+            console.log("assigned ", p);
+
+            updated = this.getPlugins().concat([p]);
+            console.log('Performing create in DB with: ', updated);
+        }
+
         this.pluginModelStorage.set(updated);
         return this;
     }

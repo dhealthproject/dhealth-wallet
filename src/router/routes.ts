@@ -377,7 +377,18 @@ export const routes: AppRoute[] = [
                         // @ts-ignore
                         component: () => import('@/views/pages/plugins/Info/Info.vue'),
                     },
-                ].concat(...new PluginService().getPlugins().map((p) => p.routes)),
+                    {
+                        path: '/page',
+                        name: 'plugins.page',
+                        meta: {
+                            protected: true,
+                            hideFromMenu: false,
+                            title: 'page_title_plugins_page',
+                        },
+                        // @ts-ignore
+                        component: () => import('@/views/pages/plugins/PageWrapper/PageWrapper.vue'),
+                    },
+                ].concat(...new PluginService().getPlugins().map((p) => 'routes' in p ? p.routes : [])),
             },
         ],
         /// end-region PageLayout children

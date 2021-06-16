@@ -16,8 +16,12 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { ValidationProvider } from 'vee-validate';
-// internal dependencies
 import { AddressBook, IContact } from 'symbol-address-book';
+import { NavigationLinks } from '@yourdlt/wallet-components';
+
+// internal dependencies
+import { UIHelpers } from '@/core/utils/UIHelpers';
+
 // child components
 // @ts-ignore
 import MosaicAmountDisplay from '@/components/MosaicAmountDisplay/MosaicAmountDisplay.vue';
@@ -34,10 +38,7 @@ import AmountDisplay from '@/components/AmountDisplay/AmountDisplay.vue';
 // @ts-ignore
 import ModalBackupProfile from '@/views/modals/ModalBackupProfile/ModalBackupProfile.vue';
 // @ts-ignore
-import NavigationLinks from '@/components/NavigationLinks/NavigationLinks.vue';
-// @ts-ignore
 import ModalContactCreation from '@/views/modals/ModalContactCreation/ModalContactCreation.vue';
-import { UIHelpers } from '@/core/utils/UIHelpers';
 
 @Component({
     components: {

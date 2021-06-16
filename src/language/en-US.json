@@ -1246,6 +1246,7 @@
     "sidebar_item_plugins": "Plugins",
     "page_title_plugins": "Plugin Manager",
     "page_title_plugins_info": "Overview",
+    "page_title_plugins_page": "Plugin page",
     "show_disabled_plugins": "Show disabled plugins",
     "table_header_npm_module": "NPM Module",
     "table_header_author": "Package author",

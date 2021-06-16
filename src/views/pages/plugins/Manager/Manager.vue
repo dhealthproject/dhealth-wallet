@@ -5,7 +5,11 @@
                 <NavigationTabs direction="horizontal" :parent-route-name="parentRouteName" />
             </div>
             <div class="bottom-container">
-                <router-view />
+                <!--
+                Even when routes use the same component, treat them
+                as distinct and create the component again.
+                -->
+                <router-view :key="$route.fullPath" />
             </div>
         </div>
     </div>

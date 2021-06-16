@@ -1,14 +1,13 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { AccountModel } from '@/core/database/entities/AccountModel';
+import { NavigationLinks } from '@yourdlt/wallet-components';
 // @ts-ignore
 import FormGeneralSettings from '@/views/forms/FormGeneralSettings/FormGeneralSettings.vue';
 // @ts-ignore
 import FormProfilePasswordUpdate from '@/views/forms/FormProfilePasswordUpdate/FormProfilePasswordUpdate.vue';
 // @ts-ignore
 import AboutPage from '@/views/pages/settings/AboutPage/AboutPage.vue';
-// @ts-ignore
-import NavigationLinks from '@/components/NavigationLinks/NavigationLinks.vue';
 //@ts-ignore
 import FormNodeEdit from '@/views/forms/FormNodeEdit/FormNodeEdit.vue';
 

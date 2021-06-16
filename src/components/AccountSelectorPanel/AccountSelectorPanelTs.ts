@@ -17,11 +17,17 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { MosaicId, NetworkType } from 'symbol-sdk';
 import { ValidationProvider } from 'vee-validate';
+import { AmountDisplay } from '@yourdlt/wallet-components';
+import { NavigationLinks } from '@yourdlt/wallet-components';
+
 // internal dependencies
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { AccountModel, AccountType } from '@/core/database/entities/AccountModel';
 import { AccountService } from '@/services/AccountService';
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';
+import { NetworkCurrencyModel } from '@/core/database/entities/NetworkCurrencyModel';
+import { MosaicModel } from '@/core/database/entities/MosaicModel';
+
 // child components
 // @ts-ignore
 import MosaicAmountDisplay from '@/components/MosaicAmountDisplay/MosaicAmountDisplay.vue';
@@ -32,13 +38,7 @@ import FormLabel from '@/components/FormLabel/FormLabel.vue';
 // @ts-ignore
 import ModalFormSubAccountCreation from '@/views/modals/ModalFormSubAccountCreation/ModalFormSubAccountCreation.vue';
 // @ts-ignore
-import AmountDisplay from '@/components/AmountDisplay/AmountDisplay.vue';
-// @ts-ignore
-import NavigationLinks from '@/components/NavigationLinks/NavigationLinks.vue';
-// @ts-ignore
 import ModalBackupProfile from '@/views/modals/ModalBackupProfile/ModalBackupProfile.vue';
-import { NetworkCurrencyModel } from '@/core/database/entities/NetworkCurrencyModel';
-import { MosaicModel } from '@/core/database/entities/MosaicModel';
 
 @Component({
     components: {

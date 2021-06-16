@@ -58,16 +58,19 @@ export default {
     actions: {
         async initialize({ commit, dispatch, getters }) {
             const callback = async () => {
-                console.log('[DEBUG][store/Plugins.ts] initializing $pluginBus onPluginsReady handler');
 
                 // onPluginsReady
+                console.log('[DEBUG][store/Plugins.ts] initializing $pluginBus onPluginsReady handler');
                 $pluginBus.$on('onPluginsReady', (plugins: PluginModel[]) => {
                     console.log('[INFO][store/Plugin.ts] caught onPluginsReady: ', plugins);
-                    dispatch('SAVE_DISCOVERED_PLUGINS', [
-                        ...plugins.map((p) => ({
-                            ...p,
-                        })),
-                    ]);
+                    dispatch('SAVE_DISCOVERED_PLUGINS', plugins);
+                });
+
+                // onPluginLoaded
+                console.log('[DEBUG][store/Plugins.ts] initializing $pluginBus onPluginLoaded handler');
+                $pluginBus.$on('onPluginLoaded', (plugin: PluginModel) => {
+                    console.log('[INFO][store/Plugin.ts] caught onPluginLoaded: ', plugin);
+                    dispatch('SAVE_PLUGIN_DETAILS', plugin);
                 });
 
                 // update store
@@ -105,6 +108,11 @@ export default {
         async SAVE_DISCOVERED_PLUGINS({ commit }, plugins) {
             await new PluginService().setPlugins(plugins);
             commit('plugins', plugins);
+        },
+
+        async SAVE_PLUGIN_DETAILS({ dispatch }, plugin) {
+            await new PluginService().updatePlugin(plugin.npmModule, plugin);
+            await dispatch('LOAD_PLUGINS');
         },
 
         async UPDATE_CACHE({ commit, dispatch }, plugins) {

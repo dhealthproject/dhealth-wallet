@@ -15,6 +15,8 @@
  */
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
+import { GenericTableDisplay } from '@yourdlt/wallet-components';
+import { NavigationLinks } from '@yourdlt/wallet-components';
 
 import { PluginModel } from '@/core/database/entities/PluginModel';
 import { AppRoute } from '@/router/AppRoute';
@@ -23,10 +25,6 @@ import { PluginService } from '@/services/PluginService';
 // child components
 // @ts-ignore
 import IconButton from '@/components/IconButton/IconButton.vue';
-// @ts-ignore
-import NavigationLinks from '@/components/NavigationLinks/NavigationLinks.vue';
-// @ts-ignore
-import GenericTableDisplay from '@/components/GenericTableDisplay/GenericTableDisplay.vue';
 
 @Component({
     components: {
@@ -91,7 +89,7 @@ export class PluginDetailMultiPanelTs extends Vue {
     }
 
     public getFormattedComponents(): any[] {
-        const comps = Object.keys(this.selectedPlugin.components);
+        const comps = this.selectedPlugin.components;
         return comps.map((c) => ({
             name: c,
         }));
