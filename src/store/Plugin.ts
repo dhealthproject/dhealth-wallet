@@ -58,7 +58,6 @@ export default {
     actions: {
         async initialize({ commit, dispatch, getters }) {
             const callback = async () => {
-
                 // onPluginsReady
                 console.log('[DEBUG][store/Plugins.ts] initializing $pluginBus onPluginsReady handler');
                 $pluginBus.$on('onPluginsReady', (plugins: PluginModel[]) => {

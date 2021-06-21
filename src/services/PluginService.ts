@@ -148,8 +148,6 @@ export class PluginService {
             // determines if its an update or a create
             this.assertPluginExists(npmModule);
 
-            console.log("Will update ", npmModule, " with: ", fields);
-
             // update one entry's "fields"
             updated = this.getPlugins().map((p) => {
                 if (p.npmModule !== npmModule) {
@@ -158,15 +156,10 @@ export class PluginService {
                 return Object.assign({}, p, fields);
             });
             console.log('Performing update in DB with: ', updated);
-        }
-        catch (e) {
-            console.log("Will create ", npmModule, " with: ", fields);
-
+        } catch (e) {
             // create new plugin entry
             let p = new PluginModel(npmModule);
             p = Object.assign({}, p, fields);
-
-            console.log("assigned ", p);
 
             updated = this.getPlugins().concat([p]);
             console.log('Performing create in DB with: ', updated);

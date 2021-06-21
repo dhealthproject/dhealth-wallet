@@ -30,8 +30,9 @@
     },
     "main": "public/bundler.js",
     "scripts": {
+        "install:plugins": "electron public/plugins.js",
         "start": "npm run node-hid:prebuild-install && electron .",
-        "build": "npm run build:web",
+        "build": "npm run install:plugins && npm run build:web",
         "test": "vue-cli-service test:unit",
         "lint": "npm run prettier && npm run eslint",
         "dev": "vue-cli-service serve",
