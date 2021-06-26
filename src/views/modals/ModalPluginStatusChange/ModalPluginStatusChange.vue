@@ -5,8 +5,8 @@
                 <div class="body-text">
                     <p>{{ $t('modal_plugin_status_change_explain_' + status) }}</p>
                 </div>
-                <hr v-if="status === 'enabled' && selectedPlugin.permissions.length > 0" class="separator" />
-                <div v-if="status === 'enabled' && selectedPlugin.permissions.length > 0" class="body-text">
+                <hr v-if="status === 'enabled' && selectedPlugin.permissions && selectedPlugin.permissions.length > 0" class="separator" />
+                <div v-if="status === 'enabled' && selectedPlugin.permissions && selectedPlugin.permissions.length > 0" class="body-text">
                     <label>Permissions requested: </label>
 
                     <table>

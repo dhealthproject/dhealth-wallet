@@ -16,7 +16,7 @@
 @import '../../resources/css/variables.less';
 @import '../../resources/css/forms.less';
 
-.modal-plugin-status-change-wrapper {
+.modal-plugin-install-details-wrapper {
     /deep/.ivu-modal {
         width: 9rem !important;
         overflow-wrap: break-word;
@@ -57,42 +57,9 @@
         line-height: 30px;
         white-space: pre-wrap;
         text-align: justify;
-        max-height: 200px;
-        overflow-y: auto;
 
         label {
             color: @accentPink;
-        }
-
-        table {
-            border: 0;
-            margin-left: 0;
-            margin-top: 15px;
-
-            thead {
-                display: none;
-            }
-
-            tbody tr {
-                padding: 0;
-                padding-bottom: 10px;
-                vertical-align: top;
-
-                td {
-                    line-height: 30px;
-                }
-            }
-
-            tbody tr td.emphasized {
-                width: 40%;
-                color: @purpleLight;
-            }
-
-            tbody tr td.optional {
-                width: 60%;
-                color: @purpleDark;
-                opacity: 0.7;
-            }
         }
     }
 
@@ -144,4 +111,12 @@
 
         font-size: @bigFont;
     }
+}
+
+.text-success {
+    color: #33dd50;
+}
+
+.text-danger {
+    color: #dd4b33;
 }

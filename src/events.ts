@@ -32,6 +32,16 @@ export const $eventBus = new Vue();
  *
  * - onPluginsReady with \a plugins
  * - onPluginLoaded with \a pluginData
+ * - onPluginActionRequest with \a actionPayload
+ * - onPluginInstallRequest with \a recipeJson
+ * - onBeforeRecipeUploaded with \a recipeJson
+ * - onRecipeUploaded with \a buildNumber
+ * - onRecipeBuildCompleted with \a artifactFile
+ * - onRecipeBuildUpdated with \a elapsedMilliseconds
+ * - onRecipeBuildTimeout with \a buildNumber
+ * - onRecipeBuildError with \a error
+ *
+ * @see {store/Plugin}
  */
 export const $pluginBus = new Vue();
 /// end-region plugin bus

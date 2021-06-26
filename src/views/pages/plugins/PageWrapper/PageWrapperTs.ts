@@ -16,24 +16,125 @@
 // external dependencies
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
+import { TransactionURI } from 'symbol-uri-scheme';
+import {
+    Address,
+    MosaicId,
+    MultisigAccountInfo,
+    NetworkType,
+    SignedTransaction,
+    Transaction,
+    TransactionFees,
+    TransactionType,
+} from 'symbol-sdk';
 
 // internal dependencies
+import { TransactionCommand, TransactionCommandMode } from '@/services/TransactionCommand';
 import { PluginModel } from '@/core/database/entities/PluginModel';
+import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
+import { Signer } from '@/store/Account';
+
+// child components
+// @ts-ignore
+import ModalTransactionConfirmation from '@/views/modals/ModalTransactionConfirmation/ModalTransactionConfirmation.vue';
 
 @Component({
+    components: {
+        ModalTransactionConfirmation,
+    },
     computed: {
         ...mapGetters({
             selectedPlugin: 'plugin/currentPlugin',
+            generationHash: 'network/generationHash',
+            networkType: 'network/networkType',
+            epochAdjustment: 'network/epochAdjustment',
+            selectedSigner: 'account/currentSigner',
+            currentSignerPublicKey: 'account/currentSignerPublicKey',
+            currentSignerMultisigInfo: 'account/currentSignerMultisigInfo',
+            isCosignatoryMode: 'account/isCosignatoryMode',
+            networkMosaic: 'mosaic/networkMosaic',
+            networkConfiguration: 'network/networkConfiguration',
+            transactionFees: 'network/transactionFees',
         }),
     },
 })
 export class PageWrapperTs extends Vue {
+    /// region store getters
     /**
      * The currently selected plugin.
      * @var {PluginModel}
      */
     public selectedPlugin: PluginModel;
 
+    /**
+     * Network generation hash
+     */
+    protected generationHash: string;
+
+    /**
+     * Network type
+     */
+    protected networkType: NetworkType;
+
+    /**
+     * The network configuration epochAdjustment.
+     */
+    protected epochAdjustment: number;
+
+    /**
+     * Currently active signer
+     */
+    protected selectedSigner: Signer;
+
+    /**
+     * Currently active signer's public key
+     */
+    protected currentSignerPublicKey: string;
+
+    /**
+     * Currently active signer's address
+     */
+    protected currentSignerAddress: Address;
+
+    /**
+     * Current signer multisig info
+     */
+    protected currentSignerMultisigInfo: MultisigAccountInfo;
+
+    /**
+     * Whether the form is in cosignatory mode (cosigner selected)
+     */
+    protected isCosignatoryMode: boolean;
+
+    /**
+     * Networks currency mosaic
+     */
+    protected networkMosaic: MosaicId;
+
+    /**
+     * Networks properties
+     */
+    protected networkConfiguration: NetworkConfigurationModel;
+
+    /**
+     * Networks transaction fees
+     */
+    protected transactionFees: TransactionFees;
+    /// end-region store getters
+
+    /**
+     * Whether the page is displaying or not the confirm modal
+     * @var {boolean}
+     */
+    public hasConfirmationModal: boolean = false;
+
+    /**
+     * A prepared transaction command.
+     * @var {TransactionCommand}
+     */
+    public command: TransactionCommand;
+
+    /// region computed properties
     public get pluginComponent(): string {
         if (!this.selectedPlugin) {
             return null;
@@ -53,4 +154,72 @@ export class PageWrapperTs extends Vue {
         const component = components[0];
         return component;
     }
+
+    protected get requiredCosignatures() {
+        return this.currentSignerMultisigInfo ? this.currentSignerMultisigInfo.minApproval : this.selectedSigner.requiredCosignatures;
+    }
+
+    /**
+     * Getter for whether forms should aggregate transactions in BONDED
+     * @return {boolean}
+     */
+    protected isMultisigMode(): boolean {
+        return this.isCosignatoryMode === true;
+    }
+    /// end-region computed properties
+
+    /// region component methods
+    public onTransactionPrepared(transaction: TransactionURI<Transaction>) {
+        this.command = this.createTransactionCommand(transaction.toTransaction());
+        this.hasConfirmationModal = true;
+    }
+
+    public onConfirmationSuccess() {
+        this.hasConfirmationModal = false;
+        this.command = null;
+    }
+
+    public onConfirmationError(error: string) {
+        this.$store.dispatch('notification/ADD_ERROR', error);
+    }
+
+    public onConfirmationCancel() {
+        this.hasConfirmationModal = false;
+    }
+
+    public onSignedOfflineTransaction(signedTransaction: SignedTransaction) {
+        this.$emit('signed', signedTransaction);
+    }
+    /// end-region computed properties
+
+    /// region private API
+    private createTransactionCommand(transaction: Transaction): TransactionCommand {
+        const mode = this.getTransactionCommandMode(transaction);
+        return new TransactionCommand(
+            mode,
+            this.selectedSigner,
+            this.currentSignerPublicKey,
+            [transaction],
+            this.networkMosaic,
+            this.generationHash,
+            this.networkType,
+            this.epochAdjustment,
+            this.networkConfiguration,
+            this.transactionFees,
+            this.requiredCosignatures,
+        );
+    }
+
+    private getTransactionCommandMode(transaction: Transaction): TransactionCommandMode {
+        const isAggregate = [TransactionType.AGGREGATE_COMPLETE, TransactionType.AGGREGATE_BONDED].includes(transaction.type);
+
+        if (this.isCosignatoryMode) {
+            return TransactionCommandMode.MULTISIGN;
+        } else if (isAggregate) {
+            return TransactionCommandMode.AGGREGATE;
+        }
+
+        return TransactionCommandMode.SIMPLE;
+    }
+    /// end-region private API
 }

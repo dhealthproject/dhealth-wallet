@@ -42,6 +42,10 @@ export class PluginTableService extends AssetTableService {
      * Return table values to be displayed in a table rows
      */
     public getTableRows(): any[] {
+        if (! this.plugins) {
+            return [];
+        }
+
         // - get reactive plugins data from the store
         return this.plugins
             .map((pluginInfo) => {

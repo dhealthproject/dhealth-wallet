@@ -17,9 +17,12 @@ import Vue from 'vue';
 
 // internal dependencies
 import { PluginModel } from '@/core/database/entities/PluginModel';
-import { PluginService } from '@/services/PluginService';
+import { PluginService, PluginRecipeStatus } from '@/services/PluginService';
 import { AwaitLock } from './AwaitLock';
 import { $pluginBus } from '../events';
+
+// configuration
+import { pluginsConfig } from '@/config';
 
 /// region globals
 const Lock = AwaitLock.create();
@@ -28,14 +31,20 @@ const Lock = AwaitLock.create();
 /// region state
 interface PluginState {
     initialized: boolean;
-    plugins: PluginModel[];
+    listedPlugins: PluginModel[];
     currentPlugin: PluginModel;
+    currentRecipeStatus: PluginRecipeStatus;
+    currentRecipeDuration: number;
+    registryPlugins: PluginModel[];
 }
 
 const initialState: PluginState = {
     initialized: false,
-    plugins: [],
+    listedPlugins: [],
     currentPlugin: null,
+    currentRecipeStatus: undefined,
+    currentRecipeDuration: 0,
+    registryPlugins: pluginsConfig.registryPlugins,
 };
 /// end-region state
 
@@ -45,34 +54,36 @@ export default {
     state: initialState,
     getters: {
         getInitialized: (state) => state.initialized,
-        plugins: (state: PluginState) => state.plugins,
+        listedPlugins: (state: PluginState) => state.listedPlugins,
         currentPlugin: (state: PluginState) => state.currentPlugin,
+        currentRecipeStatus: (state: PluginState) => state.currentRecipeStatus,
+        currentRecipeDuration: (state: PluginState) => state.currentRecipeDuration,
+        registryPlugins: (state: PluginState) => state.registryPlugins,
     },
     mutations: {
         setInitialized: (state, initialized) => (state.initialized = initialized),
-        plugins: (state, plugins) => Vue.set(state, 'plugins', plugins),
+        listedPlugins: (state, listedPlugins) => Vue.set(state, 'listedPlugins', listedPlugins),
         currentPlugin: (state: PluginState, pluginModel: PluginModel) => {
             state.currentPlugin = pluginModel;
         },
+        currentRecipeStatus: (state: PluginState, status: PluginRecipeStatus) => {
+            state.currentRecipeStatus = status;
+        },
+        currentRecipeDuration: (state: PluginState, duration: number) => {
+            state.currentRecipeDuration = duration;
+        },
+        registryPlugins: (state, registryPlugins) => Vue.set(state, 'registryPlugins', registryPlugins),
     },
     actions: {
-        async initialize({ commit, dispatch, getters }) {
+        async initialize({ commit, dispatch, getters, rootGetters }) {
             const callback = async () => {
-                // onPluginsReady
-                console.log('[DEBUG][store/Plugins.ts] initializing $pluginBus onPluginsReady handler');
-                $pluginBus.$on('onPluginsReady', (plugins: PluginModel[]) => {
-                    console.log('[INFO][store/Plugin.ts] caught onPluginsReady: ', plugins);
-                    dispatch('SAVE_DISCOVERED_PLUGINS', plugins);
-                });
+                // initializes all communication channels for plugins
+                new PluginService().initPluginBus($pluginBus, { commit, dispatch, getters, rootGetters });
 
-                // onPluginLoaded
-                console.log('[DEBUG][store/Plugins.ts] initializing $pluginBus onPluginLoaded handler');
-                $pluginBus.$on('onPluginLoaded', (plugin: PluginModel) => {
-                    console.log('[INFO][store/Plugin.ts] caught onPluginLoaded: ', plugin);
-                    dispatch('SAVE_PLUGIN_DETAILS', plugin);
-                });
+                // loads installed plugins from database
+                await dispatch('LOAD_PLUGINS');
 
-                // update store
+                // done
                 commit('setInitialized', true);
             };
 
@@ -100,13 +111,56 @@ export default {
         },
 
         async LOAD_PLUGINS({ commit }) {
-            const plugins = await new PluginService().getPlugins();
-            commit('plugins', plugins);
+            const listedPlugins = await new PluginService().getPlugins();
+            commit('listedPlugins', listedPlugins);
         },
 
-        async SAVE_DISCOVERED_PLUGINS({ commit }, plugins) {
-            await new PluginService().setPlugins(plugins);
-            commit('plugins', plugins);
+        async SAVE_DISCOVERED_PLUGINS({ commit }, listedPlugins) {
+            console.log('SAVE_DISCOVERED: ', listedPlugins);
+            await new PluginService().setPlugins(listedPlugins);
+            commit('listedPlugins', listedPlugins);
+        },
+
+        async ADD_DISCOVERED_PLUGIN({ commit }, plugin) {
+            const service = new PluginService();
+            const plugins = await service.getPlugins();
+            const exists = service.findByModule(plugin.npmModule);
+
+            if (!!exists) {
+                await service.updatePlugin(
+                    plugin.npmModule,
+                    Object.assign(
+                        {},
+                        {
+                            ...plugin,
+                        },
+                        { status: 'installed' },
+                    ),
+                );
+            } else {
+                await service.setPlugins(
+                    plugins.concat(
+                        Object.assign(
+                            {},
+                            {
+                                ...plugin,
+                            },
+                            { status: 'installed' },
+                        ),
+                    ),
+                );
+            }
+            commit('listedPlugins', await service.getPlugins());
+        },
+
+        INIT_PLUGIN_STORAGE({ dispatch }, plugin) {
+            dispatch('diagnostic/ADD_DEBUG', `Store action plugin/INIT_PLUGIN_STORAGE dispatched with ${plugin.npmModule}`, {
+                root: true,
+            });
+
+            const service = new PluginService();
+            service.initStorage(plugin.npmModule, plugin.storages);
+            dispatch('LOAD_CUSTOM_TABLES', null, { root: true });
         },
 
         async SAVE_PLUGIN_DETAILS({ dispatch }, plugin) {
@@ -114,13 +168,13 @@ export default {
             await dispatch('LOAD_PLUGINS');
         },
 
-        async UPDATE_CACHE({ commit, dispatch }, plugins) {
-            dispatch('diagnostic/ADD_DEBUG', 'Store action plugin/UPDATE_PLUGINS dispatched with ' + plugins.length + ' plugins', {
+        async UPDATE_CACHE({ commit, dispatch }, listedPlugins) {
+            dispatch('diagnostic/ADD_DEBUG', 'Store action plugin/UPDATE_CACHE dispatched with ' + listedPlugins.length + ' plugins', {
                 root: true,
             });
 
             // first update entries cache
-            commit('plugins', plugins);
+            commit('listedPlugins', listedPlugins);
         },
     },
 };

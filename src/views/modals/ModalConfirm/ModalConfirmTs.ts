@@ -44,6 +44,11 @@ export default class ModalConfirmTs extends Vue {
     showCheckbox: boolean;
 
     @Prop({
+        default: true,
+    })
+    showCancel: boolean;
+
+    @Prop({
         default: false,
     })
     useBiggerFont: boolean;

@@ -3,8 +3,11 @@
         <div class="upper-section-container">
             <div class="table-title-container section-title">
                 <div class="user-operation">
-                    <span v-if="assetType !== 'plugin'" class="add-metadata-button">
+                    <span v-if="assetType === 'metadata'" class="add-metadata-button">
                         <ButtonAdd :title="$t('add_metadata')" :disabled="false" size="26" @click="$emit('on-add-metadata')" />
+                    </span>
+                    <span v-if="assetType === 'plugin'" class="add-metadata-button">
+                        <ButtonAdd :title="$t('install_plugin')" :disabled="false" size="26" @click="$emit('on-add-plugin')" />
                     </span>
                     <Checkbox v-if="!['metadata', 'plugin'].includes(assetType)" v-model="showExpired" class="table-filter-item-container">
                         <span v-show="assetType === 'mosaic'" style="margin-left: 0.1rem;">{{ $t('show_expired_mosaics') }}</span>

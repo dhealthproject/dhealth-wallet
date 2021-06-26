@@ -2,10 +2,14 @@
     <div v-if="!!selectedPlugin" class="dashboard-container">
         <div class="dashboard-left-container">
             <div class="dashboard-top-left-container">
-                <PluginStatusPanel @on-clicked-enable="requestEnablePlugin" @on-clicked-disable="requestDisablePlugin" />
+                <PluginStatusPanel
+                    @on-clicked-enable="requestEnablePlugin"
+                    @on-clicked-disable="requestDisablePlugin"
+                    @on-clicked-start="requestStartPlugin"
+                />
             </div>
             <div class="dashboard-bottom-left-container">
-                <PluginDetailMultiPanel @on-clicked-readme="openReadme" />
+                <PluginDetailMultiPanel :plugin="selectedPlugin" @on-clicked-readme="openReadme" />
             </div>
         </div>
         <div class="dashboard-right-container">
@@ -24,6 +28,24 @@
             :use-bigger-font="true"
             @confirmed="showPluginStatusChangeModal = true"
             @cancelled="nextPluginStatus = null"
+        />
+
+        <ModalConfirm
+            v-model="showConfirmOpenPluginPageModal"
+            :title="$t('modal_title_confirm_plugin_page')"
+            :message="$t('modal_text_confirm_plugin_page')"
+            :use-bigger-font="true"
+            @confirmed="$router.push({ name: 'plugins.page' })"
+        />
+
+        <ModalConfirm
+            v-model="showConfirmReloadPageModel"
+            :title="$t('modal_title_confirm_plugin_status_reload_page')"
+            :message="$t('modal_text_confirm_plugin_status_reload_page')"
+            :use-bigger-font="true"
+            :show-cancel="false"
+            :warning="true"
+            @confirmed="onConfirmReloadPage"
         />
 
         <ModalPluginStatusChange

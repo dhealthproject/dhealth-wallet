@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="footer">
-                <button class="ivu-btn secondary-outline-button button-style button" @click="cancel">
+                <button v-if="showCancel" class="ivu-btn secondary-outline-button button-style button" @click="cancel">
                     {{ $t('cancel') }}
                 </button>
                 <button

@@ -37,10 +37,24 @@
 
             <div class="version-container">
                 <div class="title">
-                    <span class="title_txt">{{ $t('plugins_panel_version') }}</span>
+                    <span class="title_txt">{{ $t('plugins_panel_usenow') }}</span>
                 </div>
-                <div class="txt_info">
-                    <span> v{{ selectedPlugin.version }} </span>
+                <div class="level">
+                    <div class="level-left">
+                        <div class="action-wrapper">
+                            <IconButton
+                                v-if="pluginUsageDescriptor.action"
+                                :title="pluginUsageDescriptor.text"
+                                :size="'20'"
+                                :icon="pluginUsageDescriptor.icon"
+                                :class="pluginUsageDescriptor.cls"
+                                @click="$emit(pluginUsageDescriptor.event)"
+                            />
+                            <div v-else>
+                                <span class="txt_err">{{ pluginUsageDescriptor.text }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

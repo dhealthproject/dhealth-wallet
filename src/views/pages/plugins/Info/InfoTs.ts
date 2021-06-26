@@ -60,15 +60,25 @@ export class InfoTs extends Vue {
     public selectedPlugin: PluginModel;
 
     /**
-     * Show confirm open modal box
+     * Show confirm open modal box for "status change"
      */
     public showConfirmOpenPluginStatusChangeModal: boolean = false;
+
+    /**
+     * Show confirm open modal box for "plugins page"
+     */
+    public showConfirmOpenPluginPageModal: boolean = false;
 
     /**
      * Whether currently displaying the modal box
      * @var {boolean}
      */
     public showPluginStatusChangeModal: boolean = false;
+
+    /**
+     * Show confirm RELOAD PAGE after status change
+     */
+    public showConfirmReloadPageModel: boolean = false;
 
     /**
      * The plugin status change that will happen.
@@ -88,6 +98,10 @@ export class InfoTs extends Vue {
     public requestDisablePlugin() {
         this.nextPluginStatus = 'disabled';
         this.showConfirmOpenPluginStatusChangeModal = true;
+    }
+
+    public requestStartPlugin() {
+        this.showConfirmOpenPluginPageModal = true;
     }
 
     public async confirmStatusChange() {
@@ -116,5 +130,11 @@ export class InfoTs extends Vue {
         // update component/page state
         this.nextPluginStatus = this.nextPluginStatus === 'enabled' ? 'disabled' : 'enabled';
         this.showPluginStatusChangeModal = false;
+        this.showConfirmReloadPageModel = true;
+    }
+
+    public onConfirmReloadPage() {
+        this.showConfirmReloadPageModel = false;
+        window.location.reload();
     }
 }

@@ -82,7 +82,7 @@ export class ModalPluginStatusChangeTs extends Vue {
 
         this.performingUpdate = true;
 
-        return await new Promise((resolve, reject) => {
+        return await new Promise((resolve) => {
             this.$emit('confirmed', this.status);
             this.closeModal();
             return resolve(true);

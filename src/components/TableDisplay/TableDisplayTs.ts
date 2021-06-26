@@ -81,7 +81,7 @@ import { PageInfo } from '@/store/Transaction';
             currentAccount: 'account/currentAccount',
             holdMosaics: 'mosaic/holdMosaics',
             ownedNamespaces: 'namespace/ownedNamespaces',
-            knownPlugins: 'plugin/plugins',
+            knownPlugins: 'plugin/listedPlugins',
             currentConfirmedPage: 'namespace/currentConfirmedPage',
             attachedMetadataList: 'metadata/accountMetadataList',
             networkConfiguration: 'network/networkConfiguration',

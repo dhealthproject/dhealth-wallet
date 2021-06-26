@@ -18,6 +18,12 @@ import { PluginBridge } from '@yourdlt/wallet-api-bridge';
 // internal dependencies
 import { AppRoute } from '@/router/AppRoute';
 
+export interface PluginBadge {
+    icon: string;
+    label: string;
+    color: string;
+}
+
 export class PluginModel {
     constructor(
         public readonly npmModule: string,
@@ -31,12 +37,14 @@ export class PluginModel {
         public readonly homepage: string = '',
         public readonly repository: PluginBridge.PackageRepository = {},
         public readonly dependencies: PluginBridge.PackageDependencies = {},
-        public readonly status: PluginBridge.PluginInstallStatus = 'installed',
+        public status: PluginBridge.PluginInstallStatus = 'installed',
         public readonly routes: AppRoute[] = [],
         public readonly components: string[] = [],
         public readonly storages: PluginBridge.PluginStorage[] = [],
         public readonly settings: PluginBridge.PluginSetting[] = [],
         public readonly permissions: PluginBridge.PluginPermission[] = [],
+        public readonly imageUrl: string = 'https://yourdlt.tools/logo-yourdlt-192x192.png',
+        public readonly badges: PluginBadge[] = [],
         public readonly createdAt: number = 0,
         public readonly updatedAt: number = 0,
     ) {}

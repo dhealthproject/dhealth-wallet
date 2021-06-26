@@ -382,7 +382,7 @@ export const routes: AppRoute[] = [
                         name: 'plugins.page',
                         meta: {
                             protected: true,
-                            hideFromMenu: false,
+                            hideFromMenu: true,
                             title: 'page_title_plugins_page',
                         },
                         // @ts-ignore

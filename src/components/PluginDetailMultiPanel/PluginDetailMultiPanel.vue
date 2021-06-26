@@ -27,18 +27,24 @@
                 <div class="subpage-field w50">
                     <label>{{ $t('plugin_details_summary_dependencies') }}</label>
                     <GenericTableDisplay
+                        :key="dataTimestamp"
                         class="table-section"
-                        :items="getFormattedDependencies()"
-                        :fields="[{ name: 'name', label: 'plugin_table_header_dependency_name' }]"
+                        :items="pluginDependencies"
+                        :fields="[{ name: 'name', label: $t('plugin_table_header_dependency_name') }]"
                         :page-size="5"
                         :disable-headers="true"
                         :disable-single-page-links="true"
+                        :disable-rows-grid="true"
+                        :disable-placeholder-grid="true"
                         @on-clicked-row="handleDependencyClick"
                     >
                         <template v-slot:table-title>
                             <h1 class="section-title">
-                                {{ $t('title_plugin_components') }}
+                                {{ $t('title_plugin_dependencies') }}
                             </h1>
+                        </template>
+                        <template v-slot:empty>
+                            <h2 class="empty-list">No dependencies found.</h2>
                         </template>
                     </GenericTableDisplay>
                 </div>
@@ -46,12 +52,15 @@
                 <div class="subpage-field w50">
                     <label>{{ $t('plugin_details_summary_components') }}</label>
                     <GenericTableDisplay
+                        :key="dataTimestamp"
                         class="table-section"
-                        :items="getFormattedComponents()"
-                        :fields="[{ name: 'name', label: 'plugin_table_header_component_name' }]"
+                        :items="pluginComponents"
+                        :fields="[{ name: 'name', label: $t('plugin_table_header_component_name') }]"
                         :page-size="5"
                         :disable-headers="true"
                         :disable-single-page-links="true"
+                        :disable-rows-grid="true"
+                        :disable-placeholder-grid="true"
                         @on-clicked-row="handleComponentClick"
                     >
                         <template v-slot:table-title>
@@ -59,20 +68,26 @@
                                 {{ $t('title_plugin_components') }}
                             </h1>
                         </template>
+                        <template v-slot:empty>
+                            <h2 class="empty-list">No components found.</h2>
+                        </template>
                     </GenericTableDisplay>
                 </div>
             </div>
             <div v-else-if="activeSubpage === subpageIndexes['routes']" class="subpage plugin-details-routes">
                 <div class="subpage-table">
                     <GenericTableDisplay
+                        :key="dataTimestamp"
                         class="table-section"
-                        :items="getFormattedRoutes()"
+                        :items="pluginRoutes"
                         :fields="[
-                            { name: 'name', label: 'plugin_table_header_route_name' },
-                            { name: 'path', label: 'plugin_table_header_route_path' },
-                            { name: 'children', label: 'plugin_table_header_route_children' },
+                            { name: 'name', label: $t('plugin_table_header_route_name') },
+                            { name: 'path', label: $t('plugin_table_header_route_path') },
+                            { name: 'children', label: $t('plugin_table_header_route_children') },
                         ]"
                         :page-size="20"
+                        :disable-rows-grid="true"
+                        :disable-placeholder-grid="true"
                         @on-clicked-row="handleRouteClick"
                     >
                         <template v-slot:table-title>
@@ -80,20 +95,26 @@
                                 {{ $t('title_plugin_routes') }}
                             </h1>
                         </template>
+                        <template v-slot:empty>
+                            <h2 class="empty-list">No routes found.</h2>
+                        </template>
                     </GenericTableDisplay>
                 </div>
             </div>
             <div v-else-if="activeSubpage === subpageIndexes['storages']" class="subpage plugin-details-storages">
                 <div class="subpage-table">
                     <GenericTableDisplay
+                        :key="dataTimestamp"
                         class="table-section"
-                        :items="getFormattedStorages()"
+                        :items="pluginStorages"
                         :fields="[
-                            { name: 'storageKey', label: 'plugin_table_header_storage_name' },
-                            { name: 'entries', label: 'plugin_table_header_storage_entries' },
-                            { name: 'description', label: 'plugin_table_header_storage_description' },
+                            { name: 'storageKey', label: $t('plugin_table_header_storage_name') },
+                            { name: 'entries', label: $t('plugin_table_header_storage_entries') },
+                            { name: 'description', label: $t('plugin_table_header_storage_description') },
                         ]"
                         :page-size="20"
+                        :disable-rows-grid="true"
+                        :disable-placeholder-grid="true"
                         @on-clicked-row="handleStorageClick"
                     >
                         <template v-slot:table-title>
@@ -101,19 +122,25 @@
                                 {{ $t('title_plugin_storages') }}
                             </h1>
                         </template>
+                        <template v-slot:empty>
+                            <h2 class="empty-list">No tables found.</h2>
+                        </template>
                     </GenericTableDisplay>
                 </div>
             </div>
             <div v-else-if="activeSubpage === subpageIndexes['settings']" class="subpage plugin-details-settings">
                 <div class="subpage-table">
                     <GenericTableDisplay
+                        :key="dataTimestamp"
                         class="table-section"
-                        :items="getFormattedSettings()"
+                        :items="pluginSettings"
                         :fields="[
-                            { name: 'name', label: 'plugin_table_header_setting_name' },
-                            { name: 'value', label: 'plugin_table_header_setting_value' },
+                            { name: 'name', label: $t('plugin_table_header_setting_name') },
+                            { name: 'value', label: $t('plugin_table_header_setting_value') },
                         ]"
                         :page-size="20"
+                        :disable-rows-grid="true"
+                        :disable-placeholder-grid="true"
                         @on-clicked-row="handleSettingClick"
                     >
                         <template v-slot:table-title>
@@ -121,27 +148,36 @@
                                 {{ $t('title_plugin_settings') }}
                             </h1>
                         </template>
+                        <template v-slot:empty>
+                            <h2 class="empty-list">No settings found.</h2>
+                        </template>
                     </GenericTableDisplay>
                 </div>
             </div>
             <div v-else-if="activeSubpage === subpageIndexes['permissions']" class="subpage plugin-details-permissions">
                 <div class="subpage-table">
                     <GenericTableDisplay
+                        :key="dataTimestamp"
                         class="table-section"
-                        :items="selectedPlugin.permissions"
+                        :items="pluginPermissions"
                         :fields="[
-                            { name: 'name', label: 'plugin_table_header_permission_name' },
-                            { name: 'type', label: 'plugin_table_header_permission_type' },
-                            { name: 'target', label: 'plugin_table_header_permission_target' },
-                            { name: 'description', label: 'plugin_table_header_permission_description' },
+                            { name: 'name', label: $t('plugin_table_header_permission_name') },
+                            { name: 'type', label: $t('plugin_table_header_permission_type') },
+                            { name: 'target', label: $t('plugin_table_header_permission_target') },
+                            { name: 'description', label: $t('plugin_table_header_permission_description') },
                         ]"
                         :page-size="20"
+                        :disable-rows-grid="true"
+                        :disable-placeholder-grid="true"
                         @on-clicked-row="handlePermissionClick"
                     >
                         <template v-slot:table-title>
                             <h1 class="section-title">
                                 {{ $t('title_plugin_permissions') }}
                             </h1>
+                        </template>
+                        <template v-slot:empty>
+                            <h2 class="empty-list">No permissions found.</h2>
                         </template>
                     </GenericTableDisplay>
                 </div>

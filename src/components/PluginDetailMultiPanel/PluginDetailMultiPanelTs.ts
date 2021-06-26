@@ -20,7 +20,6 @@ import { NavigationLinks } from '@yourdlt/wallet-components';
 
 import { PluginModel } from '@/core/database/entities/PluginModel';
 import { AppRoute } from '@/router/AppRoute';
-import { PluginService } from '@/services/PluginService';
 
 // child components
 // @ts-ignore
@@ -49,6 +48,15 @@ export class PluginDetailMultiPanelTs extends Vue {
     };
     public selectedSubpage: number = 0;
 
+    protected pluginRoutes: any[];
+    protected pluginComponents: any[];
+    protected pluginDependencies: any[];
+    protected pluginStorages: any[];
+    protected pluginSettings: any[];
+    protected pluginPermissions: any[];
+    protected lastUpdatedData: number = new Date().valueOf();
+
+    /// region computed properties
     public get activeSubpage() {
         return this.selectedSubpage;
     }
@@ -70,57 +78,15 @@ export class PluginDetailMultiPanelTs extends Vue {
         return new Date(timestamp).toLocaleString();
     }
 
-    public getFormattedRoutes(parent?: AppRoute | undefined): any[] {
-        if (!!parent) {
-            return parent.children && parent.children.length
-                ? parent.children.map((c) => ({
-                      name: c.name,
-                      path: c.path,
-                      children: this.getFormattedRoutes(c),
-                  }))
-                : [];
-        }
-
-        return this.selectedPlugin.routes.map((r) => ({
-            name: r.name,
-            path: r.path,
-            children: this.getFormattedRoutes(r),
-        }));
+    public get dataTimestamp(): number {
+        return this.lastUpdatedData;
     }
+    /// end-region computed properties
 
-    public getFormattedComponents(): any[] {
-        const comps = this.selectedPlugin.components;
-        return comps.map((c) => ({
-            name: c,
-        }));
-    }
-
-    public getFormattedDependencies(): any[] {
-        const deps = Object.keys(this.selectedPlugin.dependencies);
-        return deps.map((d) => ({
-            name: d,
-        }));
-    }
-
-    public getFormattedStorages(): any[] {
-        return this.selectedPlugin.storages.map((s) => {
-            const database = new PluginService().getStorage(s.storageKey, s.model);
-            const datarows = database.get();
-
-            return {
-                storageKey: s.storageKey,
-                entries: !!datarows && 'data' in datarows ? datarows.data.length : 0,
-                description: s.description,
-            };
-        });
-    }
-
-    public getFormattedSettings(): any[] {
-        const opts = Object.keys(this.selectedPlugin.settings);
-        return opts.map((o) => ({
-            name: o,
-            value: this.selectedPlugin.settings[o],
-        }));
+    /// region component methods
+    public async created() {
+        await this.refreshData();
+        this.lastUpdatedData = new Date().valueOf();
     }
 
     public handleRouteClick(index) {
@@ -146,4 +112,94 @@ export class PluginDetailMultiPanelTs extends Vue {
     public handlePermissionClick(index) {
         console.log('Clicked permission at index: ', index);
     }
+    /// end-region component methods
+
+    /// region protected API
+    protected getFormattedRoutes(parent?: AppRoute | undefined): any[] {
+        if (!!parent) {
+            return parent.children && parent.children.length
+                ? parent.children.map((c) => ({
+                      name: c.name,
+                      path: c.path,
+                      children: this.getFormattedRoutes(c),
+                  }))
+                : [];
+        }
+
+        // check for emptiness
+        let routes = [];
+        if ('routes' in this.selectedPlugin && this.selectedPlugin.routes) {
+            routes = this.selectedPlugin.routes;
+        }
+
+        return routes && routes.length
+            ? routes.map((r) => ({
+                  name: r.name,
+                  path: r.path,
+                  children: this.getFormattedRoutes(r),
+              }))
+            : [];
+    }
+
+    protected async refreshData() {
+        let components = [],
+            dependencies = [],
+            storages = [],
+            buckets = [], // settings buckets
+            settings = [],
+            permissions = [];
+
+        if ('components' in this.selectedPlugin && this.selectedPlugin.components) {
+            components = this.selectedPlugin.components;
+        }
+
+        if ('dependencies' in this.selectedPlugin && this.selectedPlugin.dependencies) {
+            // uses only keys ("name")
+            dependencies = Object.keys(this.selectedPlugin.dependencies);
+        }
+
+        if ('storages' in this.selectedPlugin && this.selectedPlugin.storages) {
+            storages = this.selectedPlugin.storages;
+        }
+
+        if ('settings' in this.selectedPlugin && this.selectedPlugin.settings) {
+            // settings are sent in buckets
+            const dictionary = [];
+            buckets = this.selectedPlugin.settings;
+            buckets.forEach((bucket) => {
+                const fields = Object.keys(bucket);
+                fields.forEach((f) =>
+                    dictionary.push({
+                        name: f,
+                        value: bucket[f],
+                    }),
+                );
+            });
+
+            // fixes lint rule "prefer-const"
+            settings = dictionary;
+        }
+
+        if ('permissions' in this.selectedPlugin && this.selectedPlugin.permissions) {
+            permissions = this.selectedPlugin.permissions;
+        }
+
+        this.pluginRoutes = [...this.getFormattedRoutes()];
+
+        this.pluginComponents = components && components.length ? components.map((c) => ({ name: c })) : [];
+
+        this.pluginDependencies = dependencies && dependencies.length ? dependencies.map((d) => ({ name: d })) : [];
+
+        //!!datarows && 'data' in datarows ? datarows.data.length : 0,
+        this.pluginStorages =
+            storages && storages.length ? storages.map((s) => ({ storageKey: s.storageKey, entries: 0, description: s.description })) : [];
+
+        this.pluginSettings = settings && settings.length ? settings : [];
+
+        this.pluginPermissions =
+            permissions && permissions.length
+                ? permissions.map((p) => ({ name: p.name, type: p.type, target: p.target, description: p.description }))
+                : [];
+    }
+    /// end-region protected API
 }

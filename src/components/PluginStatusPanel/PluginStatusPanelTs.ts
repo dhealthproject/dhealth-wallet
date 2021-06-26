@@ -48,7 +48,7 @@ export class PluginStatusPanelTs extends Vue {
                     event: 'on-clicked-enable',
                     action: true,
                     cls: 'success-button',
-                    text: this.$t('plugin_action_enable_text') + this.selectedPlugin.name,
+                    text: this.$t('plugin_action_enable_text'),
                     icon: 'md-checkmark',
                 };
             case PluginBridge.PluginInstallStatus.Enabled:
@@ -56,7 +56,7 @@ export class PluginStatusPanelTs extends Vue {
                     event: 'on-clicked-disable',
                     action: true,
                     cls: 'danger-button',
-                    text: this.$t('plugin_action_disable_text') + this.selectedPlugin.name,
+                    text: this.$t('plugin_action_disable_text'),
                     icon: 'md-trash',
                 };
             case PluginBridge.PluginInstallStatus.Disabled:
@@ -64,11 +64,28 @@ export class PluginStatusPanelTs extends Vue {
                     event: 'on-clicked-enable',
                     action: true,
                     cls: 'success-button',
-                    text: this.$t('plugin_action_enable_text') + this.selectedPlugin.name,
+                    text: this.$t('plugin_action_enable_text'),
                     icon: 'md-checkmark',
                 };
+            default:
             case PluginBridge.PluginInstallStatus.Uninstalled:
                 return { action: false, text: this.$t('plugin_status_uninstalled') };
+        }
+    }
+
+    public get pluginUsageDescriptor() {
+        switch (this.selectedPlugin.status) {
+            case PluginBridge.PluginInstallStatus.Enabled:
+                return {
+                    event: 'on-clicked-start',
+                    action: true,
+                    cls: 'success-button',
+                    text: this.$t('plugin_action_start_text') + this.selectedPlugin.name,
+                    icon: 'md-play',
+                };
+
+            default:
+                return { action: false, text: this.$t('plugin_status_notusable') };
         }
     }
 

@@ -21,13 +21,23 @@
  * @description   This file defines routines to create a cross-platform Electron App.
  * --------------------------------------------------------------------------------------
  */
+/// region global scoped variables
 const path = require('path')
 const fs = require('fs')
+const { sha3_512 } = require('js-sha3')
 const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron')
 const name = app.getName()
 const electronLocalshortcut = require('electron-localshortcut')
 const contextMenu = require('electron-context-menu')
-contextMenu({});
+contextMenu({})
+const pluginManager = require('electron-plugin-manager')
+
+let loadedPluginsCache = [],
+    loadedPluginTimes  = {};
+let lastPageReloadTime = 0;
+//XXX move to config
+let jenkinsAuthToken = `6GkgiYa4AjHjZfYp6axiRx6BtqHajNSVq4HGFHPMNyCfGRPMKxTrLJwbBQMyEZo69Ncs54F85ZAjvcqroRvy2JKtDusWAt8WXLiAT6KicsBFURvTxwYVqjURqfsZmCDyar7igW6bmjCyo6GXDBv4H9h8RjsxDXpsBWa3cMw5c5dXef2BqMmX5xhPzqFYhhsbGuNzCvjWmN2A44rLp98MeSAd6iG2pXRgQn2LLFY5ubPqPaAhpdu3hkoCUg6ZQG4c`;
+/// end-region global scoped variables
 
 /**
  * --------------------------------------------------------------------------------------
@@ -210,6 +220,7 @@ class AppWindow {
       AppMainWindow = null
     })
     AppMainWindow.webContents.on('did-finish-load', () => {
+      lastPageReloadTime = new Date().valueOf();
       this.setupPlugins()
     })
 
@@ -255,6 +266,7 @@ class AppWindow {
       event.preventDefault()
     })
     AppMainWindow.webContents.on('did-finish-load', () => {
+      lastPageReloadTime = new Date().valueOf();
       this.setupPlugins()
     })
   }
@@ -266,7 +278,7 @@ class AppWindow {
       app.on('ready', () => this.onUniversalReady(this.options))
       app.on('ready', function () {
         electronLocalshortcut.register('CommandOrControl+R', function () {
-          AppMainWindow.reload();
+          AppMainWindow.reload()
         })
       })
     }
@@ -275,7 +287,7 @@ class AppWindow {
     })
     app.on('web-contents-created', (e, webContents) => {
       webContents.on('new-window', (event, url) => {
-        event.preventDefault();
+        event.preventDefault()
 
         if (url.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g)) {
           shell.openExternal(url)
@@ -291,19 +303,56 @@ class AppWindow {
  * @description   This class is responsible for loading plugins from filesystem.
  * --------------------------------------------------------------------------------------
  */
- class AppPluginManager {
+class AppPluginManager {
   constructor(ipcMain, options) {
     // Setup filesystem paths
-    this.dataPath = app.getPath('userData')
+    this.dataPath = path.join(__dirname, '../')
     this.pluginsPath = path.join(this.dataPath, 'plugins')
     this.pluginsConfPath = path.join(this.pluginsPath, 'plugins.json')
+    // this.buildJobStatusPolling = undefined
+    // this.buildArtifact = undefined
+    // this.buildPlatform = process.platform === 'darwin' 
+    //   ? 'mac' : (
+    //     process.platform === 'win32' 
+    //     ? 'win'
+    //     : 'lin'
+    //   )
 
     // Handles loaded plugins to send components details to App
-    ipcMain.once('onPluginLoaded', (event, pluginJson) => {
-      AppMainWindow.webContents.send('onPluginLoaded', pluginJson);
-    });
+    ipcMain.removeAllListeners('onPluginLoaded');
+    ipcMain.on('onPluginLoaded', (event, pluginJson) => {
+      try {
+        const parsed = JSON.parse(pluginJson)
+        const lastPluginLoadTime = parsed.npmModule in loadedPluginTimes 
+          ? loadedPluginTimes[parsed.npmModule]
+          : 0
 
-    // Load plugins for registration
+        const shouldForwardEvent = !loadedPluginsCache.includes(parsed.npmModule) || lastPluginLoadTime < lastPageReloadTime
+        if (shouldForwardEvent) {
+          loadedPluginsCache.push(parsed.npmModule)
+          loadedPluginTimes[parsed.npmModule] = new Date().valueOf()
+          AppMainWindow.webContents.send('onPluginLoaded', pluginJson)
+        }
+      }
+      catch (e) {}
+    })
+
+    // Handles store action requests from plugins to App (2-way async communication)
+    ipcMain.removeAllListeners('onPluginActionRequest');
+    ipcMain.on('onPluginActionRequest', (event, specJson) => {
+      console.log(`[INFO][public/bundler.js] main forwarding onPluginActionRequest with ${specJson} from plugin to App`)
+
+      // start in-scope listening for response (App to plugin)
+      ipcMain.once('onPluginActionResponse', (event, responseJson) => {
+        console.log(`[INFO][public/bundler.js] main forwarding onPluginActionResponse with ${responseJson} from App to plugin`)
+        AppMainWindow.webContents.send('onPluginActionResponse', responseJson)
+      })
+
+      // issue request from plugin to App
+      AppMainWindow.webContents.send('onPluginActionRequest', specJson)
+    })
+
+    // Runs the plugin bundler if necessary
     this.loadPlugins().then(
       (plugins) => {
         console.log("[INFO][public/bundler.js] Loaded plugins: ", plugins)
@@ -312,7 +361,98 @@ class AppWindow {
         AppMainWindow.webContents.send('onPluginsResolved', JSON.stringify(plugins))
       }
     )
+
+    // Handles request of installations for plugins (builds plugins.json)
+    // ipcMain.removeAllListeners('onPluginsInstallRequest');
+    // ipcMain.on('onPluginsInstallRequest', (event, recipeJson) => {
+    //   try {
+    //     const recipe = JSON.parse(recipeJson)
+    //     console.log(`[INFO][public/bundler.js] main received onPluginsInstallRequest with ${Object.keys(recipe).length} plugin(s) from App`)
+
+    //     // Hook to execute *before* recipe is uploaded
+    //     AppMainWindow.webContents.send('onBeforeRecipeUploaded', recipeJson)
+
+    //     // Send recipe to build server (Jenkins)
+    //     this.buildRecipe(recipe, this.buildPlatform).then((buildNumber) => {
+
+    //       // Hook to execute when recipe was uploaded
+    //       AppMainWindow.webContents.send('onRecipeUploaded', buildNumber)
+
+    //       // Start polling for build job status (30 seconds)
+    //       this.startBuildJobStatusPolling(buildNumber)
+    //     }).catch(
+    //       (reason) => AppMainWindow.webContents.send('onRecipeBuildError', reason.toString())
+    //     )
+    //   }
+    //   catch (e) {
+    //     AppMainWindow.webContents.send('onRecipeBuildError', `Error parsing JSON for dApps recipe.`)
+    //   }
+
+    //   // // First install plugin
+    //   // this.installPlugin(npmModule, 'latest').then(() => {
+
+    //   //   // Then load plugin definition
+    //   //   const instance = this.loadPlugin(npmModule)
+
+    //   //   // Send information about installed plugin to App
+    //   //   AppMainWindow.webContents.send('onPluginInstalled', JSON.stringify(instance))
+
+    //   //   // Call the plugins bundler (injecter)
+    //   //   this.callBundler(npmModule);
+    //   // }).catch(
+    //   //   (reason) => AppMainWindow.webContents.send('onPluginInstallError', reason.toString())
+    //   // )
+    // })
   }
+
+  // async callBundler(npmModule) {
+
+  //   if (!!npmModule && npmModule.length) {
+  //     // Hook to execute *before* plugin injection starts
+  //     AppMainWindow.webContents.send('onBeforePluginInjected', npmModule);
+  //   }
+
+  //   console.log(`[DEBUG][public/bundler.js] Now executing plugins.js with execPath '${process.execPath}'.`);
+
+  //   return new Promise(async (resolve, reject) => {
+
+  //     // Prepare bundler spawn arguments
+  //     const callSignature = ['./node_modules/electron/cli.js', './dist/plugins.js'];
+  //     if (!!npmModule && npmModule.length) {
+  //       callSignature.push(npmModule);
+  //     }
+
+  //     // Spawn a new child process with electron
+  //     const injecterProc = child_process.spawn(
+  //       process.execPath,
+  //       callSignature,
+  //       { stdio: 'pipe' },
+  //     )
+
+  //     // When injecter is recreated, reload the app
+  //     injecterProc.on('exit', (code, sig) => {
+  //       console.log(`[DEBUG][public/bundler.js] Injecter process exited with code ${code}.`);
+
+  //       if (!!npmModule && npmModule.length) {
+  //         // Send information about injected new plugins
+  //         AppMainWindow.webContents.send('onPluginInjected', npmModule);
+
+  //         // Reload the app and injected plugins
+  //         lastPageReloadTime = new Date().valueOf();
+  //         AppMainWindow.reload();
+  //       }
+
+  //       resolve(code);
+  //     })
+
+  //     // In case of errors, monitor
+  //     injecterProc.on('error', (error) => {
+  //       console.log(`[ERROR][public/bundler.js] Child process for plugin injecter failed with error: ${error.message}.`)
+
+  //       reject(error);
+  //     })
+  //   });
+  // }
 
   async loadPlugins() {
 
@@ -331,30 +471,7 @@ class AppWindow {
         const installPath = path.join(this.pluginsPath, pluginSlug)
 
         try {
-          // Verify that the plugin folder is compatible
-          if (! fs.readdirSync(installPath).includes('package.json')) {
-            console.error(`Could not find a package.json for ${pluginSlug}`)
-            continue // incompatibiliy should not break install process
-          }
-
-          // Read package information
-          const json = fs.readFileSync(path.join(installPath, 'package.json'))
-          const pkg  = JSON.parse(json)
-
-          // Merge loaded plugin and package information
-          this.plugins.push({
-            npmModule: pkg.name,
-            installPath: installPath,
-            name: pluginSlug,
-            version: pkg.version,
-            main: pkg.main,
-            // data from `package.json`
-            author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
-            description: pkg && 'description' in pkg ? pkg.description : '',
-            homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
-            repository: pkg && 'repository' in pkg ? pkg.repository : '',
-            dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
-          })
+          await this.loadPlugin(pluginSlug)
         }
         catch (e) {
           console.log(`Aborting installation for ${pluginSlug}@${pluginVer} located at ${installPath}.`)
@@ -366,6 +483,196 @@ class AppWindow {
       return resolve(this.plugins)
     })
   }
+
+  loadPlugin(plugin) {
+    const installPath = path.join(this.pluginsPath, plugin)
+
+    // Verify that the plugin folder is compatible
+    if (! fs.readdirSync(installPath).includes('package.json')) {
+      console.error(`Could not find a package.json for ${plugin}`)
+      throw new Error(`Could not find a package.json for ${plugin}`)
+    }
+
+    // Read package information
+    const json = fs.readFileSync(path.join(installPath, 'package.json'))
+    const pkg  = JSON.parse(json)
+
+    // Merge loaded plugin and package information
+    const instance = {
+      npmModule: pkg.name,
+      installPath: installPath,
+      name: plugin,
+      version: pkg.version,
+      main: pkg.main,
+      // data from `package.json`
+      author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
+      description: pkg && 'description' in pkg ? pkg.description : '',
+      homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
+      repository: pkg && 'repository' in pkg ? pkg.repository : '',
+      dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
+    }
+
+    this.plugins.push(instance)
+    return instance
+  }
+
+  // async installPlugin(plugin, version) {
+  //   // Read plugins configuration file
+  //   const configPath = this.pluginsConfPath
+  //   const pluginsConfig = JSON.parse(fs.readFileSync(configPath))
+
+  //   console.log(`[DEBUG][public/bundler.js] Now installing ${plugin} with plugins configuration in '${configPath}'.`);
+
+  //   // Link plugin manager to main IPC event emitter
+  //   pluginManager.manager(ipcMain)
+
+  //   return new Promise((resolve, reject) => {
+  //     // must pass "dataPath" because underlying electron-plugin-manager
+  //     // automatically suffixes the path with `plugins` in their path.js
+  //     // @link https://github.com/pksunkara/electron-plugin-manager/blob/master/lib/path.js
+
+  //     pluginManager.install(this.dataPath, plugin, version, (err, pluginPath) => {
+  //       if (!! err) {
+  //         console.error(`[ERROR][public/bundler.js] Error occured installing ${plugin}: ${err}`)
+  //         return reject(err)
+  //       }
+
+  //       console.log(`[INFO][public/bundler.js] Installed ${plugin} at ${pluginPath}`)
+
+  //       // update plugins.json
+  //       if (!(plugin in pluginsConfig) || pluginsConfig[plugin] !== version) {
+  //         pluginsConfig[plugin] = version
+  //         fs.writeFileSync(configPath, JSON.stringify(pluginsConfig), {mode: 0o644})
+  //       }
+
+  //       return resolve(pluginPath)
+  //     })
+  //   })
+  // }
+
+  // async buildRecipe(recipe, platform) {
+  //   console.log(`[DEBUG][public/bundler.js] Now building recipe with ${Object.keys(recipe).length} plugin(s).`)
+
+  //   // prepare build parameters
+  //   const buildJob = `http://dapps.dhealth.cloud:8080/job/dhealth-dapp-recipes`
+  //   const recipeJson = JSON.stringify(recipe)
+  //   const recipeHash = sha3_512(recipeJson)
+
+  //   console.log(`[DEBUG][public/bundler.js] Computed recipeHash: ${recipeHash}.`)
+
+  //   // save artifact name
+  //   this.buildArtifact = platform === 'mac'
+  //     ? `${recipeHash}.zip` : (
+  //       platform === 'lin'
+  //       ? `${recipeHash}.tar.xz`
+  //       : `${recipeHash}.exe`
+  //     )
+
+  //   // prepares the Jenkins build URL
+  //   const buildUrl = `${buildJob}/buildWithParameters?token=${jenkinsAuthTokens}&recipe=${recipeJson}&platform=${platform}`
+
+  //   return new Promise(async (resolve, reject) => {
+
+  //     // triggers the Jenkins build
+  //     const buildResponse = await fetch(buildUrl, {
+  //       method: 'GET',
+  //     })
+
+  //     if (! buildResponse.ok) {
+  //       return reject(`The build server is currently not available. Please, try again later.`)
+  //     }
+
+  //     // Queue URL can be found in response headers
+  //     // e.g.: http://dapps.dhealth.cloud:8080/queue/item/3/
+  //     const matches  = buildResponse.headers.get('Location').match(
+  //       // picks build number
+  //       new RegExp(`([0-9])\/?$`)
+  //     )
+
+  //     if (!matches || !matches.length) {
+  //       return reject(`Could not determine build number. Please, try again later.`)
+  //     }
+
+  //     // group 1 of regexp holds build number
+  //     return resolve(parseInt(matches[1]))
+  //   });
+  // }
+
+  // async getRecipeStatus(buildNumber) {
+  //   // prepare build parameters
+  //   const buildJob = `http://dapps.dhealth.cloud:8080/job/dhealth-dapp-recipes`
+  //   const statusUrl = `${buildJob}/api/json`
+
+  //   return new Promise(async (resolve, reject) => {
+
+  //     // now query build to get status and info
+  //     const buildResponse = await fetch(statusUrl, {
+  //       method: 'GET',
+  //     });
+
+  //     if (! buildResponse.ok) {
+  //       return reject(`The build server is currently not available. Please, try again later.`)
+  //     }
+
+  //     // receives an array of builds
+  //     const buildJobStatus = await buildResponse.json()
+
+  //     if (! ('builds' in buildJobStatus) || ! buildJobStatus.builds.length) {
+  //       return reject(`No builds were found. Please, try again later.`)
+  //     }
+
+  //     // validates build number
+  //     const findBuild = buildJobStatus.builds.find(b => b.number === buildNumber)
+  //     if (! findBuild) {
+  //       return reject(`Could not find a build with number ${buildNumber}.`)
+  //     }
+
+  //     // with "result" set, the build job has completed.
+  //     if ('result' in findBuild && null !== findBuild.result) {
+  //       return resolve({
+  //         status: findBuild.result,
+  //         artifact: this.buildArtifact,
+  //       });
+  //     }
+
+  //     // no "result" available, resolves info
+  //     return resolve({
+  //       status: 'BUILDING',
+  //       building: lastBuild.building,
+  //       startedAt: lastBuild.timestamp,
+  //       estimatedDuration: lastBuild.estimatedDuration,
+  //     })
+  //   })
+  // }
+
+  // async startBuildJobStatusPolling(buildNumber) {
+  //   this.buildJobStatusPolling = setInterval(async () => {
+  //     const response = await this.getRecipeStatus(buildNumber)
+
+  //     if (response.status === 'SUCCESS') {
+  //       // Hook to execute when recipe was successfully built
+  //       AppMainWindow.webContents.send('onRecipeBuildCompleted', response.artifact)
+  //       clearInterval(this.buildJobStatusPolling)
+  //       this.buildJobStatusPolling = null
+  //     }
+  //     else {
+  //       // Hook to execute when recipe build status was updated
+  //       const elapsedMs = (new Date().valueOf()) - status.startedAt
+  //       AppMainWindow.webContents.send('onRecipeBuildUpdated', elapsedMs)
+  //     }
+
+  //   // Polling every 30 seconds
+  //   }, 30000)
+
+  //   // timeout after 10 minutes
+  //   setTimeout(() => {
+  //     if (this.buildJobStatusPolling !== null) {
+  //       // Hook to execute when recipe build times out
+  //       AppMainWindow.webContents.send('onRecipeBuildTimeout', buildNumber)
+  //       clearInterval(this.buildJobStatusPolling)
+  //     }
+  //   }, 300000)
+  // }
 }
 
 /**

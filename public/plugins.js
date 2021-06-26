@@ -23,6 +23,7 @@
  */
 const path = require('path')
 const fs = require('fs')
+const rimraf = require('rimraf')
 const { app, ipcMain } = require('electron')
 const pluginManager = require('electron-plugin-manager')
 
@@ -41,6 +42,7 @@ const pluginManager = require('electron-plugin-manager')
     this.pluginsPath = path.join(this.dataPath, 'plugins')
     this.pluginsConfPath = path.join(this.pluginsPath, 'plugins.json')
     this.injecterPath = path.join(this.pluginsPath, 'plugins.js')
+    this.singlePlugin = 'plugin' in options ? options.plugin : undefined;
 
     // Evaluate filesystem and setup
     this.setupFilesystem()
@@ -56,11 +58,7 @@ const pluginManager = require('electron-plugin-manager')
 
   setupFilesystem() {
     // Make filesystem compliant
-    if (!fs.existsSync(this.pluginsPath)) {
-      // Create empty plugins folder
-      fs.mkdirSync(this.pluginsPath, 0o775)
-    }
-    else if (!fs.existsSync(this.pluginsConfPath)) {
+    if (!fs.existsSync(this.pluginsConfPath)) {
       // Create empty plugins config
       fs.writeFileSync(this.pluginsConfPath, JSON.stringify({}), {mode: 0o644})
     }
@@ -87,12 +85,22 @@ const pluginManager = require('electron-plugin-manager')
         const pluginVer  = pluginsConfig[pluginSlug]
         const installPath = path.join(this.pluginsPath, pluginSlug)
 
-        //XXX check if installation required
+        // Passing a plugin name forces re-install
+        // e.g.: npm run plugins:install @yourdlt/plugin-librarian
+        const isForcedInstall = !!this.singlePlugin && this.singlePlugin === pluginSlug
+
+        // Removes plugin from filesystem
+        if (isForcedInstall && fs.existsSync(installPath)) {
+          console.log(`[INFO][public/plugins.js] Now removing ${pluginSlug}...`)
+          rimraf.sync(installPath)
+        }
 
         try {
-          // Try installing the plugin
-          console.log(`[INFO][public/plugins.js] Now installing ${pluginSlug}...`)
-          await this.installPlugin(pluginSlug, pluginVer)
+          // Try installing the plugin (if necessary or forced)
+          if (isForcedInstall || !fs.existsSync(installPath)) {
+            console.log(`[INFO][public/plugins.js] Now installing ${pluginSlug}...`)
+            await this.installPlugin(pluginSlug, pluginVer)
+          }
 
           // Verify that the plugin folder is compatible
           if (! fs.readdirSync(installPath).includes('package.json')) {
@@ -158,7 +166,7 @@ const pluginManager = require('electron-plugin-manager')
  * You should never modify the content of this file
  * unless you know what you are doing.
  *
- * The method AppPluginInstaller.createInjecter()  is
+ * The method AppPluginInstaller.createInjecter  is
  * responsible for generating this file.
  */\n`;
 
@@ -242,11 +250,17 @@ window.PluginInjecter = {
  *                Vue app using `src/injecter.ts`.
  * --------------------------------------------------------------------------------------
  */
+// Reads command line arguments to find single plugin identifier
+let which = undefined;
+if (!!process.argv && process.argv.length === 3) {
+  which = process.argv[2];
+}
 
 // Set the path of the folder where the persisted data is stored
 app.setPath('userData', path.join(app.getPath('home'), '.yourdlt-wallet'))
 
 // Prepare plugins manager
 new AppPluginInstaller(ipcMain, {
-  dataPath: app.getPath('userData')
+  dataPath: path.join(__dirname, '../'),
+  plugin: which,
 })
