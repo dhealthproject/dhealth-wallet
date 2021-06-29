@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { createStepImage, importStepImage, officialIcons } from '@/views/resources/Images';
+import { createStepImage, importStepImage, officialIcons, walletTypeImages } from '@/views/resources/Images';
 import { AppRoute } from './AppRoute';
 
 export const routes: AppRoute[] = [
@@ -322,6 +322,32 @@ export const routes: AppRoute[] = [
                         meta: { protected: true },
                         // @ts-ignore
                         component: () => import('@/views/pages/community/information/Information.vue'),
+                    },
+                ],
+            },
+            {
+                path: '/faq',
+                name: 'faq',
+                meta: {
+                    protected: true,
+                    clickable: true,
+                    title: 'sidebar_item_faq',
+                    icon: walletTypeImages.createImg,
+                },
+                redirect: '/faqHome',
+                // @ts-ignore
+                component: () => import('@/views/pages/faq/Manager/Manager.vue'),
+
+                children: [
+                    {
+                        path: '/faqHome',
+                        name: 'faq.dashboard',
+                        meta: {
+                            protected: true,
+                            title: 'page_faq_dashboard',
+                        },
+                        // @ts-ignore
+                        component: () => import('@/views/pages/faq/Dashboard/Dashboard.vue'),
                     },
                 ],
             },
