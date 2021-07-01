@@ -8,7 +8,7 @@
                     <NavigationTabs direction="horizontal" :parent-route-name="parentRouteName" />
                     <div class="search-container">
                         <form action="">
-                            <input type="text" placeholder="Search.." name="search">
+                            <input type="text" :placeholder="$t('faq-search-placeholder')" name="search">
                             <button type="submit"><img src="@/views/resources/img/icons/Search.svg" /></button>
                         </form>
                     </div>
@@ -17,7 +17,7 @@
                     <div class="faq-main-container">
                         <div class="faq-container">
 
-                            <div class="faq-items-first">
+                            <div class="faq-items-container" v-if="topic === 'general'">
 
                                 <details open class="faq-item">
                                     <summary class="faq-title">{{ $t('faq_question_first') }}</summary>
@@ -76,10 +76,24 @@
 
                             </div>
 
-                            <div class="faq-items-second">
+                            <div class="faq-items-container" v-if="topic === 'tokenomics'">
                                 <details open class="faq-item">
                                     <summary class="faq-title">ITEM 2 HEADING</summary>
                                     <div class="faq-content">ITEM 2 TEXT</div>
+                                </details>
+                            </div>
+
+                            <div class="faq-items-container" v-if="topic === 'develop'">
+                                <details open class="faq-item">
+                                    <summary class="faq-title">ITEM 3 HEADING</summary>
+                                    <div class="faq-content">ITEM 3 TEXT</div>
+                                </details>
+                            </div>
+
+                            <div class="faq-items-container" v-if="topic === 'wallet'">
+                                <details open class="faq-item">
+                                    <summary class="faq-title">ITEM 4 HEADING</summary>
+                                    <div class="faq-content">ITEM 4 TEXT</div>
                                 </details>
                             </div>
 
@@ -101,7 +115,9 @@
                     <div class="faq-category-main-container">
                         <div class="faq-category-container">
 
-                            <div class="faq-category-item">
+                            <div class="faq-category-item" @click="topic = 'general'" :class="{
+                                'active': topic === 'general'
+                            }">
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/metadata.png" />
                                     <div class="faq-category-text">{{ $t('faq_category_first') }}</div>
@@ -109,7 +125,9 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_first') }}</div>
                             </div>
 
-                            <div class="faq-category-item">
+                            <div class="faq-category-item" @click="topic = 'tokenomics'" :class="{
+                                'active': topic === 'tokenomics'
+                            }">
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/mosaic.png" />
                                     <div class="faq-category-text">{{ $t('faq_category_second') }}</div>
@@ -117,7 +135,9 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_second') }}</div>
                             </div>
 
-                            <div class="faq-category-item">
+                            <div class="faq-category-item" @click="topic = 'develop'" :class="{
+                                'active': topic === 'develop'
+                            }">
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/blocks.png" />
                                     <div class="faq-category-text">{{ $t('faq_category_third') }}</div>
@@ -125,7 +145,9 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_third') }}</div>
                             </div>
 
-                            <div class="faq-category-item">
+                            <div class="faq-category-item" @click="topic = 'wallet'" :class="{
+                                'active': topic === 'wallet'
+                            }">
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/wallet.png" />
                                     <div class="faq-category-text">{{ $t('faq_category_fourth') }}</div>
@@ -153,6 +175,7 @@ import NavigationTabs from '@/components/NavigationTabs/NavigationTabs.vue';
 @Component({ components: { NavigationTabs } })
 export default class Dashboard extends Vue {
     @Prop({ default: 'faq' }) parentRouteName: string;
+    @Prop({ default: 'general' }) topic: string;
 }
 </script>
 

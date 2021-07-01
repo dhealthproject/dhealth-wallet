@@ -37,19 +37,31 @@
                         display: flex;
 
                         input {
-                            border: 2px solid #ff00ff;
+                            border-bottom: 2px solid @accentPink !important;
+                            padding: 2px 5px;
+                            min-width: 250px;
+                            border: none;
+                        }
+
+                        input:focus {
+                            border: 2px solid @accentPink;
                             border-right-width: 0px;
                             border-radius: 0.04rem 0 0 0.04rem;
-                            padding: 2px 5px;
+                        }
+
+                        input:focus ~ button {
+                            border: 2px solid @accentPink;
+                            border-left-width: 0.5px;
+                            border-radius: 0 0.04rem 0.04rem 0;
                         }
 
                         button {
                             width: 30px;
                             padding: 2px 5px;
                             background-color: transparent;
-                            border: 2px solid #ff00ff;
-                            border-left-width: 0.5px;
-                            border-radius: 0 0.04rem 0.04rem 0;
+                            border-bottom: 2px solid @accentPink !important;
+                            border: none;
+                            cursor: pointer;
 
                             img {
                                 width: 100%;
@@ -81,17 +93,17 @@
                             overflow: hidden;
 
                             .faq-title {
-                                color: #44004e;
+                                color: @purpleDark;
                                 font-weight: 600;
                                 font-size: 0.18rem;
                                 cursor: pointer;
-                                border-bottom: 0.02rem solid #5200c6;
+                                border-bottom: 0.02rem solid @purpleLightest;
                                 width: max-content;
                                 margin-bottom: 10px;
                             }
 
                             .faq-content {
-                                color: #44004e;
+                                color: @purpleDark;
                                 font-size: 0.16rem;
                                 font-family: 'noto-sans-light';
                                 cursor: default;
@@ -105,7 +117,7 @@
                             padding: 20px;
 
                             .faq-contact-title {
-                                color: #44004e;
+                                color: @purpleDark;
                                 font-weight: 600;
                                 font-size: 0.18rem;
                                 cursor: default;
@@ -113,7 +125,7 @@
                             }
 
                             .faq-contact-content {
-                                color: #44004e;
+                                color: @purpleDark;
                                 font-size: 0.16rem;
                                 font-family: 'noto-sans-light';
                                 cursor: default;
@@ -138,7 +150,7 @@
                 height: 100%;
 
                 .faq-category-title {
-                color: #44004e;
+                color: @purpleDark;
                 font-weight: 600;
                 font-size: 0.18rem;
                 padding: 20px 40px;
@@ -165,7 +177,7 @@
                         margin-top: 35px;
 
                        .faq-category-item {
-                            color: #44004e;
+                            color: @purpleDark;
                             font-weight: 600;
                             font-size: 0.18rem;
                             cursor: pointer;
@@ -186,8 +198,17 @@
                                 cursor: default;
                                 text-align: justify;
                                 font-weight: 400;
+                                position: relative;
                            }
                        }
+
+                       .faq-category-item.active .faq-category-subtext::before {
+                            content: '';
+                            border-left: 5px solid @accentOrange;
+                            position: absolute;
+                            height: 100%;
+                            left: -60px;
+                        }
                    }
                 }
             }

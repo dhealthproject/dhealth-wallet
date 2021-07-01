@@ -295,6 +295,7 @@
     "faq_question_ninth": "シンボルブロックチェーンで自分のDHPを見ることはできますか？",
     "faq_question_tenth": "モザイクとは？",
     "faq_question_eleventh": "詐欺やコピーに対する安全性は？",
+    "faq-search-placeholder": "検索...",
     "fee": "手数料",
     "fee_can_not_be_less_than_0": "手数料は 0 未満にできません",
     "fee_speed_fast": "早い",
