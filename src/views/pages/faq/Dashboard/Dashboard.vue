@@ -1,14 +1,18 @@
 <template>
-
     <div class="dashboard-outer-container">
         <div class="dashboard-inner-container">
-
             <div class="left-container">
                 <div class="header-container">
                     <NavigationTabs direction="horizontal" :parent-route-name="parentRouteName" />
                     <div class="search-container">
                         <div class="search-bar">
-                            <input v-model="searchTerm" type="text" :placeholder="$t('faq-search-placeholder')" name="search">
+                            <input
+                                v-model="searchTerm"
+                                type="text"
+                                :placeholder="$t('faq-search-placeholder')"
+                                name="search"
+                                @input="onInputSearch"
+                            />
                             <div class="search-button"><img src="@/views/resources/img/icons/Search.svg" /></div>
                         </div>
                     </div>
@@ -16,59 +20,68 @@
                 <div class="bottom-container">
                     <div class="faq-main-container">
                         <div class="faq-container">
-
-                            <FaqPage v-if="topic === 'search'" :topic="'search'">
+                            <FaqPage v-if="topic === 'search'" :key="'search'" :topic="'search'">
                                 <template v-slot:body>
                                     <FaqPageItem
                                         v-for="({ question, answer }, index) in searchResults"
+                                        :key="index"
                                         :question="question"
                                         :answer="answer"
-                                        :key="index"
-                                        :open="index === 0" />
+                                        :open="displayedAnswers.includes(index)"
+                                        @click="toggleAnswer(index)"
+                                    />
                                 </template>
                             </FaqPage>
 
-                            <FaqPage v-if="topic === 'general'" :topic="'general'">
+                            <FaqPage v-if="topic === 'general'" :key="'general'" :topic="'general'">
                                 <template v-slot:body>
                                     <FaqPageItem
                                         v-for="({ question, answer }, index) in searchResults"
+                                        :key="index"
                                         :question="question"
                                         :answer="answer"
-                                        :key="index"
-                                        :open="index === 0" />
+                                        :open="displayedAnswers.includes(index)"
+                                        @click="toggleAnswer(index)"
+                                    />
                                 </template>
                             </FaqPage>
 
-                            <FaqPage v-if="topic === 'tokenomics'" :topic="'tokenomics'">
+                            <FaqPage v-if="topic === 'tokenomics'" :key="'tokenomics'" :topic="'tokenomics'">
                                 <template v-slot:body>
                                     <FaqPageItem
                                         v-for="({ question, answer }, index) in searchResults"
+                                        :key="index"
                                         :question="question"
                                         :answer="answer"
-                                        :key="index"
-                                        :open="index === 0" />
+                                        :open="displayedAnswers.includes(index)"
+                                        @click="toggleAnswer(index)"
+                                    />
                                 </template>
                             </FaqPage>
 
-                            <FaqPage v-if="topic === 'develop'" :topic="'develop'">
+                            <FaqPage v-if="topic === 'develop'" :key="'develop'" :topic="'develop'">
                                 <template v-slot:body>
                                     <FaqPageItem
                                         v-for="({ question, answer }, index) in searchResults"
+                                        :key="index"
                                         :question="question"
                                         :answer="answer"
-                                        :key="index"
-                                        :open="index === 0" />
+                                        :open="displayedAnswers.includes(index)"
+                                        @click="toggleAnswer(index)"
+                                    />
                                 </template>
                             </FaqPage>
 
-                            <FaqPage v-if="topic === 'wallet'" :topic="'wallet'">
+                            <FaqPage v-if="topic === 'wallet'" :key="'wallet'" :topic="'wallet'">
                                 <template v-slot:body>
                                     <FaqPageItem
                                         v-for="({ question, answer }, index) in searchResults"
+                                        :key="index"
                                         :question="question"
                                         :answer="answer"
-                                        :key="index"
-                                        :open="index === 0" />
+                                        :open="displayedAnswers.includes(index)"
+                                        @click="toggleAnswer(index)"
+                                    />
                                 </template>
                             </FaqPage>
 
@@ -76,7 +89,6 @@
                                 <div class="faq-contact-title">{{ $t('faq_contact_title') }}</div>
                                 <div class="faq-contact-content" v-html="$t('faq_contact_content')"></div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -89,10 +101,13 @@
                 <div class="bottom-container">
                     <div class="faq-category-main-container">
                         <div class="faq-category-container">
-
-                            <div class="faq-category-item" @click="setTopic('general')" :class="{
-                                'active': topic === 'general'
-                            }">
+                            <div
+                                class="faq-category-item"
+                                :class="{
+                                    active: topic === 'general',
+                                }"
+                                @click="setTopic('general')"
+                            >
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/metadata.png" />
                                     <div class="faq-category-text">{{ $t('faq_category_first') }}</div>
@@ -100,9 +115,13 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_first') }}</div>
                             </div>
 
-                            <div class="faq-category-item" @click="setTopic('tokenomics')" :class="{
-                                'active': topic === 'tokenomics'
-                            }">
+                            <div
+                                class="faq-category-item"
+                                :class="{
+                                    active: topic === 'tokenomics',
+                                }"
+                                @click="setTopic('tokenomics')"
+                            >
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/mosaic.png" />
                                     <div class="faq-category-text">{{ $t('faq_category_second') }}</div>
@@ -110,9 +129,13 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_second') }}</div>
                             </div>
 
-                            <div class="faq-category-item" @click="setTopic('develop')" :class="{
-                                'active': topic === 'develop'
-                            }">
+                            <div
+                                class="faq-category-item"
+                                :class="{
+                                    active: topic === 'develop',
+                                }"
+                                @click="setTopic('develop')"
+                            >
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/blocks.png" />
                                     <div class="faq-category-text">{{ $t('faq_category_third') }}</div>
@@ -120,25 +143,25 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_third') }}</div>
                             </div>
 
-                            <div class="faq-category-item" @click="setTopic('wallet')" :class="{
-                                'active': topic === 'wallet'
-                            }">
+                            <div
+                                class="faq-category-item"
+                                :class="{
+                                    active: topic === 'wallet',
+                                }"
+                                @click="setTopic('wallet')"
+                            >
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/wallet.png" />
                                     <div class="faq-category-text">{{ $t('faq_category_fourth') }}</div>
                                 </div>
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_fourth') }}</div>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
-
 </template>
 
 <script lang="ts">
@@ -148,7 +171,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import NavigationTabs from '@/components/NavigationTabs/NavigationTabs.vue';
 import FaqPage from '@/components/FaqPage/FaqPage.vue';
 import FaqPageItem from '@/components/FaqPage/FaqPageItem/FaqPageItem.vue';
- 
+
 @Component({ components: { NavigationTabs, FaqPage, FaqPageItem } })
 export default class Dashboard extends Vue {
     @Prop({ default: 'faq' }) parentRouteName: string;
@@ -156,7 +179,8 @@ export default class Dashboard extends Vue {
 
     public topic: string = 'general';
 
-    public searchResults: { question: string, answer: string }[] = [];
+    public searchResults: { question: string; answer: string; group: string }[] = [];
+    public displayedAnswers: number[] = [0];
 
     public get searchTerm(): string {
         return this.term;
@@ -165,8 +189,7 @@ export default class Dashboard extends Vue {
     public set searchTerm(t: string) {
         if (t.length) {
             this.executeSearch(t, 'search');
-        }
-        else {
+        } else {
             this.executeSearch(undefined, 'general');
         }
     }
@@ -194,20 +217,37 @@ export default class Dashboard extends Vue {
             { question: this.$t('faq_question_tokenomics_2'), answer: this.$t('faq_answer_tokenomics_2'), group: 'tokenomics' },
             { question: this.$t('faq_question_develop_1'), answer: this.$t('faq_answer_develop_1'), group: 'develop' },
             { question: this.$t('faq_question_wallet_1'), answer: this.$t('faq_answer_wallet_1'), group: 'wallet' },
-        ].filter(
-            (item) => !!exGroup ? (item.group.toLowerCase() === exGroup.toLowerCase()) : (
-                -1 !== item.question.toString().toLowerCase().search(exTerm.toLowerCase())
-             || -1 !== item.answer.toString().toLowerCase().search(exTerm.toLowerCase())
-            )).map(i => ({
+        ]
+            .filter((item) =>
+                !!exGroup
+                    ? item.group.toLowerCase() === exGroup.toLowerCase()
+                    : -1 !== item.question.toString().toLowerCase().search(exTerm.toLowerCase()) ||
+                      -1 !== item.answer.toString().toLowerCase().search(exTerm.toLowerCase()),
+            )
+            .map((i) => ({
                 question: i.question.toString(),
                 answer: i.answer.toString(),
                 group: i.group,
-            }))
+            }));
     }
 
     public setTopic(g: string) {
         this.topic = g;
+        this.displayedAnswers = [0];
         this.executeSearch(undefined, g);
+    }
+
+    public toggleAnswer(i: number) {
+        if (this.displayedAnswers.includes(i)) {
+            this.displayedAnswers = this.displayedAnswers.filter((j) => j !== i);
+        } else {
+            this.displayedAnswers.push(i);
+        }
+    }
+
+    public onInputSearch(e) {
+        const value = e.target.value;
+        this.$emit('input', value);
     }
 }
 </script>
