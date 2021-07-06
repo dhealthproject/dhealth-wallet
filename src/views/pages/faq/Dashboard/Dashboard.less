@@ -33,7 +33,7 @@
                 .search-container {
                     padding-right: 70px;
 
-                    form {
+                    .search-bar {
                         display: flex;
 
                         input {
@@ -49,19 +49,18 @@
                             border-radius: 0.04rem 0 0 0.04rem;
                         }
 
-                        input:focus ~ button {
+                        input:focus ~ .search-button {
                             border: 2px solid @accentPink;
                             border-left-width: 0.5px;
                             border-radius: 0 0.04rem 0.04rem 0;
                         }
 
-                        button {
+                        .search-button {
                             width: 30px;
                             padding: 2px 5px;
                             background-color: transparent;
                             border-bottom: 2px solid @accentPink !important;
                             border: none;
-                            cursor: pointer;
 
                             img {
                                 width: 100%;
@@ -87,29 +86,6 @@
                         overflow-x: hidden;
                         overflow-y: auto;
                         margin-top: 2%;
-
-                        .faq-item {
-                            padding: 0.2rem;
-                            overflow: hidden;
-
-                            .faq-title {
-                                color: @purpleDark;
-                                font-weight: 600;
-                                font-size: 0.18rem;
-                                cursor: pointer;
-                                border-bottom: 0.02rem solid @purpleLightest;
-                                width: max-content;
-                                margin-bottom: 10px;
-                            }
-
-                            .faq-content {
-                                color: @purpleDark;
-                                font-size: 0.16rem;
-                                font-family: 'noto-sans-light';
-                                cursor: default;
-                                text-align: justify;
-                            }
-                        }
 
                         .faq-contact-item {
                             border-bottom: none;

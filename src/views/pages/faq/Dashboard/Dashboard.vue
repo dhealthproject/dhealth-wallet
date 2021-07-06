@@ -7,95 +7,70 @@
                 <div class="header-container">
                     <NavigationTabs direction="horizontal" :parent-route-name="parentRouteName" />
                     <div class="search-container">
-                        <form action="">
-                            <input type="text" :placeholder="$t('faq-search-placeholder')" name="search">
-                            <button type="submit"><img src="@/views/resources/img/icons/Search.svg" /></button>
-                        </form>
+                        <div class="search-bar">
+                            <input v-model="searchTerm" type="text" :placeholder="$t('faq-search-placeholder')" name="search">
+                            <div class="search-button"><img src="@/views/resources/img/icons/Search.svg" /></div>
+                        </div>
                     </div>
                 </div>
                 <div class="bottom-container">
                     <div class="faq-main-container">
                         <div class="faq-container">
 
-                            <div class="faq-items-container" v-if="topic === 'general'">
+                            <FaqPage v-if="topic === 'search'" :topic="'search'">
+                                <template v-slot:body>
+                                    <FaqPageItem
+                                        v-for="({ question, answer }, index) in searchResults"
+                                        :question="question"
+                                        :answer="answer"
+                                        :key="index"
+                                        :open="index === 0" />
+                                </template>
+                            </FaqPage>
 
-                                <details open class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_first') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_first')"></div>
-                                </details>
+                            <FaqPage v-if="topic === 'general'" :topic="'general'">
+                                <template v-slot:body>
+                                    <FaqPageItem
+                                        v-for="({ question, answer }, index) in searchResults"
+                                        :question="question"
+                                        :answer="answer"
+                                        :key="index"
+                                        :open="index === 0" />
+                                </template>
+                            </FaqPage>
 
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_second') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_second')"></div>
-                                </details>
+                            <FaqPage v-if="topic === 'tokenomics'" :topic="'tokenomics'">
+                                <template v-slot:body>
+                                    <FaqPageItem
+                                        v-for="({ question, answer }, index) in searchResults"
+                                        :question="question"
+                                        :answer="answer"
+                                        :key="index"
+                                        :open="index === 0" />
+                                </template>
+                            </FaqPage>
 
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_third') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_third')"></div>
-                                </details>
+                            <FaqPage v-if="topic === 'develop'" :topic="'develop'">
+                                <template v-slot:body>
+                                    <FaqPageItem
+                                        v-for="({ question, answer }, index) in searchResults"
+                                        :question="question"
+                                        :answer="answer"
+                                        :key="index"
+                                        :open="index === 0" />
+                                </template>
+                            </FaqPage>
 
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_fourth') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_fourth')"></div>
-                                </details>
-
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_fifth') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_fifth')"></div>
-                                </details>
-
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_sixth') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_sixth')"></div>
-                                </details>
-
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_seventh') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_seventh')"></div>
-                                </details>
-
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_eighth') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_eighth')"></div>
-                                </details>
-
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_ninth') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_ninth')"></div>
-                                </details>
-
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_tenth') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_tenth')"></div>
-                                </details>
-
-                                <details class="faq-item">
-                                    <summary class="faq-title">{{ $t('faq_question_eleventh') }}</summary>
-                                    <div class="faq-content" v-html="$t('faq_answer_eleventh')"></div>
-                                </details>
-
-                            </div>
-
-                            <div class="faq-items-container" v-if="topic === 'tokenomics'">
-                                <details open class="faq-item">
-                                    <summary class="faq-title">ITEM 2 HEADING</summary>
-                                    <div class="faq-content">ITEM 2 TEXT</div>
-                                </details>
-                            </div>
-
-                            <div class="faq-items-container" v-if="topic === 'develop'">
-                                <details open class="faq-item">
-                                    <summary class="faq-title">ITEM 3 HEADING</summary>
-                                    <div class="faq-content">ITEM 3 TEXT</div>
-                                </details>
-                            </div>
-
-                            <div class="faq-items-container" v-if="topic === 'wallet'">
-                                <details open class="faq-item">
-                                    <summary class="faq-title">ITEM 4 HEADING</summary>
-                                    <div class="faq-content">ITEM 4 TEXT</div>
-                                </details>
-                            </div>
+                            <FaqPage v-if="topic === 'wallet'" :topic="'wallet'">
+                                <template v-slot:body>
+                                    <FaqPageItem
+                                        v-for="({ question, answer }, index) in searchResults"
+                                        :question="question"
+                                        :answer="answer"
+                                        :key="index"
+                                        :open="index === 0" />
+                                </template>
+                            </FaqPage>
 
                             <div class="faq-contact-item">
                                 <div class="faq-contact-title">{{ $t('faq_contact_title') }}</div>
@@ -115,7 +90,7 @@
                     <div class="faq-category-main-container">
                         <div class="faq-category-container">
 
-                            <div class="faq-category-item" @click="topic = 'general'" :class="{
+                            <div class="faq-category-item" @click="setTopic('general')" :class="{
                                 'active': topic === 'general'
                             }">
                                 <div class="faq-category-head grow">
@@ -125,7 +100,7 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_first') }}</div>
                             </div>
 
-                            <div class="faq-category-item" @click="topic = 'tokenomics'" :class="{
+                            <div class="faq-category-item" @click="setTopic('tokenomics')" :class="{
                                 'active': topic === 'tokenomics'
                             }">
                                 <div class="faq-category-head grow">
@@ -135,7 +110,7 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_second') }}</div>
                             </div>
 
-                            <div class="faq-category-item" @click="topic = 'develop'" :class="{
+                            <div class="faq-category-item" @click="setTopic('develop')" :class="{
                                 'active': topic === 'develop'
                             }">
                                 <div class="faq-category-head grow">
@@ -145,7 +120,7 @@
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_third') }}</div>
                             </div>
 
-                            <div class="faq-category-item" @click="topic = 'wallet'" :class="{
+                            <div class="faq-category-item" @click="setTopic('wallet')" :class="{
                                 'active': topic === 'wallet'
                             }">
                                 <div class="faq-category-head grow">
@@ -171,11 +146,69 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 // child components
 import NavigationTabs from '@/components/NavigationTabs/NavigationTabs.vue';
+import FaqPage from '@/components/FaqPage/FaqPage.vue';
+import FaqPageItem from '@/components/FaqPage/FaqPageItem/FaqPageItem.vue';
  
-@Component({ components: { NavigationTabs } })
+@Component({ components: { NavigationTabs, FaqPage, FaqPageItem } })
 export default class Dashboard extends Vue {
     @Prop({ default: 'faq' }) parentRouteName: string;
-    @Prop({ default: 'general' }) topic: string;
+    @Prop({ default: '' }) term: string;
+
+    public topic: string = 'general';
+
+    public searchResults: { question: string, answer: string }[] = [];
+
+    public get searchTerm(): string {
+        return this.term;
+    }
+
+    public set searchTerm(t: string) {
+        if (t.length) {
+            this.executeSearch(t, 'search');
+        }
+        else {
+            this.executeSearch(undefined, 'general');
+        }
+    }
+    public created() {
+        this.executeSearch(undefined, this.topic);
+    }
+
+    public executeSearch(t?: string, g?: string) {
+        this.topic = !!g && g.length ? g : 'search';
+        const exTerm = !!t && t.length ? t : this.searchTerm;
+        const exGroup = !t && !!g && g.length ? g : undefined;
+        this.searchResults = [
+            { question: this.$t('faq_question_general_1'), answer: this.$t('faq_answer_general_1'), group: 'general' },
+            { question: this.$t('faq_question_general_2'), answer: this.$t('faq_answer_general_2'), group: 'general' },
+            { question: this.$t('faq_question_general_3'), answer: this.$t('faq_answer_general_3'), group: 'general' },
+            { question: this.$t('faq_question_general_4'), answer: this.$t('faq_answer_general_4'), group: 'general' },
+            { question: this.$t('faq_question_general_5'), answer: this.$t('faq_answer_general_5'), group: 'general' },
+            { question: this.$t('faq_question_general_6'), answer: this.$t('faq_answer_general_6'), group: 'general' },
+            { question: this.$t('faq_question_general_7'), answer: this.$t('faq_answer_general_7'), group: 'general' },
+            { question: this.$t('faq_question_general_8'), answer: this.$t('faq_answer_general_8'), group: 'general' },
+            { question: this.$t('faq_question_general_9'), answer: this.$t('faq_answer_general_9'), group: 'general' },
+            { question: this.$t('faq_question_general_10'), answer: this.$t('faq_answer_general_10'), group: 'general' },
+            { question: this.$t('faq_question_general_11'), answer: this.$t('faq_answer_general_11'), group: 'general' },
+            { question: this.$t('faq_question_tokenomics_1'), answer: this.$t('faq_answer_tokenomics_1'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_2'), answer: this.$t('faq_answer_tokenomics_2'), group: 'tokenomics' },
+            { question: this.$t('faq_question_develop_1'), answer: this.$t('faq_answer_develop_1'), group: 'develop' },
+            { question: this.$t('faq_question_wallet_1'), answer: this.$t('faq_answer_wallet_1'), group: 'wallet' },
+        ].filter(
+            (item) => !!exGroup ? (item.group.toLowerCase() === exGroup.toLowerCase()) : (
+                -1 !== item.question.toString().toLowerCase().search(exTerm.toLowerCase())
+             || -1 !== item.answer.toString().toLowerCase().search(exTerm.toLowerCase())
+            )).map(i => ({
+                question: i.question.toString(),
+                answer: i.answer.toString(),
+                group: i.group,
+            }))
+    }
+
+    public setTopic(g: string) {
+        this.topic = g;
+        this.executeSearch(undefined, g);
+    }
 }
 </script>
 

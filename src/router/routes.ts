@@ -334,13 +334,13 @@ export const routes: AppRoute[] = [
                     title: 'sidebar_item_faq',
                     icon: walletTypeImages.createImg,
                 },
-                redirect: '/faqHome',
+                redirect: '/faqHome/general',
                 // @ts-ignore
                 component: () => import('@/views/pages/faq/Manager/Manager.vue'),
 
                 children: [
                     {
-                        path: '/faqHome',
+                        path: '/faqHome/:topic',
                         name: 'faq.dashboard',
                         meta: {
                             protected: true,
