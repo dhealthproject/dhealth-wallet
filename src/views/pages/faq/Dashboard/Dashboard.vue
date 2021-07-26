@@ -74,14 +74,191 @@
 
                             <FaqPage v-if="topic === 'wallet'" :key="'wallet'" :topic="'wallet'">
                                 <template v-slot:body>
-                                    <FaqPageItem
-                                        v-for="({ question, answer }, index) in searchResults"
-                                        :key="index"
-                                        :question="question"
-                                        :answer="answer"
-                                        :open="displayedAnswers.includes(index)"
-                                        @click="toggleAnswer(index)"
-                                    />
+                                    <div class="faq-slider">
+                                        <FaqScreenshotItem
+                                            :title="$t('faq_screenshot_title_dashboard_1')"
+                                            :texts="[
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_dashboard_1').toString(),
+                                                    description: $t('faq_screenshot_description_dashboard_1').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_dashboard_2').toString(),
+                                                    description: $t('faq_screenshot_description_dashboard_2').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_dashboard_3').toString(),
+                                                    description: $t('faq_screenshot_description_dashboard_3').toString(),
+                                                },
+                                            ]"
+                                            right="50px"
+                                            top="50%"
+                                            transform="translateY(-50%)"
+                                            width="50%"
+                                            :index="0"
+                                            :count="countScreenshots"
+                                            :active="activeScreenshot === 0"
+                                            @click="activeScreenshot = 0"
+                                        >
+                                            <template v-slot:image>
+                                                <img src="@/views/resources/img/faq/dhealth-dashboard-address-balance.png" />
+                                            </template>
+                                        </FaqScreenshotItem>
+
+                                        <FaqScreenshotItem
+                                            :title="$t('faq_screenshot_title_dashboard_2')"
+                                            :texts="[
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_dashboard_4').toString(),
+                                                    description: $t('faq_screenshot_description_dashboard_4').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_dashboard_5').toString(),
+                                                    description: $t('faq_screenshot_description_dashboard_5').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_dashboard_6').toString(),
+                                                    description: $t('faq_screenshot_description_dashboard_6').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_dashboard_7').toString(),
+                                                    description: $t('faq_screenshot_description_dashboard_7').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_dashboard_8').toString(),
+                                                    description: $t('faq_screenshot_description_dashboard_8').toString(),
+                                                },
+                                            ]"
+                                            left="50px"
+                                            top="50%"
+                                            transform="translateY(-50%)"
+                                            width="30%"
+                                            :index="1"
+                                            :count="countScreenshots"
+                                            :active="activeScreenshot === 1"
+                                            @click="activeScreenshot = 1"
+                                        >
+                                            <template v-slot:image>
+                                                <img src="@/views/resources/img/faq/dhealth-dashboard-send-transaction.png" />
+                                            </template>
+                                        </FaqScreenshotItem>
+
+                                        <FaqScreenshotItem
+                                            :title="$t('faq_screenshot_title_identities_1')"
+                                            :texts="[
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_identities_1').toString(),
+                                                    description: $t('faq_screenshot_description_identities_1').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_identities_2').toString(),
+                                                    description: $t('faq_screenshot_description_identities_2').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_identities_3').toString(),
+                                                    description: $t('faq_screenshot_description_identities_3').toString(),
+                                                },
+                                            ]"
+                                            right="50px"
+                                            top="50%"
+                                            transform="translateY(-50%)"
+                                            width="50%"
+                                            :index="2"
+                                            :count="countScreenshots"
+                                            :active="activeScreenshot === 2"
+                                            @click="activeScreenshot = 2"
+                                        >
+                                            <template v-slot:image>
+                                                <img src="@/views/resources/img/faq/dhealth-identities-add-account.png" />
+                                            </template>
+                                        </FaqScreenshotItem>
+
+                                        <FaqScreenshotItem
+                                            :title="$t('faq_screenshot_title_identities_2')"
+                                            :texts="[
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_identities_4').toString(),
+                                                    description: $t('faq_screenshot_description_identities_4').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_identities_5').toString(),
+                                                    description: $t('faq_screenshot_description_identities_5').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_identities_6').toString(),
+                                                    description: $t('faq_screenshot_description_identities_6').toString(),
+                                                },
+                                            ]"
+                                            right="50px"
+                                            top="50%"
+                                            transform="translateY(-50%)"
+                                            width="50%"
+                                            :index="3"
+                                            :count="countScreenshots"
+                                            :active="activeScreenshot === 3"
+                                            @click="activeScreenshot = 3"
+                                        >
+                                            <template v-slot:image>
+                                                <img src="@/views/resources/img/faq/dhealth-identities-backup.png" />
+                                            </template>
+                                        </FaqScreenshotItem>
+
+                                        <FaqScreenshotItem
+                                            :title="$t('faq_screenshot_title_harvesting_1')"
+                                            :texts="[
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_harvesting_1').toString(),
+                                                    description: $t('faq_screenshot_description_harvesting_1').toString(),
+                                                },
+                                            ]"
+                                            right="0px"
+                                            left="0px"
+                                            margin="auto"
+                                            width="90%"
+                                            :index="4"
+                                            :count="countScreenshots"
+                                            :active="activeScreenshot === 4"
+                                            @click="activeScreenshot = 4"
+                                        >
+                                            <template v-slot:image>
+                                                <img src="@/views/resources/img/faq/dhealth-harvesting-info.png" />
+                                            </template>
+                                        </FaqScreenshotItem>
+
+                                        <FaqScreenshotItem
+                                            :title="$t('faq_screenshot_title_harvesting_2')"
+                                            :texts="[
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_harvesting_2').toString(),
+                                                    description: $t('faq_screenshot_description_harvesting_2').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_harvesting_3').toString(),
+                                                    description: $t('faq_screenshot_description_harvesting_3').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_harvesting_4').toString(),
+                                                    description: $t('faq_screenshot_description_harvesting_4').toString(),
+                                                },
+                                                {
+                                                    subtitle: $t('faq_screenshot_subtitle_harvesting_5').toString(),
+                                                    description: $t('faq_screenshot_description_harvesting_5').toString(),
+                                                },
+                                            ]"
+                                            left="50px"
+                                            top="60%"
+                                            transform="translateY(-60%)"
+                                            width="67%"
+                                            :index="5"
+                                            :count="countScreenshots"
+                                            :active="activeScreenshot === 5"
+                                            @click="activeScreenshot = 5"
+                                        >
+                                            <template v-slot:image>
+                                                <img src="@/views/resources/img/faq/dhealth-harvesting-active-harvesting.png" />
+                                            </template>
+                                        </FaqScreenshotItem>
+                                    </div>
                                 </template>
                             </FaqPage>
 
@@ -171,8 +348,9 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import NavigationTabs from '@/components/NavigationTabs/NavigationTabs.vue';
 import FaqPage from '@/components/FaqPage/FaqPage.vue';
 import FaqPageItem from '@/components/FaqPage/FaqPageItem/FaqPageItem.vue';
+import FaqScreenshotItem from '@/components/FaqPage/FaqScreenshotItem/FaqScreenshotItem.vue';
 
-@Component({ components: { NavigationTabs, FaqPage, FaqPageItem } })
+@Component({ components: { NavigationTabs, FaqPage, FaqPageItem, FaqScreenshotItem } })
 export default class Dashboard extends Vue {
     @Prop({ default: 'faq' }) parentRouteName: string;
     @Prop({ default: '' }) term: string;
@@ -181,6 +359,7 @@ export default class Dashboard extends Vue {
 
     public searchResults: { question: string; answer: string; group: string }[] = [];
     public displayedAnswers: number[] = [0];
+    public indexScreenshot: number = 0;
 
     public get searchTerm(): string {
         return this.term;
@@ -192,6 +371,22 @@ export default class Dashboard extends Vue {
         } else {
             this.executeSearch(undefined, 'general');
         }
+    }
+
+    public get activeScreenshot(): number {
+        return this.indexScreenshot;
+    }
+
+    public set activeScreenshot(index: number) {
+        if (index < 0 || index >= this.countScreenshots) {
+            index = 0;
+        }
+
+        this.indexScreenshot = index;
+    }
+
+    public get countScreenshots(): number {
+        return 6;
     }
     public created() {
         this.executeSearch(undefined, this.topic);
@@ -216,7 +411,6 @@ export default class Dashboard extends Vue {
             { question: this.$t('faq_question_tokenomics_1'), answer: this.$t('faq_answer_tokenomics_1'), group: 'tokenomics' },
             { question: this.$t('faq_question_tokenomics_2'), answer: this.$t('faq_answer_tokenomics_2'), group: 'tokenomics' },
             { question: this.$t('faq_question_develop_1'), answer: this.$t('faq_answer_develop_1'), group: 'develop' },
-            { question: this.$t('faq_question_wallet_1'), answer: this.$t('faq_answer_wallet_1'), group: 'wallet' },
         ]
             .filter((item) =>
                 !!exGroup
