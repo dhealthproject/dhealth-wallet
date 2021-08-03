@@ -410,7 +410,15 @@ export default class Dashboard extends Vue {
             { question: this.$t('faq_question_general_11'), answer: this.$t('faq_answer_general_11'), group: 'general' },
             { question: this.$t('faq_question_tokenomics_1'), answer: this.$t('faq_answer_tokenomics_1'), group: 'tokenomics' },
             { question: this.$t('faq_question_tokenomics_2'), answer: this.$t('faq_answer_tokenomics_2'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_3'), answer: this.$t('faq_answer_tokenomics_3'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_4'), answer: this.$t('faq_answer_tokenomics_4'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_5'), answer: this.$t('faq_answer_tokenomics_5'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_6'), answer: this.$t('faq_answer_tokenomics_6'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_7'), answer: this.$t('faq_answer_tokenomics_7'), group: 'tokenomics' },
             { question: this.$t('faq_question_develop_1'), answer: this.$t('faq_answer_develop_1'), group: 'develop' },
+            { question: this.$t('faq_question_develop_2'), answer: this.$t('faq_answer_develop_2'), group: 'develop' },
+            { question: this.$t('faq_question_develop_3'), answer: this.$t('faq_answer_develop_3'), group: 'develop' },
+            { question: this.$t('faq_question_develop_4'), answer: this.$t('faq_answer_develop_4'), group: 'develop' },
         ]
             .filter((item) =>
                 !!exGroup
