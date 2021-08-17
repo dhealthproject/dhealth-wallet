@@ -87,7 +87,9 @@ export class InfoTs extends Vue {
     public nextPluginStatus: string;
 
     public openReadme() {
-        window.open(this.selectedPlugin.repository.replace(/\.git$/, '#readme'));
+        if (this.selectedPlugin.repository && 'url' in this.selectedPlugin.repository) {
+            window.open(this.selectedPlugin.repository.url.replace(/\.git$/, '#readme'));
+        }
     }
 
     public requestEnablePlugin() {

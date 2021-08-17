@@ -34,7 +34,6 @@ import infiniteScroll from 'vue-infinite-scroll';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import VueNumber from 'vue-number-animation';
-import LoadScript from 'vue-plugin-load-script';
 
 // internal dependencies
 import { UIBootstrapper } from '@/app/UIBootstrapper';
@@ -67,13 +66,13 @@ Vue.use(Toast, {
     transition: 'Vue-Toastification__fade',
     transitionDuration: 300,
 });
-Vue.use(LoadScript);
 library.add(faFileCsv);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.directive('click-outside', clickOutsideDirective);
 
 // create root instance
 const app = new Vue({
+    // @ts-ignore
     router,
     store: AppStore,
     i18n,

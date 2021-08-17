@@ -224,7 +224,7 @@ export class DatabaseService {
         const table = new DatabaseTableModel(npmModule, tableName, primaryKey, new Date().valueOf());
         const updated = this.getTables().concat([table]);
 
-        console.log('Performing databaseTables INSERT in DB with: ', updated);
+        //console.log('Performing databaseTables INSERT in DB with: ', updated);
         this.tableModelStorage.set(updated);
         return table;
     }
@@ -257,17 +257,17 @@ export class DatabaseService {
 
         // catches duplicate primary key value
         const id = data[table.primaryKey];
-        if (!!this.findEntry(npmModule, tableName, id)) {
+        if (!!this.findEntry(npmModule, tableName, id.toString())) {
             throw new Error(`Entry with primary key value of "${id}" already exists.`);
         }
 
         // create new database table entry
-        let e = new DatabaseTableEntryModel(npmModule, tableName, data[table.primaryKey], data);
+        let e = new DatabaseTableEntryModel(npmModule, tableName, data[table.primaryKey].toString(), data);
         e = Object.assign({}, e, data);
 
         // note: also holds entries from other tables
         updated = this.getEntries().concat([e]);
-        console.log('Performing databaseTableEntries INSERT in DB with: ', updated);
+        //console.log('Performing databaseTableEntries INSERT in DB with: ', updated);
 
         this.entryModelStorage.set(updated);
         return e;
@@ -298,12 +298,12 @@ export class DatabaseService {
 
         // verifies presence of primary key value
         if (!(table.primaryKey in data)) {
-            throw new Error(`Missing primary key value for insert in table: ${this.getTableName(npmModule, tableName)}.`);
+            throw new Error(`Missing primary key value for update in table: ${this.getTableName(npmModule, tableName)}.`);
         }
 
         // catches invalid primary key value (not found)
         const id = data[table.primaryKey];
-        if (!this.findEntry(npmModule, tableName, id)) {
+        if (!this.findEntry(npmModule, tableName, id.toString())) {
             throw new Error(`Entry with primary key value of "${id}" does not exist.`);
         }
 
@@ -317,7 +317,7 @@ export class DatabaseService {
             return e;
         });
 
-        console.log('Performing databaseTableEntries UPDATE in DB with: ', updated);
+        //console.log('Performing databaseTableEntries UPDATE in DB with: ', updated);
         this.entryModelStorage.set(updated);
         return this;
     }
@@ -352,14 +352,14 @@ export class DatabaseService {
 
         // catches invalid primary key value (not found)
         const id = data[table.primaryKey];
-        if (!this.findEntry(npmModule, tableName, id)) {
+        if (!this.findEntry(npmModule, tableName, id.toString())) {
             throw new Error(`Entry with primary key value of "${id}" does not exist.`);
         }
 
         // filters out one entry based on primary key value
         updated = this.getEntries().filter((e) => e.npmModule !== npmModule || e.tableName !== tableName || e.identifier !== id);
 
-        console.log('Performing databaseTableEntries DELETE in DB with: ', updated);
+        //console.log('Performing databaseTableEntries DELETE in DB with: ', updated);
         this.entryModelStorage.set(updated);
         return this;
     }

@@ -307,8 +307,8 @@ class AppPluginManager {
   constructor(ipcMain, options) {
     // Setup filesystem paths
     this.dataPath = path.join(__dirname, '../')
-    this.pluginsPath = path.join(this.dataPath, 'plugins')
-    this.pluginsConfPath = path.join(this.pluginsPath, 'plugins.json')
+    this.pluginsPath = path.join(__dirname, '../node_modules')
+    this.pluginsConfPath = path.join(this.dataPath, 'plugins/plugins.json')
     // this.buildJobStatusPolling = undefined
     // this.buildArtifact = undefined
     // this.buildPlatform = process.platform === 'darwin' 
@@ -340,11 +340,11 @@ class AppPluginManager {
     // Handles store action requests from plugins to App (2-way async communication)
     ipcMain.removeAllListeners('onPluginActionRequest');
     ipcMain.on('onPluginActionRequest', (event, specJson) => {
-      console.log(`[INFO][public/bundler.js] main forwarding onPluginActionRequest with ${specJson} from plugin to App`)
+      //console.log(`[INFO][public/bundler.js] main forwarding onPluginActionRequest with ${specJson} from plugin to App`)
 
       // start in-scope listening for response (App to plugin)
       ipcMain.once('onPluginActionResponse', (event, responseJson) => {
-        console.log(`[INFO][public/bundler.js] main forwarding onPluginActionResponse with ${responseJson} from App to plugin`)
+        //console.log(`[INFO][public/bundler.js] main forwarding onPluginActionResponse with ${responseJson} from App to plugin`)
         AppMainWindow.webContents.send('onPluginActionResponse', responseJson)
       })
 

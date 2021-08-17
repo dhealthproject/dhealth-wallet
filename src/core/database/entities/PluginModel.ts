@@ -37,7 +37,7 @@ export class PluginModel {
         public readonly homepage: string = '',
         public readonly repository: PluginBridge.PackageRepository = {},
         public readonly dependencies: PluginBridge.PackageDependencies = {},
-        public status: PluginBridge.PluginInstallStatus = 'installed',
+        public status: PluginBridge.PluginInstallStatus = PluginBridge.PluginInstallStatus.Installed,
         public readonly routes: AppRoute[] = [],
         public readonly components: string[] = [],
         public readonly storages: PluginBridge.PluginStorage[] = [],

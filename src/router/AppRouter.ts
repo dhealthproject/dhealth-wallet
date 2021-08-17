@@ -15,10 +15,11 @@
  *
  */
 // external dependencies
-import Router, { RawLocation } from 'vue-router';
+import Router, { RawLocation, RouteRecordPublic } from 'vue-router';
+import { AppRoute } from './AppRoute';
+
 // internal dependencies
 import { routes } from '@/router/routes';
-import { AppRoute } from './AppRoute';
 import { TabEntry } from './TabEntry';
 import { AppStore } from '@/app/AppStore';
 import { ProfileService } from '@/services/ProfileService';
@@ -85,6 +86,7 @@ export class AppRouter extends Router {
      * @param {string} [parentRouteName]
      * @returns {AppRoute[]}
      */
+    // @ts-ignore
     public getRoutes(parentRouteName?: string): AppRoute[] {
         const parentRoute = this.getParentRoute(parentRouteName);
         if (!parentRoute) {

@@ -116,7 +116,7 @@ export default {
         },
 
         async SAVE_DISCOVERED_PLUGINS({ commit }, listedPlugins) {
-            console.log('SAVE_DISCOVERED: ', listedPlugins);
+            //console.log('SAVE_DISCOVERED: ', listedPlugins);
             await new PluginService().setPlugins(listedPlugins);
             commit('listedPlugins', listedPlugins);
         },

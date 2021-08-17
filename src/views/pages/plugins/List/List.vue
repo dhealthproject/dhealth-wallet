@@ -8,7 +8,6 @@
                     :pagination-type="'scroll'"
                     :page-size="20"
                     @on-clicked-row="onRowClick"
-                    @on-add-plugin="onAddPluginClick"
                 >
                     <template v-slot:table-title>
                         <h1 class="section-title">
@@ -18,28 +17,6 @@
                 </TableDisplay>
             </template>
         </AssetListPageWrap>
-
-        <ModalConfirm
-            v-model="showConfirmInstallPluginModal"
-            :title="$t('modal_title_confirm_plugin_install_manager')"
-            :message="$t('modal_text_confirm_plugin_install_manager')"
-            :use-bigger-font="true"
-            @confirmed="showInstallPluginModal = true"
-        />
-
-        <ModalPluginInstallManager
-            v-if="showInstallPluginModal"
-            :visible="showInstallPluginModal"
-            :title="$t('modal_title_plugin_install_manager')"
-            @confirmed="onConfirmInstallPlugins"
-            @cancelled="showInstallPluginModal = false"
-        />
-
-        <ModalPluginInstallDetails
-            v-if="showInstallDetailsModal"
-            :visible="showInstallDetailsModal"
-            :title="$t('modal_title_plugin_install_details')"
-        />
     </div>
 </template>
 

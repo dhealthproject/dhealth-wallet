@@ -80,18 +80,18 @@ export default {
         },
 
         SELECT(ignored, payload: DatabaseActionPayload) {
-            console.log('[DEBUG][store/Database.ts] caught db/SELECT with payload: ', payload);
+            //console.log('[DEBUG][store/Database.ts] caught db/SELECT with payload: ', payload);
 
             // read operation
             const service = new DatabaseService();
             const entries = service.getEntries(payload.plugin, payload.table, payload.data);
 
-            console.log('[DEBUG][store/Database.ts] entries for db/SELECT: ', entries);
+            //console.log('[DEBUG][store/Database.ts] entries for db/SELECT: ', entries);
             return entries;
         },
 
         INSERT({ commit }, payload: DatabaseActionPayload) {
-            console.log('[DEBUG][store/Database.ts] caught db/INSERT with payload: ', payload);
+            //console.log('[DEBUG][store/Database.ts] caught db/INSERT with payload: ', payload);
 
             // insert operation
             const service = new DatabaseService();
@@ -102,9 +102,9 @@ export default {
         },
 
         UPDATE({ commit }, payload: DatabaseActionPayload) {
-            console.log('[DEBUG][store/Database.ts] caught db/UPDATE with payload: ', payload);
+            //console.log('[DEBUG][store/Database.ts] caught db/UPDATE with payload: ', payload);
 
-            // insert operation
+            // update operation
             const service = new DatabaseService();
             service.updateEntry(payload.plugin, payload.table, payload.data);
 
@@ -112,8 +112,15 @@ export default {
             commit('entries', service.getEntries());
         },
 
-        DELETE(ignored, payload: DatabaseActionPayload) {
+        DELETE({ commit }, payload: DatabaseActionPayload) {
             console.log('[DEBUG][store/Database.ts] caught db/DELETE with payload: ', payload);
+
+            // insert operation
+            const service = new DatabaseService();
+            service.deleteEntry(payload.plugin, payload.table, payload.data);
+
+            // update state
+            commit('entries', service.getEntries());
         },
     },
 };

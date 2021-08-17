@@ -28,20 +28,11 @@ import { PluginModel } from '@/core/database/entities/PluginModel';
 import AssetListPageWrap from '@/views/pages/assets/AssetListPageWrap/AssetListPageWrap.vue';
 // @ts-ignore
 import TableDisplay from '@/components/TableDisplay/TableDisplay.vue';
-// @ts-ignore
-import ModalConfirm from '@/views/modals/ModalConfirm/ModalConfirm.vue';
-// @ts-ignore
-import ModalPluginInstallManager from '@/views/modals/ModalPluginInstallManager/ModalPluginInstallManager.vue';
-// @ts-ignore
-import ModalPluginInstallDetails from '@/views/modals/ModalPluginInstallDetails/ModalPluginInstallDetails.vue';
 
 @Component({
     components: {
         AssetListPageWrap,
         TableDisplay,
-        ModalConfirm,
-        ModalPluginInstallManager,
-        ModalPluginInstallDetails,
     },
     computed: {
         ...mapGetters({
@@ -55,24 +46,6 @@ export class ListTs extends Vue {
      * @var {PluginModel[]}
      */
     protected knownPlugins: PluginModel[];
-
-    /**
-     * Whether currently displaying the confirmation modal box
-     * @var {boolean}
-     */
-    public showConfirmInstallPluginModal: boolean = false;
-
-    /**
-     * Whether currently displaying the install manager
-     * @var {boolean}
-     */
-    public showInstallPluginModal: boolean = false;
-
-    /**
-     * Whether currently displaying the install details modal box
-     * @var {boolean}
-     */
-    public showInstallDetailsModal: boolean = false;
 
     /**
      * Displays plugin detail page on click of row.
@@ -95,35 +68,5 @@ export class ListTs extends Vue {
         // update in store then render
         await this.$store.dispatch('plugin/SET_CURRENT_PLUGIN', { ...plugin });
         this.$router.push({ name: 'plugins.info' });
-    }
-
-    /**
-     * Displays a confirmation window to open the install
-     * manager. In case of confirmation using the Confirm
-     * button in the modal box,  a plugin install manager
-     * modal box will be displayed.
-     *
-     * @returns {void}
-     */
-    public onAddPluginClick() {
-        this.showConfirmInstallPluginModal = true;
-    }
-
-    public async onConfirmInstallPlugins(selectedPlugins: string[]) {
-        // Leave trace in diagnostic console
-        const message = `Requesting installation of ${selectedPlugins.length} plugin(s)`;
-        this.$store.dispatch('diagnostic/ADD_DEBUG', message);
-
-        // Closes installer to display process details
-        this.showInstallPluginModal = false;
-        this.showInstallDetailsModal = true;
-
-        // common service instance
-        const service = new PluginService(this.$parent); // Manager is parent
-        await service.createRecipe(selectedPlugins);
-
-        // update store state
-        const plugins = service.getPlugins();
-        await this.$store.dispatch('plugin/UPDATE_CACHE', plugins);
     }
 }

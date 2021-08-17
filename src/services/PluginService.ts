@@ -91,7 +91,7 @@ export class PluginService {
      *
      * @var {string[]}
      */
-    private readonly KNOWN_PUBLISHERS: string[] = ['@yourdlt/', '@dhealth/', '@ubcdigital'];
+    private readonly KNOWN_PUBLISHERS: string[] = ['@yourdlt', '@dhealth', '@ubcdigital'];
 
     /**
      * The plugins request blacklists. We blacklist any store
@@ -211,7 +211,7 @@ export class PluginService {
                 Object.assign(
                     // defaults prevail
                     {
-                        status: 'installed',
+                        status: PluginBridge.PluginInstallStatus.Installed,
                         createdAt: new Date().getTime(),
                     },
 
@@ -223,7 +223,7 @@ export class PluginService {
                 ),
             )
             // overwrite "uninstalled" storage status for discovered plugins
-            .map((p) => (p.status === 'uninstalled' ? { ...p, status: 'installed' } : p));
+            .map((p) => (p.status === PluginBridge.PluginInstallStatus.Uninstalled ? { ...p, status: PluginBridge.PluginInstallStatus.Installed } : p));
 
         // set "uninstalled" flags
         uninstalled = uninstalled.map((p) =>
@@ -235,7 +235,7 @@ export class PluginService {
 
         // update storage with newly discovered plugins
         const updated = _.uniqBy(augmented.concat(uninstalled), 'npmModule');
-        console.log('[PluginService.ts] Updating plugins with: ', updated);
+        //console.log('[PluginService.ts] Updating plugins with: ', updated);
 
         this.pluginModelStorage.set(updated);
         return this;
@@ -262,14 +262,14 @@ export class PluginService {
                 }
                 return Object.assign({}, p, fields);
             });
-            console.log('Performing update in DB with: ', updated);
+            //console.log('Performing update in DB with: ', updated);
         } catch (e) {
             // create new plugin entry
             let p = new PluginModel(npmModule);
             p = Object.assign({}, p, fields);
 
             updated = this.getPlugins().concat([p]);
-            console.log('Performing create in DB with: ', updated);
+            //console.log('Performing create in DB with: ', updated);
         }
 
         this.pluginModelStorage.set(updated);
@@ -418,58 +418,57 @@ export class PluginService {
         });
 
         // onBeforeRecipeUploaded: Dispatches pre-installation hook for plugins
-        $pluginBus.$on('onBeforeRecipeUploaded', (recipeJson: string) => {
-            console.log(`[DEBUG][PluginService] onBeforeRecipeUploaded caught with recipe: ${recipeJson}`)
-            commit('currentRecipeStatus', PluginRecipeStatus.Pending);
-            commit('currentRecipeDuration', 0);
-        });
+        // $pluginBus.$on('onBeforeRecipeUploaded', (recipeJson: string) => {
+        //     console.log(`[DEBUG][PluginService] onBeforeRecipeUploaded caught with recipe: ${recipeJson}`)
+        //     commit('currentRecipeStatus', PluginRecipeStatus.Pending);
+        //     commit('currentRecipeDuration', 0);
+        // });
 
-        // onRecipeUploaded: Dispatches status update when dApp recipe upload completed
-        $pluginBus.$on('onRecipeUploaded', (buildNumber: any) => {
-            dispatch('diagnostic/ADD_INFO', `onRecipeUploaded caught with build number ${buildNumber}.`, {
-                root: true,
-            });
+        // // onRecipeUploaded: Dispatches status update when dApp recipe upload completed
+        // $pluginBus.$on('onRecipeUploaded', (buildNumber: any) => {
+        //     dispatch('diagnostic/ADD_INFO', `onRecipeUploaded caught with build number ${buildNumber}.`, {
+        //         root: true,
+        //     });
 
-            commit('currentRecipeStatus', PluginRecipeStatus.Uploaded);
-            //commit('currentRecipeDuration', parseInt(uploadResult.estimatedDuration));
-        });
+        //     commit('currentRecipeStatus', PluginRecipeStatus.Uploaded);
+        //     //commit('currentRecipeDuration', parseInt(uploadResult.estimatedDuration));
+        // });
 
-        // onRecipeBuildError: Dispatches error handler hook for plugins
-        $pluginBus.$on('onRecipeBuildError', (error: string) => {
-            dispatch('diagnostic/ADD_ERROR', `onRecipeBuildError caught with ${error}.`, {
-                root: true,
-            });
+        // // onRecipeBuildError: Dispatches error handler hook for plugins
+        // $pluginBus.$on('onRecipeBuildError', (error: string) => {
+        //     dispatch('diagnostic/ADD_ERROR', `onRecipeBuildError caught with ${error}.`, {
+        //         root: true,
+        //     });
 
-            commit('currentRecipeStatus', PluginRecipeStatus.Error);
-        });
+        //     commit('currentRecipeStatus', PluginRecipeStatus.Error);
+        // });
 
-        // onRecipeBuildCompleted: Dispatches post-build hook for plugins
-        $pluginBus.$on('onRecipeBuildCompleted', (artifactFile: string) => {
-            dispatch('diagnostic/ADD_INFO', `onRecipeBuildCompleted caught with artifact ${artifactFile}.`, {
-                root: true,
-            });
+        // // onRecipeBuildCompleted: Dispatches post-build hook for plugins
+        // $pluginBus.$on('onRecipeBuildCompleted', (artifactFile: string) => {
+        //     dispatch('diagnostic/ADD_INFO', `onRecipeBuildCompleted caught with artifact ${artifactFile}.`, {
+        //         root: true,
+        //     });
 
-            commit('currentRecipeStatus', PluginRecipeStatus.Success);
-            commit('currentRecipeArtifact', `http://dapps.dhealth.cloud/artifacts/${artifactFile}`);
-        });
+        //     commit('currentRecipeStatus', PluginRecipeStatus.Success);
+        //     commit('currentRecipeArtifact', `http://dapps.dhealth.cloud/artifacts/${artifactFile}`);
+        // });
 
-        // onRecipeBuildUpdated: Dispatches build status update hook
-        $pluginBus.$on('onRecipeBuildUpdated', (buildUpdate: any) => {
-            if (buildUpdate.status === 'BUILDING') {
-                commit('currentRecipeStatus', PluginRecipeStatus.Building);
-                commit('currentRecipeDuration', buildUpdate.estimateDuration);
-            }
-        });
+        // // onRecipeBuildUpdated: Dispatches build status update hook
+        // $pluginBus.$on('onRecipeBuildUpdated', (buildUpdate: any) => {
+        //     if (buildUpdate.status === 'BUILDING') {
+        //         commit('currentRecipeStatus', PluginRecipeStatus.Building);
+        //         commit('currentRecipeDuration', buildUpdate.estimateDuration);
+        //     }
+        // });
 
-        // onRecipeBuildTimeout: Dispatches build timeout hook
-        $pluginBus.$on('onRecipeBuildTimeout', () => (buildNumber: number) => {
-            // forwarded as onRecipeBuildError
-            $pluginBus.$emit(
-                'onRecipeBuildError',
-                `dApp Recipe build #${buildNumber} failed to execute and timed out.`,
-            );
-        });
-
+        // // onRecipeBuildTimeout: Dispatches build timeout hook
+        // $pluginBus.$on('onRecipeBuildTimeout', () => (buildNumber: number) => {
+        //     // forwarded as onRecipeBuildError
+        //     $pluginBus.$emit(
+        //         'onRecipeBuildError',
+        //         `dApp Recipe build #${buildNumber} failed to execute and timed out.`,
+        //     );
+        // });
 
         return this;
     }
@@ -504,25 +503,25 @@ export class PluginService {
 
         // checks "authentication" of plugin
         if (currentPlugin.npmModule !== actionPayload.plugin) {
-            console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Plugin must be started.`);
+            //console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Plugin must be started.`);
             throw new Error(`PluginActionRequestError: Plugin must be started`);
         }
 
         // checks plugin status (must be enabled)
         if (PluginBridge.PluginInstallStatus.Enabled !== plugin.status) {
-            console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Plugin must be enabled.`);
+            //console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Plugin must be enabled.`);
             throw new Error(`PluginActionRequestError: Plugin must be enabled`);
         }
 
         // checks that permission(s) is/are granted
         if (!plugin.permissions.find((perm) => actionPayload.action === perm.target)) {
-            console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Permission not granted for ${actionPayload.action}.`);
+            //console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Permission not granted for ${actionPayload.action}.`);
             throw new Error(`PluginActionRequestError: Permission must be granted`);
         }
 
         // checks that the action request is valid
         if (!actionPayload || !('plugin' in actionPayload) || !('type' in actionPayload)) {
-            console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Invalid action payload.`);
+            //console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Invalid action payload.`);
             throw new Error(`PluginActionRequestError: Action payload must be valid`);
         }
 
@@ -530,7 +529,7 @@ export class PluginService {
         this.assertRequestAllowance(actionPayload.type, actionPayload.action);
 
         let response = undefined;
-        console.log(`[INFO][store/Plugin.ts] reading ${actionPayload.type}: ${actionPayload.action} from store`);
+        //console.log(`[INFO][store/Plugin.ts] reading ${actionPayload.type}: ${actionPayload.action} from store`);
 
         // using Vuex rootGetters (namespaced)
         if ('getter' === actionPayload.type) {
@@ -561,47 +560,47 @@ export class PluginService {
      *
      * @param npmModule
      */
-    public async searchModule(npmModule: string, version: string = 'latest'): Promise<PluginSearchResponse> {
-        return new Promise(async (resolve, reject) => {
-            // only plugins from authorized publishers are accepted
-            if (!this.KNOWN_PUBLISHERS.some((p) => npmModule.startsWith(p))) {
-                return reject(`This plugin is from an unauthorized publisher.`);
-            }
+    // public async searchModule(npmModule: string, version: string = 'latest'): Promise<PluginSearchResponse> {
+    //     return new Promise(async (resolve, reject) => {
+    //         // only plugins from authorized publishers are accepted
+    //         if (!this.KNOWN_PUBLISHERS.some((p) => npmModule.startsWith(p))) {
+    //             return reject(`This plugin is from an unauthorized publisher.`);
+    //         }
 
-            // prepares the package.json download URL
-            const unpkgUrl = `https://unpkg.com/${npmModule}@${version}/package.json`;
+    //         // prepares the package.json download URL
+    //         const unpkgUrl = `https://unpkg.com/${npmModule}@${version}/package.json`;
 
-            // downloads package.json using unpkg
-            const response = await fetch(unpkgUrl, {
-                method: 'GET',
-            }).then((response) => response.text());
+    //         // downloads package.json using unpkg
+    //         const response = await fetch(unpkgUrl, {
+    //             method: 'GET',
+    //         }).then((response) => response.text());
 
-            // reads package manifest (package.json)
-            let packageJson = { dependencies: [] };
-            try {
-                packageJson = JSON.parse(response);
-            } catch (e) {
-                return reject(`An error happened while parsing package.json`);
-            }
+    //         // reads package manifest (package.json)
+    //         let packageJson = { dependencies: [] };
+    //         try {
+    //             packageJson = JSON.parse(response);
+    //         } catch (e) {
+    //             return reject(`An error happened while parsing package.json`);
+    //         }
 
-            // mandatory presence
-            if (!('dependencies' in packageJson)) {
-                return reject(`Missing dependencies in package.json`);
-            }
+    //         // mandatory presence
+    //         if (!('dependencies' in packageJson)) {
+    //             return reject(`Missing dependencies in package.json`);
+    //         }
 
-            // check for obligatory deps
-            const dependencies = Object.keys(packageJson.dependencies);
+    //         // check for obligatory deps
+    //         const dependencies = Object.keys(packageJson.dependencies);
 
-            if (!dependencies.includes('@yourdlt/wallet-api-bridge') || !dependencies.includes('@yourdlt/wallet-components')) {
-                return reject(`Missing mandatory dependencies`);
-            }
+    //         if (!dependencies.includes('@yourdlt/wallet-api-bridge') || !dependencies.includes('@yourdlt/wallet-components')) {
+    //             return reject(`Missing mandatory dependencies`);
+    //         }
 
-            return resolve({
-                npmModule,
-                isCompatible: true,
-            });
-        });
-    }
+    //         return resolve({
+    //             npmModule,
+    //             isCompatible: true,
+    //         });
+    //     });
+    // }
 
     /**
      * This method emits a `onPluginInstallRequest` event to
@@ -613,26 +612,26 @@ export class PluginService {
      * @param   {string[]}    selectedPlugins
      * @returns {PluginService}
      */
-    public createRecipe(selectedPlugins: string[]): PluginService {
-        // Merges storage plugins and selected new plugins
-        const installedPlugins = this.getPlugins();
-        const recipePlugins = installedPlugins.concat(selectedPlugins.map(
-            n => new PluginModel(n, undefined, 'latest')
-        ));
+    // public createRecipe(selectedPlugins: string[]): PluginService {
+    //     // Merges storage plugins and selected new plugins
+    //     const installedPlugins = this.getPlugins();
+    //     const recipePlugins = installedPlugins.concat(selectedPlugins.map(
+    //         n => new PluginModel(n, undefined, 'latest')
+    //     ));
 
-        console.log(`[DEBUG][PluginService.ts] ${installedPlugins.length} installedPlugins.`)
-        console.log(`[DEBUG][PluginService.ts] ${recipePlugins.length} recipePlugins.`)
+    //     console.log(`[DEBUG][PluginService.ts] ${installedPlugins.length} installedPlugins.`)
+    //     console.log(`[DEBUG][PluginService.ts] ${recipePlugins.length} recipePlugins.`)
 
-        // Builds recipe from plugin instances
-        const recipe = {};
-        recipePlugins.forEach(p => recipe[p.npmModule] = p.version ?? 'latest');
+    //     // Builds recipe from plugin instances
+    //     const recipe = {};
+    //     recipePlugins.forEach(p => recipe[p.npmModule] = p.version ?? 'latest');
 
-        console.log(`[DEBUG][PluginService.ts] Sending install request with recipe: ${JSON.stringify(recipe)}.`)
+    //     console.log(`[DEBUG][PluginService.ts] Sending install request with recipe: ${JSON.stringify(recipe)}.`)
 
-        // Emits onPluginsInstallRequest to main process
-        window['electron']['ipcRenderer'].send('onPluginsInstallRequest', JSON.stringify(recipe));
-        return this;
-    }
+    //     // Emits onPluginsInstallRequest to main process
+    //     window['electron']['ipcRenderer'].send('onPluginsInstallRequest', JSON.stringify(recipe));
+    //     return this;
+    // }
     /// end-region public API
 
     /// region protected API
@@ -724,7 +723,7 @@ export class PluginService {
 
         // checks that the action/mutation/getter is not blacklisted
         if ((isWildcardDenial && !isWhitelisted) || isBlacklisted) {
-            console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Action target is blacklisted.`);
+            //console.log(`[ERR][store/Plugin.ts] Plugin action request denied. Reason: Action target is blacklisted.`);
             throw new Error(`PluginActionRequestError: Action target is blacklisted`);
         }
 

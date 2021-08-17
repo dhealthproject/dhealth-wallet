@@ -31,7 +31,6 @@ export class PluginTableService extends AssetTableService {
         return [
             { name: 'status', label: 'table_header_status' },
             { name: 'npmModule', label: 'table_header_npm_module' },
-            { name: 'name', label: 'table_header_name' },
             { name: 'author', label: 'table_header_author' },
             { name: 'description', label: 'table_header_description' },
             { name: 'repository', label: 'table_header_repository' },
@@ -53,7 +52,6 @@ export class PluginTableService extends AssetTableService {
                 return {
                     status: pluginInfo.status,
                     npmModule: pluginInfo.npmModule + '@v' + pluginInfo.version,
-                    name: pluginInfo.name || pluginInfo.npmModule,
                     author: pluginInfo.author.name,
                     description: pluginInfo.description,
                     repository: pluginInfo.repository.url,
