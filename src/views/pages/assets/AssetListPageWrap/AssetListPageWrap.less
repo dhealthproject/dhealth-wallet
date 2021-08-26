@@ -5,10 +5,13 @@
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 100%;
+    grid-template-columns: auto 4.5rem;
+    grid-column-gap: 0.3rem;
 
     .left-container {
         display: grid;
         grid-template-rows: 100%;
+        background: #fff;
 
         .table-title {
             background-color: limegreen;
@@ -22,6 +25,49 @@
             font-weight: 500;
             color: #333;
             margin-top: 0.2rem;
+        }
+    }
+
+    .right-container {
+        height: 100%;
+        background-color: white;
+        overflow: hidden;
+        border-radius: 0.08rem;
+        display: grid;
+        grid-template-rows: auto 1fr;
+
+        .header-container {
+            width: 100%;
+            height: 100%;
+
+            .asset-title {
+                color: purple;
+                font-weight: 600;
+                font-size: 0.18rem;
+                padding: 20px 40px;
+                cursor: default;
+                height: 70px;
+            }
+        }
+
+        .bottom-container {
+            position: relative;
+            width: 100%;
+            height: auto;
+            overflow-y: auto;
+            border-radius: 6px;
+
+            .asset-main-container {
+                height: 100%;
+                padding: 0px 40px;
+                overflow: hidden;
+
+                .asset-container {
+                    height: 100%;
+                    padding: 0 0.2rem;
+                    margin-top: 35px;
+                }
+            }
         }
     }
 }

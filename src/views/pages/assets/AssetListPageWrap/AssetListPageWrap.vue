@@ -5,6 +5,18 @@
                 <slot name="table-section" />
             </div>
         </div>
+        <div class="right-container">
+            <div class="header-container">
+                <div class="asset-title">Test</div>
+            </div>
+            <div class="bottom-container">
+                <div class="asset-main-container">
+                    <div class="asset-container">
+                        <span>Test Beschreibung</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
