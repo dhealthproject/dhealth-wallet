@@ -1,9 +1,30 @@
 <template>
     <div class="multisig-outer-container">
         <div class="multisig-inner-container">
-            <div class="bottom-container">
-                <NavigationTabs direction="horizontal" :parent-route-name="'multisig'" />
-                <router-view />
+            <div class="left-container">
+                <div class="bottom-container">
+                    <NavigationTabs class="multisig-tabs" direction="horizontal" :parent-route-name="'multisig'" />
+                    <router-view />
+                </div>
+            </div>
+            <div class="right-container">
+                <div class="header-container">
+                    <div class="multisig-title">{{ $t('multisig_sidebar_heading') }}</div>
+                </div>
+                <div class="bottom-container">
+                    <div class="multisig-main-container">
+                        <div class="multisig-container">
+                            <div class="multisig-item">
+                                <div class="multisig-item-heading">{{ $t('multisig_item_heading') }}</div>
+                                <div class="multisig-item-content">{{ $t('multisig_item_content') }}</div>
+                            </div>
+                            <div class="multisig-item">
+                                <div class="multisig-item-heading">{{ $t('multisig_item_heading_2') }}</div>
+                                <div class="multisig-item-content">{{ $t('multisig_item_content_2') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -25,22 +46,5 @@ export default class MultisigDashboardPage extends Vue {}
 
 <style lang="less" scoped>
 @import '../../../resources/css/variables.less';
-.multisig-outer-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-
-    .multisig-inner-container {
-        width: 100%;
-        height: 100%;
-        background: white;
-        overflow-x: hidden;
-        overflow-y: auto;
-        border-radius: @borderRadius;
-        .header-container {
-            width: 100%;
-            height: 100%;
-        }
-    }
-}
+@import './MultisigDashboardPage.less';
 </style>

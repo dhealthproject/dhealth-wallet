@@ -7,12 +7,15 @@
         </div>
         <div class="right-container">
             <div class="header-container">
-                <div class="asset-title">Test</div>
+                <div class="asset-title">{{ $t('assets_sidebar_heading') }}</div>
             </div>
             <div class="bottom-container">
                 <div class="asset-main-container">
                     <div class="asset-container">
-                        <span>Test Beschreibung</span>
+                        <div class="asset-item">
+                            <div class="asset-item-heading">{{ $t('assets_item_heading') }}</div>
+                            <div class="asset-item-content">{{ $t('assets_item_content') }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -30,5 +33,6 @@ export default class AssetListPageWrap extends Vue {}
 </script>
 
 <style lang="less" scoped>
+@import '../../../resources/css/variables.less';
 @import './AssetListPageWrap.less';
 </style>

@@ -1,0 +1,92 @@
+.multisig-outer-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .multisig-inner-container {
+        width: 100%;
+        height: 100%;
+        border-radius: @borderRadius;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 100%;
+        grid-template-columns: auto 4.5rem;
+        grid-column-gap: 0.3rem;
+
+        .left-container {
+            display: grid;
+            grid-template-rows: 100%;
+            background: #fff;
+            border-radius: @borderRadius;
+
+            .multisig-tabs {
+                display: block;
+                height: unset;
+            }
+        }
+
+        .right-container {
+            height: 100%;
+            background-color: white;
+            overflow: hidden;
+            border-radius: 0.08rem;
+            display: grid;
+            grid-template-rows: auto 1fr;
+
+            .header-container {
+                width: 100%;
+                height: 100%;
+
+                .multisig-title {
+                    color: @primary;
+                    font-weight: 600;
+                    font-size: 0.18rem;
+                    padding: 20px 40px;
+                    cursor: default;
+                    height: 70px;
+                }
+            }
+
+            .bottom-container {
+                position: relative;
+                width: 100%;
+                height: auto;
+                overflow-y: auto;
+                border-radius: 6px;
+
+                .multisig-main-container {
+                    height: 100%;
+                    padding: 0px 40px;
+                    overflow: hidden;
+
+                    .multisig-container {
+                        height: calc(100% - 35px);
+                        padding: 0 0.2rem;
+                        margin-top: 35px;
+
+                        .multisig-item {
+                            color: @primary;
+                            font-weight: 600;
+                            font-size: 0.18rem;
+                            margin-bottom: 0.25rem;
+
+                            .multisig-item-heading {
+                                line-height: 30px;
+                            }
+
+                            .multisig-item-content {
+                                font-size: 0.16rem;
+                                font-family: 'noto-sans-regular';
+                                cursor: pointer;
+                                text-align: justify;
+                                font-weight: 400;
+                                position: relative;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
