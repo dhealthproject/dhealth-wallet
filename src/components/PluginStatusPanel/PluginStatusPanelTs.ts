@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { PluginBridge } from '@yourdlt/wallet-api-bridge';
 import { PluginModel } from '@/core/database/entities/PluginModel';
 
@@ -26,14 +25,13 @@ import IconButton from '@/components/IconButton/IconButton.vue';
     components: {
         IconButton,
     },
-    computed: {
-        ...mapGetters({
-            selectedPlugin: 'plugin/currentPlugin',
-        }),
-    },
 })
 export class PluginStatusPanelTs extends Vue {
-    public selectedPlugin: PluginModel;
+    /**
+     * The active plugin.
+     * @var {PluginModel}
+     */
+    @Prop({default: null}) plugin: PluginModel;
 
     /**
      * Controls the checkbox state
@@ -42,7 +40,7 @@ export class PluginStatusPanelTs extends Vue {
     private isEnabled: boolean = false;
 
     public get pluginActionDescriptor() {
-        switch (this.selectedPlugin.status) {
+        switch (this.plugin.status) {
             case PluginBridge.PluginInstallStatus.Installed:
                 return {
                     event: 'on-clicked-enable',
@@ -74,23 +72,18 @@ export class PluginStatusPanelTs extends Vue {
     }
 
     public get pluginUsageDescriptor() {
-        switch (this.selectedPlugin.status) {
+        switch (this.plugin.status) {
             case PluginBridge.PluginInstallStatus.Enabled:
                 return {
                     event: 'on-clicked-start',
                     action: true,
                     cls: 'success-button',
-                    text: this.$t('plugin_action_start_text') + this.selectedPlugin.name,
+                    text: this.$t('plugin_action_start_text') + this.plugin.name,
                     icon: 'md-play',
                 };
 
             default:
                 return { action: false, text: this.$t('plugin_status_notusable') };
         }
-    }
-
-    @Watch('selectedPlugin', { immediate: true })
-    protected watchCurrentPlugin() {
-        this.$store.dispatch('plugin/LOAD_PLUGINS');
     }
 }

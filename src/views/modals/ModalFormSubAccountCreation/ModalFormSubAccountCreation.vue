@@ -126,4 +126,10 @@ hr {
 /deep/.form-label {
     padding-left: 0.7rem;
 }
+
+.select-style {
+    .ivu-select-selection {
+        height: auto;
+    }
+}
 </style>

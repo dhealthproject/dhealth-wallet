@@ -16,6 +16,7 @@ const account1: AccountModel = {
     profileName: 'test',
     publicKey: '82D539A540E89EC5848BBE6CF95F2001CDE8A6DEB904D0ADA86D613A4FD0CACB',
     type: 1,
+    isListedAccount: true,
 };
 const account2: AccountModel = {
     address: 'TD2UU6EY4G4WSV5NJMVLVVNRKZOKEZIBYXBFZ4U2',
@@ -29,6 +30,7 @@ const account2: AccountModel = {
     profileName: 'test',
     publicKey: '82D539A540E89EC5848BBE6CF95F2001CDE8A6DEB904D0ADA86D613A4FD0CACB',
     type: 1,
+    isListedAccount: true,
 };
 
 const mosaicService = new MosaicService();

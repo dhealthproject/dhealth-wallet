@@ -14,24 +14,19 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-
 // external dependencies
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 
 // internal dependencies
-import { PluginService } from '@/services/PluginService';
 import { PluginModel } from '@/core/database/entities/PluginModel';
 
 // child components
-// @ts-ignore
-import AssetListPageWrap from '@/views/pages/assets/AssetListPageWrap/AssetListPageWrap.vue';
 // @ts-ignore
 import TableDisplay from '@/components/TableDisplay/TableDisplay.vue';
 
 @Component({
     components: {
-        AssetListPageWrap,
         TableDisplay,
     },
     computed: {
@@ -59,14 +54,10 @@ export class ListTs extends Vue {
         }
 
         // reads plugin from db
-        const service = new PluginService(this.$parent); // Manager is parent
-        const plugins = await service.getPlugins();
-        const plugin = plugins.find((p, i) => i === index);
-
-        console.log('SETTING CURRENT_PLUGIN: ', { ...plugin });
+        const plugin = this.knownPlugins[index];
 
         // update in store then render
-        await this.$store.dispatch('plugin/SET_CURRENT_PLUGIN', { ...plugin });
+        this.$store.dispatch('plugin/SET_CURRENT_PLUGIN', plugin.npmModule);
         this.$router.push({ name: 'plugins.info' });
     }
 }

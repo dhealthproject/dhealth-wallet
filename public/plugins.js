@@ -222,6 +222,11 @@ window.PluginInjecter = {
           k => Vue.component(k, p.module.components[k])
         );
 
+        // Stops here with missing IPC
+        if (!('electron' in window) || !('ipcRenderer' in window['electron'])) {
+          return ;
+        }
+
         setTimeout(() => {
           // Persists loaded plugin details
           // Component data is ignored here

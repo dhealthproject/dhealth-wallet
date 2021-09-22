@@ -76,11 +76,6 @@ export class InfoTs extends Vue {
     public showPluginStatusChangeModal: boolean = false;
 
     /**
-     * Show confirm RELOAD PAGE after status change
-     */
-    public showConfirmReloadPageModel: boolean = false;
-
-    /**
      * The plugin status change that will happen.
      * @var {string}
      */
@@ -123,20 +118,14 @@ export class InfoTs extends Vue {
 
         // update store state
         const plugins = service.getPlugins();
-        await this.$store.dispatch('plugin/UPDATE_CACHE', plugins);
+        await this.$store.dispatch('plugin/LOAD_PLUGINS', plugins);
         await this.$store.dispatch(
             'plugin/SET_CURRENT_PLUGIN',
-            plugins.find((p) => p.npmModule === this.selectedPlugin.npmModule),
+            this.selectedPlugin.npmModule,
         );
 
         // update component/page state
         this.nextPluginStatus = this.nextPluginStatus === 'enabled' ? 'disabled' : 'enabled';
         this.showPluginStatusChangeModal = false;
-        this.showConfirmReloadPageModel = true;
-    }
-
-    public onConfirmReloadPage() {
-        this.showConfirmReloadPageModel = false;
-        window.location.reload();
     }
 }

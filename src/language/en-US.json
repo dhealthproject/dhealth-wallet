@@ -1344,5 +1344,7 @@
     "modal_plugin_install_details_error": "An error happened during the installation process.",
     "modal_plugin_install_details_packaging": "Packaging in progress...",
     "modal_plugin_install_details_packaging_done": "Packaging completed successfully.",
-    "modal_plugin_install_details_button_close": "Close"
+    "modal_plugin_install_details_button_close": "Close",
+    "modal_title_confirm_account_request": "Account creation request",
+    "modal_text_confirm_account_request": "This plugin requested the creation of a new account.\n\nPlease, click on the button below to continue and allow this request."
 }

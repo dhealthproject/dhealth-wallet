@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Component, Vue } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
-import { GenericTableDisplay } from '@yourdlt/wallet-components';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { GenericTableDisplay, GenericTableRow } from '@yourdlt/wallet-components';
 import { NavigationLinks } from '@yourdlt/wallet-components';
 
 import { PluginModel } from '@/core/database/entities/PluginModel';
@@ -30,15 +29,17 @@ import IconButton from '@/components/IconButton/IconButton.vue';
         IconButton,
         NavigationLinks,
         GenericTableDisplay,
-    },
-    computed: {
-        ...mapGetters({
-            selectedPlugin: 'plugin/currentPlugin',
-        }),
+        GenericTableRow,
     },
 })
 export class PluginDetailMultiPanelTs extends Vue {
-    public selectedPlugin: PluginModel;
+
+    /**
+     * The active plugin.
+     * @var {PluginModel}
+     */
+    @Prop({default: null}) plugin: PluginModel;
+
     public subpageIndexes: { [k: string]: number } = {
         summary: 0,
         routes: 1,
@@ -48,12 +49,6 @@ export class PluginDetailMultiPanelTs extends Vue {
     };
     public selectedSubpage: number = 0;
 
-    protected pluginRoutes: any[];
-    protected pluginComponents: any[];
-    protected pluginDependencies: any[];
-    protected pluginStorages: any[];
-    protected pluginSettings: any[];
-    protected pluginPermissions: any[];
     protected lastUpdatedData: number = new Date().valueOf();
 
     /// region computed properties
@@ -70,9 +65,9 @@ export class PluginDetailMultiPanelTs extends Vue {
     }
 
     public get updatedDate(): string {
-        let timestamp = this.selectedPlugin.createdAt;
-        if (!!this.selectedPlugin.updatedAt) {
-            timestamp = this.selectedPlugin.updatedAt;
+        let timestamp = this.plugin.createdAt;
+        if (!!this.plugin.updatedAt) {
+            timestamp = this.plugin.updatedAt;
         }
 
         return new Date(timestamp).toLocaleString();
@@ -81,36 +76,92 @@ export class PluginDetailMultiPanelTs extends Vue {
     public get dataTimestamp(): number {
         return this.lastUpdatedData;
     }
+
+    public get pluginRoutes(): any[] {
+        return [...this.getFormattedRoutes()];
+    }
+
+    public get pluginComponents(): any[] {
+        return this.plugin.components && this.plugin.components.length 
+            ? this.plugin.components.map((c) => ({ name: c }))
+            : [];
+    }
+
+    public get pluginDependencies(): any[] {
+        return this.plugin.dependencies && Object.keys(this.plugin.dependencies).length
+            ? Object.keys(this.plugin.dependencies).map((d) => ({ name: d }))
+            : [];
+    }
+
+    public get pluginStorages(): any[] {
+        return this.plugin.storages && this.plugin.storages.length 
+            ? this.plugin.storages.map((s) => ({
+                storageKey: s.storageKey,
+                entries: 0, //!!datarows && 'data' in datarows ? datarows.data.length : 0,
+                description: s.description,
+            })) 
+            : [];
+    }
+
+    public get pluginSettings(): any[] {
+        let dictionary = [],
+            buckets = [];
+        buckets = this.plugin.settings;
+        buckets.forEach((bucket) => {
+            const fields = Object.keys(bucket);
+            fields.forEach((f) =>
+                dictionary.push({
+                    name: f,
+                    value: bucket[f],
+                }),
+            );
+        });
+
+        // fixes lint rule "prefer-const"
+        return dictionary && dictionary.length
+            ? dictionary
+            : []
+    }
+
+    public get pluginPermissions(): any[] {
+        return this.plugin.permissions && this.plugin.permissions.length
+        ? this.plugin.permissions.map((p) => ({
+            name: p.name,
+            type: p.type,
+            target: p.target,
+            description: p.description,
+        }))
+        : [];
+    }
     /// end-region computed properties
 
     /// region component methods
     public async created() {
-        await this.refreshData();
         this.lastUpdatedData = new Date().valueOf();
     }
 
-    public handleRouteClick(index) {
-        console.log('Clicked route at index: ', index);
+    public handleRouteClick(name) {
+        console.log('Clicked route with name: ', name);
     }
 
-    public handleComponentClick(index) {
-        console.log('Clicked component at index: ', index);
+    public handleComponentClick(name) {
+        console.log('Clicked component with name: ', name);
     }
 
-    public handleDependencyClick(index) {
-        console.log('Clicked dependency at index: ', index);
+    public handleDependencyClick(name) {
+        console.log('Clicked dependency with name: ', name);
     }
 
-    public handleStorageClick(index) {
-        console.log('Clicked storage at index: ', index);
+    public handleStorageClick(storageKey) {
+        console.log('Clicked storage with storageKey: ', storageKey);
     }
 
-    public handleSettingClick(index) {
-        console.log('Clicked setting at index: ', index);
+    public handleSettingClick(name) {
+        console.log('Clicked setting with name: ', name);
     }
 
-    public handlePermissionClick(index) {
-        console.log('Clicked permission at index: ', index);
+    public handlePermissionClick(name) {
+        console.log('Clicked permission with name: ', name);
     }
     /// end-region component methods
 
@@ -128,8 +179,8 @@ export class PluginDetailMultiPanelTs extends Vue {
 
         // check for emptiness
         let routes = [];
-        if ('routes' in this.selectedPlugin && this.selectedPlugin.routes) {
-            routes = this.selectedPlugin.routes;
+        if ('routes' in this.plugin && this.plugin.routes) {
+            routes = this.plugin.routes;
         }
 
         return routes && routes.length
@@ -139,67 +190,6 @@ export class PluginDetailMultiPanelTs extends Vue {
                   children: this.getFormattedRoutes(r),
               }))
             : [];
-    }
-
-    protected async refreshData() {
-        let components = [],
-            dependencies = [],
-            storages = [],
-            buckets = [], // settings buckets
-            settings = [],
-            permissions = [];
-
-        if ('components' in this.selectedPlugin && this.selectedPlugin.components) {
-            components = this.selectedPlugin.components;
-        }
-
-        if ('dependencies' in this.selectedPlugin && this.selectedPlugin.dependencies) {
-            // uses only keys ("name")
-            dependencies = Object.keys(this.selectedPlugin.dependencies);
-        }
-
-        if ('storages' in this.selectedPlugin && this.selectedPlugin.storages) {
-            storages = this.selectedPlugin.storages;
-        }
-
-        if ('settings' in this.selectedPlugin && this.selectedPlugin.settings) {
-            // settings are sent in buckets
-            const dictionary = [];
-            buckets = this.selectedPlugin.settings;
-            buckets.forEach((bucket) => {
-                const fields = Object.keys(bucket);
-                fields.forEach((f) =>
-                    dictionary.push({
-                        name: f,
-                        value: bucket[f],
-                    }),
-                );
-            });
-
-            // fixes lint rule "prefer-const"
-            settings = dictionary;
-        }
-
-        if ('permissions' in this.selectedPlugin && this.selectedPlugin.permissions) {
-            permissions = this.selectedPlugin.permissions;
-        }
-
-        this.pluginRoutes = [...this.getFormattedRoutes()];
-
-        this.pluginComponents = components && components.length ? components.map((c) => ({ name: c })) : [];
-
-        this.pluginDependencies = dependencies && dependencies.length ? dependencies.map((d) => ({ name: d })) : [];
-
-        //!!datarows && 'data' in datarows ? datarows.data.length : 0,
-        this.pluginStorages =
-            storages && storages.length ? storages.map((s) => ({ storageKey: s.storageKey, entries: 0, description: s.description })) : [];
-
-        this.pluginSettings = settings && settings.length ? settings : [];
-
-        this.pluginPermissions =
-            permissions && permissions.length
-                ? permissions.map((p) => ({ name: p.name, type: p.type, target: p.target, description: p.description }))
-                : [];
     }
     /// end-region protected API
 }

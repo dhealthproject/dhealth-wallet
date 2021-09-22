@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Vue, Component } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { PluginModel } from '@/core/database/entities/PluginModel';
 
-@Component({
-    components: {},
-    computed: {
-        ...mapGetters({
-            selectedPlugin: 'plugin/currentPlugin',
-        }),
-    },
-})
+@Component
 export default class PluginInformationSidebarTs extends Vue {
-    public selectedPlugin: PluginModel;
+
+    /**
+     * The active plugin.
+     * @var {PluginModel}
+     */
+    @Prop({default: null}) plugin: PluginModel;
 
     public get mailtoAuthor(): string {
-        return 'mailto:' + this.selectedPlugin.author.email;
+        return 'mailto:' + this.plugin.author.email;
     }
 }

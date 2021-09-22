@@ -46,6 +46,7 @@ export const WalletsModel1: AccountModel = {
     encryptedPrivateKey: simpleWallet1.encryptedPrivateKey,
     path: '',
     isMultisig: false,
+    isListedAccount: true,
 };
 
 export const WalletsModel2: AccountModel = {
@@ -59,6 +60,7 @@ export const WalletsModel2: AccountModel = {
     encryptedPrivateKey: simpleWallet1.encryptedPrivateKey,
     path: "m/44'/1'/1'/0'/0'",
     isMultisig: false,
+    isListedAccount: true,
 };
 
 const TEST_ACCOUNTS = {

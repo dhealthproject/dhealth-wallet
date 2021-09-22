@@ -30,7 +30,7 @@
                 </div>
                 <span class="txt_info">
                     <span>
-                        {{ selectedPlugin.npmModule }}
+                        {{ plugin.npmModule }}
                     </span>
                 </span>
             </div>

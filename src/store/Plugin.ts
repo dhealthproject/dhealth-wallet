@@ -33,8 +33,6 @@ interface PluginState {
     initialized: boolean;
     listedPlugins: PluginModel[];
     currentPlugin: PluginModel;
-    currentRecipeStatus: PluginRecipeStatus;
-    currentRecipeDuration: number;
     registryPlugins: PluginModel[];
 }
 
@@ -42,8 +40,6 @@ const initialState: PluginState = {
     initialized: false,
     listedPlugins: [],
     currentPlugin: null,
-    currentRecipeStatus: undefined,
-    currentRecipeDuration: 0,
     registryPlugins: pluginsConfig.registryPlugins,
 };
 /// end-region state
@@ -56,32 +52,22 @@ export default {
         getInitialized: (state) => state.initialized,
         listedPlugins: (state: PluginState) => state.listedPlugins,
         currentPlugin: (state: PluginState) => state.currentPlugin,
-        currentRecipeStatus: (state: PluginState) => state.currentRecipeStatus,
-        currentRecipeDuration: (state: PluginState) => state.currentRecipeDuration,
         registryPlugins: (state: PluginState) => state.registryPlugins,
     },
     mutations: {
         setInitialized: (state, initialized) => (state.initialized = initialized),
-        listedPlugins: (state, listedPlugins) => Vue.set(state, 'listedPlugins', listedPlugins),
-        currentPlugin: (state: PluginState, pluginModel: PluginModel) => {
-            state.currentPlugin = pluginModel;
-        },
-        currentRecipeStatus: (state: PluginState, status: PluginRecipeStatus) => {
-            state.currentRecipeStatus = status;
-        },
-        currentRecipeDuration: (state: PluginState, duration: number) => {
-            state.currentRecipeDuration = duration;
-        },
+        listedPlugins: (state, listedPlugins) => (state.listedPlugins = listedPlugins),
+        currentPlugin: (state: PluginState, pluginModel: PluginModel) => (state.currentPlugin = pluginModel),
         registryPlugins: (state, registryPlugins) => Vue.set(state, 'registryPlugins', registryPlugins),
     },
     actions: {
         async initialize({ commit, dispatch, getters, rootGetters }) {
             const callback = async () => {
+                // loads installed plugins from database
+                dispatch('LOAD_PLUGINS');
+
                 // initializes all communication channels for plugins
                 new PluginService().initPluginBus($pluginBus, { commit, dispatch, getters, rootGetters });
-
-                // loads installed plugins from database
-                await dispatch('LOAD_PLUGINS');
 
                 // done
                 commit('setInitialized', true);
@@ -97,60 +83,27 @@ export default {
             await Lock.uninitialize(callback, { getters });
         },
 
-        async SET_CURRENT_PLUGIN({ commit, dispatch }, currentPlugin: PluginModel) {
-            dispatch('diagnostic/ADD_DEBUG', 'Store action plugin/SET_CURRENT_PLUGIN dispatched with ' + currentPlugin.npmModule, {
+        SET_CURRENT_PLUGIN({ commit, dispatch, getters }, npmModule: string) {
+            dispatch('diagnostic/ADD_DEBUG', `Store action plugin/SET_CURRENT_PLUGIN dispatched with ${npmModule}`, {
                 root: true,
             });
 
             // set current plugin
-            commit('currentPlugin', currentPlugin);
+            const plugins = getters['listedPlugins'];
+            commit('currentPlugin', plugins.find(p => p.npmModule === npmModule));
         },
 
         RESET_PLUGINS({ commit }) {
             commit('currentPlugin', null);
         },
 
-        async LOAD_PLUGINS({ commit }) {
-            const listedPlugins = await new PluginService().getPlugins();
-            commit('listedPlugins', listedPlugins);
-        },
+        LOAD_PLUGINS({ dispatch, commit }) {
+            dispatch('diagnostic/ADD_DEBUG', `Store action plugin/LOAD_PLUGINS dispatched`, {
+                root: true,
+            });
 
-        async SAVE_DISCOVERED_PLUGINS({ commit }, listedPlugins) {
-            //console.log('SAVE_DISCOVERED: ', listedPlugins);
-            await new PluginService().setPlugins(listedPlugins);
-            commit('listedPlugins', listedPlugins);
-        },
-
-        async ADD_DISCOVERED_PLUGIN({ commit }, plugin) {
-            const service = new PluginService();
-            const plugins = await service.getPlugins();
-            const exists = service.findByModule(plugin.npmModule);
-
-            if (!!exists) {
-                await service.updatePlugin(
-                    plugin.npmModule,
-                    Object.assign(
-                        {},
-                        {
-                            ...plugin,
-                        },
-                        { status: 'installed' },
-                    ),
-                );
-            } else {
-                await service.setPlugins(
-                    plugins.concat(
-                        Object.assign(
-                            {},
-                            {
-                                ...plugin,
-                            },
-                            { status: 'installed' },
-                        ),
-                    ),
-                );
-            }
-            commit('listedPlugins', await service.getPlugins());
+            const listedPlugins = new PluginService().getPlugins();
+            commit('listedPlugins', [...listedPlugins]);
         },
 
         INIT_PLUGIN_STORAGE({ dispatch }, plugin) {
@@ -160,21 +113,25 @@ export default {
 
             const service = new PluginService();
             service.initStorage(plugin.npmModule, plugin.storages);
-            dispatch('LOAD_CUSTOM_TABLES', null, { root: true });
+            dispatch('db/LOAD_CUSTOM_TABLES', null, { root: true });
         },
 
-        async SAVE_PLUGIN_DETAILS({ dispatch }, plugin) {
-            await new PluginService().updatePlugin(plugin.npmModule, plugin);
-            await dispatch('LOAD_PLUGINS');
-        },
-
-        async UPDATE_CACHE({ commit, dispatch }, listedPlugins) {
-            dispatch('diagnostic/ADD_DEBUG', 'Store action plugin/UPDATE_CACHE dispatched with ' + listedPlugins.length + ' plugins', {
+        SAVE_DISCOVERED_PLUGINS({ dispatch, commit }, listedPlugins) {
+            dispatch('diagnostic/ADD_DEBUG', `Store action plugin/SAVE_DISCOVERED_PLUGINS dispatched with ${listedPlugins.length} plugins`, {
                 root: true,
             });
 
-            // first update entries cache
-            commit('listedPlugins', listedPlugins);
+            const updatedPlugins = new PluginService().setPlugins(listedPlugins);
+            commit('listedPlugins', [...updatedPlugins]);
+        },
+
+        SAVE_PLUGIN_DETAILS({ dispatch, commit }, plugin) {
+            dispatch('diagnostic/ADD_DEBUG', `Store action plugin/SAVE_PLUGIN_DETAILS dispatched with ${plugin.npmModule}`, {
+                root: true,
+            });
+
+            const updatedPlugins = new PluginService().updatePlugin(plugin.npmModule, plugin);
+            commit('listedPlugins', [...updatedPlugins]);
         },
     },
 };

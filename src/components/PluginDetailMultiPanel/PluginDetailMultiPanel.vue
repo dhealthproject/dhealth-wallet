@@ -15,11 +15,11 @@
                 </div>
                 <div class="subpage-field">
                     <label>{{ $t('plugin_details_summary_readme') }}</label>
-                    <a :href="selectedPlugin.homepage" target="_blank">{{ $t('plugin_details_summary_view_readme') }}</a>
+                    <a :href="plugin.homepage" target="_blank">{{ $t('plugin_details_summary_view_readme') }}</a>
                 </div>
                 <div class="subpage-field">
                     <label>{{ $t('plugin_details_summary_install_path') }}</label>
-                    <span>{{ selectedPlugin.installPath }}</span>
+                    <span>{{ plugin.installPath }}</span>
                 </div>
 
                 <hr class="separator break" />
@@ -36,7 +36,6 @@
                         :disable-single-page-links="true"
                         :disable-rows-grid="true"
                         :disable-placeholder-grid="true"
-                        @on-clicked-row="handleDependencyClick"
                     >
                         <template v-slot:table-title>
                             <h1 class="section-title">
@@ -45,6 +44,14 @@
                         </template>
                         <template v-slot:empty>
                             <h2 class="empty-list">No dependencies found.</h2>
+                        </template>
+                        <template v-slot:rows="props">
+                            <GenericTableRow
+                                v-for="(rowValues, index) in props.items"
+                                :key="index"
+                                :row-values="rowValues"
+                                @click="handleDependencyClick(rowValues.name)"
+                            />
                         </template>
                     </GenericTableDisplay>
                 </div>
@@ -61,7 +68,6 @@
                         :disable-single-page-links="true"
                         :disable-rows-grid="true"
                         :disable-placeholder-grid="true"
-                        @on-clicked-row="handleComponentClick"
                     >
                         <template v-slot:table-title>
                             <h1 class="section-title">
@@ -70,6 +76,14 @@
                         </template>
                         <template v-slot:empty>
                             <h2 class="empty-list">No components found.</h2>
+                        </template>
+                        <template v-slot:rows="props">
+                            <GenericTableRow
+                                v-for="(rowValues, index) in props.items"
+                                :key="index"
+                                :row-values="rowValues"
+                                @click="handleComponentClick(rowValues.name)"
+                            />
                         </template>
                     </GenericTableDisplay>
                 </div>
@@ -86,9 +100,9 @@
                             { name: 'children', label: $t('plugin_table_header_route_children') },
                         ]"
                         :page-size="20"
+                        :disable-single-page-links="true"
                         :disable-rows-grid="true"
                         :disable-placeholder-grid="true"
-                        @on-clicked-row="handleRouteClick"
                     >
                         <template v-slot:table-title>
                             <h1 class="section-title">
@@ -97,6 +111,14 @@
                         </template>
                         <template v-slot:empty>
                             <h2 class="empty-list">No routes found.</h2>
+                        </template>
+                        <template v-slot:rows="props">
+                            <GenericTableRow
+                                v-for="(rowValues, index) in props.items"
+                                :key="index"
+                                :row-values="rowValues"
+                                @click="handleRouteClick(rowValues.name)"
+                            />
                         </template>
                     </GenericTableDisplay>
                 </div>
@@ -113,9 +135,9 @@
                             { name: 'description', label: $t('plugin_table_header_storage_description') },
                         ]"
                         :page-size="20"
+                        :disable-single-page-links="true"
                         :disable-rows-grid="true"
                         :disable-placeholder-grid="true"
-                        @on-clicked-row="handleStorageClick"
                     >
                         <template v-slot:table-title>
                             <h1 class="section-title">
@@ -124,6 +146,14 @@
                         </template>
                         <template v-slot:empty>
                             <h2 class="empty-list">No tables found.</h2>
+                        </template>
+                        <template v-slot:rows="props">
+                            <GenericTableRow
+                                v-for="(rowValues, index) in props.items"
+                                :key="index"
+                                :row-values="rowValues"
+                                @click="handleStorageClick(rowValues.storageKey)"
+                            />
                         </template>
                     </GenericTableDisplay>
                 </div>
@@ -139,9 +169,9 @@
                             { name: 'value', label: $t('plugin_table_header_setting_value') },
                         ]"
                         :page-size="20"
+                        :disable-single-page-links="true"
                         :disable-rows-grid="true"
                         :disable-placeholder-grid="true"
-                        @on-clicked-row="handleSettingClick"
                     >
                         <template v-slot:table-title>
                             <h1 class="section-title">
@@ -150,6 +180,14 @@
                         </template>
                         <template v-slot:empty>
                             <h2 class="empty-list">No settings found.</h2>
+                        </template>
+                        <template v-slot:rows="props">
+                            <GenericTableRow
+                                v-for="(rowValues, index) in props.items"
+                                :key="index"
+                                :row-values="rowValues"
+                                @click="handleSettingClick(rowValues.name)"
+                            />
                         </template>
                     </GenericTableDisplay>
                 </div>
@@ -167,9 +205,9 @@
                             { name: 'description', label: $t('plugin_table_header_permission_description') },
                         ]"
                         :page-size="20"
+                        :disable-single-page-links="true"
                         :disable-rows-grid="true"
                         :disable-placeholder-grid="true"
-                        @on-clicked-row="handlePermissionClick"
                     >
                         <template v-slot:table-title>
                             <h1 class="section-title">
@@ -178,6 +216,14 @@
                         </template>
                         <template v-slot:empty>
                             <h2 class="empty-list">No permissions found.</h2>
+                        </template>
+                        <template v-slot:rows="props">
+                            <GenericTableRow
+                                v-for="(rowValues, index) in props.items"
+                                :key="index"
+                                :row-values="rowValues"
+                                @click="handlePermissionClick(rowValues.name)"
+                            />
                         </template>
                     </GenericTableDisplay>
                 </div>

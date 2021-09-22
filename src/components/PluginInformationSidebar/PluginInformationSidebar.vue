@@ -2,22 +2,22 @@
     <div class="table-container">
         <div class="table-component">
             <label>{{ $t('plugin_info_npm_module') }}</label>
-            <span>{{ selectedPlugin.npmModule }}@v{{ selectedPlugin.version }}</span>
+            <span>{{ plugin.npmModule }}@v{{ plugin.version }}</span>
 
             <label>{{ $t('plugin_info_description') }}</label>
-            <span>{{ selectedPlugin.description }}</span>
+            <span>{{ plugin.description }}</span>
 
             <label>{{ $t('plugin_info_repository') }}</label>
-            <a :href="selectedPlugin.repository.url" target="_blank">{{ $t('plugin_info_view_repository') }}</a>
+            <a :href="plugin.repository.url" target="_blank">{{ $t('plugin_info_view_repository') }}</a>
 
             <label>{{ $t('plugin_info_homepage') }}</label>
-            <a :href="selectedPlugin.homepage" target="_blank">{{ $t('plugin_info_view_homepage') }}</a>
+            <a :href="plugin.homepage" target="_blank">{{ $t('plugin_info_view_homepage') }}</a>
 
             <label>{{ $t('plugin_info_author') }}</label>
-            <a v-if="!!selectedPlugin.author.url" :href="selectedPlugin.author.url" target="_blank">{{ selectedPlugin.author.name }}</a>
-            <span v-else>{{ selectedPlugin.author.name }}</span>
+            <a v-if="!!plugin.author.url" :href="plugin.author.url" target="_blank">{{ plugin.author.name }}</a>
+            <span v-else>{{ plugin.author.name }}</span>
             <br />
-            <a v-if="!!selectedPlugin.author.email" :href="mailtoAuthor" target="_blank">{{ $t('plugin_info_email_author') }}</a>
+            <a v-if="!!plugin.author.email" :href="mailtoAuthor" target="_blank">{{ $t('plugin_info_email_author') }}</a>
         </div>
     </div>
 </template>

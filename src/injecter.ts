@@ -82,6 +82,22 @@ if ('electron' in window && 'ipcRenderer' in window['electron']) {
         // forwarding onPluginActionRequest on renderer process (dispatches action)
         $pluginBus.$emit('onPluginActionRequest', JSON.parse(!!data && data.length ? data : '{}'));
     });
+
+    // /**
+    //  * @event ipcRenderer:onPluginAccountResponse -> ipcRenderer:onPluginAccountResponse
+    //  * @description This event propagates a child account request and
+    //  * returns the child public
+    //  *
+    //  * @param   {EventEmitter}  event   The event emitter instance.
+    //  * @param   {string}        data    A JSON-formatted arguments object.
+    //  * @return  {void}
+    //  */
+    // window['electron']['ipcRenderer'].on('onPluginAccountResponse', (event, data) => {
+    //     //console.log(`[INFO][injecter.ts] received onPluginAccountResponse with ${data} from plugin`);
+
+    //     // forwarding onPluginActionResponse from $pluginBus on renderer process
+    //     window['electron']['ipcRenderer'].send('onPluginActionResponse', JSON.parse(!!data && data.length ? data : '{}'));
+    // });
 }
 
 // adds window.PluginInjecter to inject plugins on page load

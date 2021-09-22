@@ -174,23 +174,27 @@ export class AccountSelectorPanelTs extends Vue {
     }
 
     public get seedAccounts(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.SEED);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.SEED);
     }
 
     public get optInAccounts(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.OPT_IN);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.OPT_IN);
     }
 
     public get pkAccounts(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.PRIVATE_KEY);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.PRIVATE_KEY);
     }
 
     public get ledgerAccount(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.LEDGER);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.LEDGER);
     }
 
     public get ledgerOptInAccount(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.LEDGER_OPT_IN);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.LEDGER_OPT_IN);
+    }
+
+    public get pluginAccounts(): AccountModel[] {
+        return this.knownAccounts.filter((_) => 'isListedAccount' in _ && !_.isListedAccount);
     }
 
     public get hasAddAccountModal(): boolean {

@@ -195,9 +195,9 @@ export class PluginService {
      * appear in the \a plugins anymore.
      *
      * @param   {PluginModel[]}     plugins
-     * @returns {PluginService}
+     * @returns {PluginModel[]}
      */
-    public setPlugins(plugins: PluginModel[]): PluginService {
+    public setPlugins(plugins: PluginModel[]): PluginModel[] {
         // read from database to identify uninstalls
         const fromStorage = this.getPlugins();
         const discovered = plugins.map((p) => p.npmModule);
@@ -238,7 +238,7 @@ export class PluginService {
         //console.log('[PluginService.ts] Updating plugins with: ', updated);
 
         this.pluginModelStorage.set(updated);
-        return this;
+        return updated;
     }
 
     /**
@@ -246,10 +246,10 @@ export class PluginService {
      * and sets \a fields on the entry with previous values set.
      *
      * @param   {string}    npmModule
-     * @returns {PluginService}
+     * @returns {PluginModel[]}
      * @throws  {Error}     On invalid \a npmModule, not found in local cache.
      */
-    public updatePlugin(npmModule: string, fields: { [key: string]: any }): PluginService {
+    public updatePlugin(npmModule: string, fields: { [key: string]: any }): PluginModel[] {
         let updated = [];
         try {
             // determines if its an update or a create
@@ -260,7 +260,15 @@ export class PluginService {
                 if (p.npmModule !== npmModule) {
                     return p;
                 }
-                return Object.assign({}, p, fields);
+                return Object.assign(
+                    {},
+
+                    // storage info prevails
+                    p,
+
+                    // filesystem info overwrites
+                    fields,
+                );
             });
             //console.log('Performing update in DB with: ', updated);
         } catch (e) {
@@ -273,7 +281,7 @@ export class PluginService {
         }
 
         this.pluginModelStorage.set(updated);
-        return this;
+        return updated;
     }
 
     /**
@@ -369,12 +377,13 @@ export class PluginService {
      */
     public initPluginBus($pluginBus: Vue, { commit, dispatch, getters, rootGetters }): PluginService {
         // onPluginsReady: Dispatches initial *save* of plugins in database
-        $pluginBus.$on('onPluginsReady', async (plugins: PluginModel[]) => {
+        $pluginBus.$on('onPluginsReady', (plugins: PluginModel[]) => {
             dispatch('diagnostic/ADD_INFO', `onPluginsReady caught with ${plugins.length} plugins.`, {
                 root: true,
             });
 
-            await dispatch('SAVE_DISCOVERED_PLUGINS', plugins);
+            // Updates plugin metadata (name, version, etc.)
+            dispatch('SAVE_DISCOVERED_PLUGINS', plugins);
         });
 
         // onPluginLoaded: Dispatches *update* of plugin details in database (after load)
@@ -382,7 +391,11 @@ export class PluginService {
             dispatch('diagnostic/ADD_INFO', `onPluginLoaded caught for plugin ${plugin.npmModule}.`, {
                 root: true,
             });
+
+            // Updates plugin details (components, permissions, etc.)
             dispatch('SAVE_PLUGIN_DETAILS', plugin);
+
+            // Initializes database tables if necessary
             if (plugin.storages && plugin.storages.length) {
                 dispatch('INIT_PLUGIN_STORAGE', plugin);
             }

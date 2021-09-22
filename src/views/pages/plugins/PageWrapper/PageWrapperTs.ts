@@ -33,14 +33,21 @@ import { TransactionCommand, TransactionCommandMode } from '@/services/Transacti
 import { PluginModel } from '@/core/database/entities/PluginModel';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
 import { Signer } from '@/store/Account';
+import { $pluginBus } from '@/events';
 
 // child components
 // @ts-ignore
 import ModalTransactionConfirmation from '@/views/modals/ModalTransactionConfirmation/ModalTransactionConfirmation.vue';
+// @ts-ignore
+import ModalFormSubAccountCreation from '@/views/modals/ModalFormSubAccountCreation/ModalFormSubAccountCreation.vue';
+// @ts-ignore
+import ModalConfirm from '@/views/modals/ModalConfirm/ModalConfirm.vue';
 
 @Component({
     components: {
         ModalTransactionConfirmation,
+        ModalFormSubAccountCreation,
+        ModalConfirm,
     },
     computed: {
         ...mapGetters({
@@ -129,6 +136,18 @@ export class PageWrapperTs extends Vue {
     public hasConfirmationModal: boolean = false;
 
     /**
+     * Whether the account request modal is displayed or not
+     * @var {boolean}
+     */
+    public showConfirmAccountRequestModal: boolean = false;
+
+    /**
+     * Whether the sub account form modal is displayed or not
+     * @var {boolean}
+     */
+    public showSubAccountFormModal: boolean = false;
+
+    /**
      * A prepared transaction command.
      * @var {TransactionCommand}
      */
@@ -169,6 +188,26 @@ export class PageWrapperTs extends Vue {
     /// end-region computed properties
 
     /// region component methods
+    public onAccountRequestIntercepted() {
+        console.log(`[DEBUG][PageWrapperTs.ts] requested account.`);
+        this.showConfirmAccountRequestModal = true;
+    }
+
+    public onAccountRequestAccepted() {
+        console.log(`[DEBUG][PageWrapperTs.ts] accepted account request.`);
+        this.showSubAccountFormModal = true;
+    }
+
+    public onAccountRequestCompleted(childPublicKey: string) {
+        console.log("[DEBUG][PageWrapperTs.ts] Added account with public key: ", childPublicKey);
+
+        // communicate public key to plugin
+        window['electron']['ipcRenderer'].send(
+            'onPluginAccountResponse',
+            JSON.stringify({ publicKey: childPublicKey }),
+        );
+    }
+
     public onTransactionPrepared(transaction: TransactionURI<Transaction>) {
         this.command = this.createTransactionCommand(transaction.toTransaction());
         this.hasConfirmationModal = true;

@@ -352,6 +352,13 @@ class AppPluginManager {
       AppMainWindow.webContents.send('onPluginActionRequest', specJson)
     })
 
+    // Handles account requests from plugins to App
+    ipcMain.removeAllListeners('onPluginAccountResponse');
+    ipcMain.on('onPluginAccountResponse', (event, responseJson) => {
+      console.log(`[INFO][public/bundler.js] main forwarding onPluginAccountResponse with ${responseJson} from App to plugin`)
+      AppMainWindow.webContents.send('onPluginAccountResponse', responseJson)
+    })
+
     // Runs the plugin bundler if necessary
     this.loadPlugins().then(
       (plugins) => {
