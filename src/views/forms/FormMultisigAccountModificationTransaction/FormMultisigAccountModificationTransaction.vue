@@ -115,7 +115,15 @@ export default class FormMultisigAccountModificationTransaction extends FormMult
 <style lang="less" scoped>
 /deep/ .form-row {
     .form-row-inner-container {
-        grid-template-columns: 3.35rem 8rem;
+        grid-template-columns: 2.4rem 7.5rem;
+
+        .form-label {
+            padding-left: 0;
+        }
+
+        .form-row-inner-container-value-only {
+            grid-template-columns: 7.5rem;
+        }
     }
 }
 

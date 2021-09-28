@@ -6,9 +6,6 @@
                     <slot name="form-section" />
                 </div>
             </div>
-            <!-- <div class="right-container xym-outline">
-      <slot name="right-section" />
-    </div> -->
         </div>
     </div>
 </template>
@@ -29,20 +26,12 @@ export default class MultisigFormPage extends Vue {}
     display: grid;
     grid-template-columns: 90% auto;
     grid-template-rows: 100%;
+
     .main-out-container {
         position: relative;
         width: 100%;
         height: 100%;
         padding: 0.2rem 0 0.35rem 0.2rem;
-    }
-    .left-container {
-        width: 100%;
-        padding-left: 0.5rem;
-        background-color: white;
-    }
-
-    .right-container {
-        padding-left: 0.2rem;
     }
 }
 </style>

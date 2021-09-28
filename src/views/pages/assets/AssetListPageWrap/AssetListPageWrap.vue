@@ -5,6 +5,20 @@
                 <slot name="table-section" />
             </div>
         </div>
+        <div class="right-container">
+            <div class="header-container">
+                <div class="asset-title">{{ $t('assets_sidebar_heading') }}</div>
+            </div>
+            <div class="bottom-container">
+                <div class="asset-main-container">
+                    <div class="asset-container">
+                        <div class="asset-item">
+                            <div class="asset-item-content" v-html="$t('assets_item_content')"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -18,5 +32,6 @@ export default class AssetListPageWrap extends Vue {}
 </script>
 
 <style lang="less" scoped>
+@import '../../../resources/css/variables.less';
 @import './AssetListPageWrap.less';
 </style>

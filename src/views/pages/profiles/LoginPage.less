@@ -27,15 +27,15 @@
     top: 0;
     z-index: 999;
 
-    .video-background-section {
+    .login-background-section {
         width: 100%;
         height: 100%;
         background-size: 100% 100%;
     }
 
     .welcome-box {
-        width: 17.2rem;
-        height: fit-content;
+        width: 100%;
+        height: 100%;
         position: absolute;
         top: 0;
         left: 0;
@@ -43,106 +43,134 @@
         bottom: 0;
         margin: auto;
         display: grid;
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 1.5fr 1fr;
         align-items: center;
 
         .banner-image {
             width: 100%;
+            height: 100%;
             color: @white;
-            padding: 0.3rem 0.4rem 0.4rem 0.4rem;
-            padding-right: 2rem;
+            padding: 0.6rem;
+            padding-right: 0.7rem;
+            background-image: url('../../resources/img/login/login-screen-d2.png');
+            background-size: 100% 100%;
 
-            .top-welcome-text {
-                display: block;
-                font-size: 0.6rem;
-                font-weight: 500;
-                height: 0.84rem;
-                line-height: 0.7rem;
-                letter-spacing: 1.5;
-                margin-bottom: 0.54rem;
-                cursor: context-menu;
-                user-select: none;
-            }
+            .welcome-text {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                // padding-left: 30%;
+                padding: 0 5% 0 20%;
+                // padding-bottom: 30px;
+                text-align: justify;
 
-            .bottom-welcome-text {
-                font-size: @biggerFont;
-                line-height: 0.38rem;
-                font-weight: 400;
-                cursor: context-menu;
-                user-select: none;
+
+                .top-welcome-text {
+                    // position: absolute;
+                    // top: 32%;
+                    // left: 12%;
+                    font-size: 0.5rem;
+                    line-height: 0.7rem;
+                    cursor: context-menu;
+                    user-select: none;
+                }
+
+                .bottom-welcome-text {
+                    font-size: @biggerFont;
+                    line-height: 0.38rem;
+                    font-weight: 400;
+                    cursor: context-menu;
+                    user-select: none;
+                }
             }
         }
 
         .login-card {
             float: right;
-            width: 4.2rem;
-            height: 6.2rem;
-            padding: 0.4rem 0.31rem 0 0.31rem;
-            background-color: @white;
-            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 0.6rem;
+            background-color: #f3f4f8;
             margin-right: 0.8rem;
-            border-radius: 10px;
 
-            /deep/.ivu-select {
-                color: @purpleDark;
+            .login-card-wrapper {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
 
-                .ivu-select-dropdown {
-                    top: unset !important;
-                    left: unset !important;
-                    width: 3.4rem !important;
-                }
-                .ivu-select-selection .ivu-select-placeholder,
-                .ivu-select-selection .ivu-select-selected-value {
-                    color: @black !important;
-                }
+                /deep/.ivu-select {
+                    color: @purpleDark;
 
-                .login-profile-network-type {
-                    float: right;
-                    color: @grayDark;
+                    .ivu-select-dropdown {
+                        top: unset !important;
+                        left: unset !important;
+                        width: 3.4rem !important;
+                    }
+                    .ivu-select-selection .ivu-select-placeholder,
+                    .ivu-select-selection .ivu-select-selected-value {
+                        color: @black !important;
+                    }
+
+                    .login-profile-network-type {
+                        float: right;
+                        color: @grayDark;
+                    }
                 }
             }
 
             .img-box {
-                width: 2.3rem;
+                position: absolute;
+                top: 4%;
+                // left: 4%;
+                left: 45%;
+                width: 2.5rem;
                 height: 0.72rem;
-                margin: 0 auto;
-                margin-bottom: 0.5rem;
-                background-repeat: no-repeat;
-                background-size: 2.3rem 0.72rem;
-                background-size: contain;
-                color: red;
+                background-size: cover;
                 background-position: 0 center;
-                background-image: url('../../resources/dhealth-network-long.png');
+                background-image: url('../../resources/dhealth-logo-white.png');
             }
 
             .login-title {
-                font-size: 0.23rem;
+                font-size: 0.3rem;
                 font-weight: bold;
-                text-align: center;
                 color: @purpleDark;
                 @black: rgba(51, 51, 51, 1);
-                margin-bottom: 0.3rem;
+                margin-bottom: 0.4rem;
             }
 
             /deep/.ivu-tooltip {
                 width: 100%;
             }
 
+            /deep/.ivu-tooltip-rel::after {
+                content: "";
+                background: linear-gradient(315.55deg, #700081 -1.68%, #6700f9 110.7%);
+                display: block;
+                height: 3px;
+                width: 100%;
+                position: absolute;
+                bottom: 0;
+            }
+
             /deep/input {
                 width: 100%;
                 height: 0.37rem;
-                background: #f2f2f2;
-                border: none;
                 padding-left: 0.11rem;
                 font-size: @normalFont;
                 color: @purpleDark;
                 border-radius: 0;
                 margin-top: 0.1rem;
+                background: #f6f6f6;
+                border-width: 3px;
+                border-style: solid;
+                border-color: #f6f6f6;
             }
 
             .profile-name,
             .input-password {
-                font-size: 0.22rem;
+                font-size: 0.2rem;
                 color: @purpleDark;
                 font-weight: 400;
             }
@@ -164,13 +192,14 @@
             }
 
             .password-tip {
-                padding-top: 0.2rem;
+                padding-top: 0.3rem;
                 font-size: @smallerFont;
                 font-weight: 400;
                 color: @purple;
                 line-height: 0.17rem;
                 display: flex;
                 min-height: 0.56rem;
+
                 .prompt {
                     width: 100%;
                     background-color: transparent;
@@ -179,23 +208,23 @@
 
                 .create-profile {
                     width: 100%;
-                    background-color: transparent;
-                    text-align: right;
+                    text-align: center;
+                    font-size: 16px;
                 }
             }
 
             .button {
-                width: 1.8rem;
-                font-size: 0.18rem;
-                margin: 0 auto;
-                margin-top: 0.5rem;
-                height: 0.4rem;
                 border-radius: 0.05rem;
                 text-align: center;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 background: linear-gradient(315.55deg, #44004e -1.68%, #5200c6 110.7%);
+                width: 100%;
+                font-size: 20px;
+                margin: 0;
+                padding: 25px 0px;
+                margin-top: 50px;
 
                 /deep/ i {
                     margin-right: 0.07rem;
@@ -216,8 +245,9 @@
         align-items: center;
 
         > img {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
+            z-index: 1;
         }
     }
 
@@ -228,8 +258,11 @@
 
         .ivu-select-placeholder,
         .ivu-select-selected-value {
-            color: @white !important;
+            color: @primary !important;
             font-size: @smallFont;
+            position: relative;
+            z-index: 1;
+            padding-left: 10px !important;
         }
 
         i::before {
@@ -379,5 +412,5 @@
 .navbar-icon {
     margin-right: 10px;
     font-size: 25px;
-    color: white;
+    // color: white;
 }

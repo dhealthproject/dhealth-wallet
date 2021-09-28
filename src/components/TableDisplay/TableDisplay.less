@@ -1,6 +1,7 @@
 @import '../../views/resources/css/variables.less';
 .mosaic-columns {
-    grid-template-columns: 14% 10% repeat(2, 14%) 12% repeat(4, 8%) 4%;
+    // grid-template-columns: 14% 10% repeat(2, 14%) 12% repeat(4, 8%) 4%;
+    grid-template-columns: 17% 21% 15% 15% 15% 9% auto;
     grid-template-rows: 100%;
 }
 
@@ -87,6 +88,11 @@
 .restrictable-header {
     text-align: center;
     white-space: nowrap;
+    border-right: none !important;
+}
+
+.table-cell {
+    border-right: 0.01rem solid rgba(68, 0, 78, 0.1);
 }
 
 .hexId-cell {
@@ -117,6 +123,7 @@
 
 .restrictable-cell {
     text-align: center;
+    border-right: none;
 }
 
 .table-container {
@@ -278,12 +285,8 @@
             line-height: 0.35rem;
             font-weight: 300;
             cursor: pointer;
-
-            .header-label {
-            }
-
-            .sort-icon {
-            }
+            border-right: 0.01rem solid rgba(68, 0, 78, 0.1);
+            border-bottom: 0.01rem solid rgba(68, 0, 78, 0.1);
         }
     }
 

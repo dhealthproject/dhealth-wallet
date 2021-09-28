@@ -40,9 +40,9 @@ export class MosaicTableService extends AssetTableService {
             { name: 'balance', label: 'table_header_balance' },
             { name: 'expiration', label: 'table_header_expiration' },
             { name: 'divisibility', label: 'table_header_divisibility' },
-            { name: 'transferable', label: 'table_header_transferable' },
-            { name: 'supplyMutable', label: 'table_header_supply_mutable' },
-            { name: 'restrictable', label: 'table_header_restrictable' },
+            //{ name: 'transferable', label: 'table_header_transferable' },
+            //{ name: 'supplyMutable', label: 'table_header_supply_mutable' },
+            //{ name: 'restrictable', label: 'table_header_restrictable' },
         ];
     }
 
@@ -69,9 +69,9 @@ export class MosaicTableService extends AssetTableService {
                     balance: (mosaicInfo.balance || 0) / Math.pow(10, mosaicInfo.divisibility),
                     expiration: expiration,
                     divisibility: mosaicInfo.divisibility,
-                    transferable: mosaicInfo.transferable,
-                    supplyMutable: mosaicInfo.supplyMutable,
-                    restrictable: mosaicInfo.restrictable,
+                    //transferable: mosaicInfo.transferable,
+                    //supplyMutable: mosaicInfo.supplyMutable,
+                    //restrictable: mosaicInfo.restrictable,
                     metadataList: mosaicInfo.metadataList || [],
                 };
             })
