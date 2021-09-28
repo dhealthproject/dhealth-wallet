@@ -13,8 +13,7 @@
                 <div class="asset-main-container">
                     <div class="asset-container">
                         <div class="asset-item">
-                            <div class="asset-item-heading">{{ $t('assets_item_heading') }}</div>
-                            <div class="asset-item-content">{{ $t('assets_item_content') }}</div>
+                            <div class="asset-item-content" v-html="$t('assets_item_content')"></div>
                         </div>
                     </div>
                 </div>

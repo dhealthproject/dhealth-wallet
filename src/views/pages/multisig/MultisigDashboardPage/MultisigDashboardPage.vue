@@ -16,11 +16,11 @@
                         <div class="multisig-container">
                             <div class="multisig-item">
                                 <div class="multisig-item-heading">{{ $t('multisig_item_heading') }}</div>
-                                <div class="multisig-item-content">{{ $t('multisig_item_content') }}</div>
+                                <div class="multisig-item-content" v-html="$t('multisig_item_content')"></div>
                             </div>
                             <div class="multisig-item">
                                 <div class="multisig-item-heading">{{ $t('multisig_item_heading_2') }}</div>
-                                <div class="multisig-item-content">{{ $t('multisig_item_content_2') }}</div>
+                                <div class="multisig-item-content" v-html="$t('multisig_item_content_2')"></div>
                             </div>
                         </div>
                     </div>
