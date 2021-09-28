@@ -72,6 +72,16 @@
                                 </template>
                             </FaqPage>
 
+                            <FaqPage v-if="topic === 'roadmap'" :key="'roadmap'" :topic="'roadmap'">
+                                <template v-slot:body>
+                                    <FaqImageItem>
+                                        <template v-slot:image>
+                                            <img src="@/views/resources/img/faq/dhealth-roadmap-phases.png" />
+                                        </template>
+                                    </FaqImageItem>
+                                </template>
+                            </FaqPage>
+
                             <FaqPage v-if="topic === 'wallet'" :key="'wallet'" :topic="'wallet'">
                                 <template v-slot:body>
                                     <div class="faq-slider">
@@ -323,16 +333,31 @@
                             <div
                                 class="faq-category-item"
                                 :class="{
+                                    active: topic === 'roadmap',
+                                }"
+                                @click="setTopic('roadmap')"
+                            >
+                                <div class="faq-category-head grow">
+                                    <img class="faq-category-img" src="@/views/resources/img/icons/harvest.png" />
+                                    <div class="faq-category-text">{{ $t('faq_category_fourth') }}</div>
+                                </div>
+                                <div class="faq-category-subtext">{{ $t('faq_category_sub_fourth') }}</div>
+                            </div>
+
+                            <div
+                                class="faq-category-item"
+                                :class="{
                                     active: topic === 'wallet',
                                 }"
                                 @click="setTopic('wallet')"
                             >
                                 <div class="faq-category-head grow">
                                     <img class="faq-category-img" src="@/views/resources/img/icons/wallet.png" />
-                                    <div class="faq-category-text">{{ $t('faq_category_fourth') }}</div>
+                                    <div class="faq-category-text">{{ $t('faq_category_fifth') }}</div>
                                 </div>
-                                <div class="faq-category-subtext">{{ $t('faq_category_sub_fourth') }}</div>
+                                <div class="faq-category-subtext">{{ $t('faq_category_sub_fifth') }}</div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -347,10 +372,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 // child components
 import NavigationTabs from '@/components/NavigationTabs/NavigationTabs.vue';
 import FaqPage from '@/components/FaqPage/FaqPage.vue';
+import FaqImageItem from '@/components/FaqPage/FaqImageItem/FaqImageItem.vue';
 import FaqPageItem from '@/components/FaqPage/FaqPageItem/FaqPageItem.vue';
 import FaqScreenshotItem from '@/components/FaqPage/FaqScreenshotItem/FaqScreenshotItem.vue';
 
-@Component({ components: { NavigationTabs, FaqPage, FaqPageItem, FaqScreenshotItem } })
+@Component({ components: { NavigationTabs, FaqPage, FaqImageItem, FaqPageItem, FaqScreenshotItem } })
 export default class Dashboard extends Vue {
     @Prop({ default: 'faq' }) parentRouteName: string;
     @Prop({ default: '' }) term: string;
@@ -408,6 +434,10 @@ export default class Dashboard extends Vue {
             { question: this.$t('faq_question_general_9'), answer: this.$t('faq_answer_general_9'), group: 'general' },
             { question: this.$t('faq_question_general_10'), answer: this.$t('faq_answer_general_10'), group: 'general' },
             { question: this.$t('faq_question_general_11'), answer: this.$t('faq_answer_general_11'), group: 'general' },
+            { question: this.$t('faq_question_general_12'), answer: this.$t('faq_answer_general_12'), group: 'general' },
+            { question: this.$t('faq_question_general_13'), answer: this.$t('faq_answer_general_13'), group: 'general' },
+            { question: this.$t('faq_question_general_14'), answer: this.$t('faq_answer_general_14'), group: 'general' },
+            { question: this.$t('faq_question_general_15'), answer: this.$t('faq_answer_general_15'), group: 'general' },
             { question: this.$t('faq_question_tokenomics_1'), answer: this.$t('faq_answer_tokenomics_1'), group: 'tokenomics' },
             { question: this.$t('faq_question_tokenomics_2'), answer: this.$t('faq_answer_tokenomics_2'), group: 'tokenomics' },
             { question: this.$t('faq_question_tokenomics_3'), answer: this.$t('faq_answer_tokenomics_3'), group: 'tokenomics' },
@@ -415,6 +445,13 @@ export default class Dashboard extends Vue {
             { question: this.$t('faq_question_tokenomics_5'), answer: this.$t('faq_answer_tokenomics_5'), group: 'tokenomics' },
             { question: this.$t('faq_question_tokenomics_6'), answer: this.$t('faq_answer_tokenomics_6'), group: 'tokenomics' },
             { question: this.$t('faq_question_tokenomics_7'), answer: this.$t('faq_answer_tokenomics_7'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_8'), answer: this.$t('faq_answer_tokenomics_8'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_9'), answer: this.$t('faq_answer_tokenomics_9'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_10'), answer: this.$t('faq_answer_tokenomics_10'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_11'), answer: this.$t('faq_answer_tokenomics_11'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_12'), answer: this.$t('faq_answer_tokenomics_12'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_13'), answer: this.$t('faq_answer_tokenomics_13'), group: 'tokenomics' },
+            { question: this.$t('faq_question_tokenomics_14'), answer: this.$t('faq_answer_tokenomics_14'), group: 'tokenomics' },
             { question: this.$t('faq_question_develop_1'), answer: this.$t('faq_answer_develop_1'), group: 'develop' },
             { question: this.$t('faq_question_develop_2'), answer: this.$t('faq_answer_develop_2'), group: 'develop' },
             { question: this.$t('faq_question_develop_3'), answer: this.$t('faq_answer_develop_3'), group: 'develop' },
