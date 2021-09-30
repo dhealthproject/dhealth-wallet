@@ -70,6 +70,10 @@ import { NodeModel } from '@/core/database/entities/NodeModel';
 import { MosaicModel } from '@/core/database/entities/MosaicModel';
 import { HarvestingModel } from '@/core/database/entities/HarvestingModel';
 import { AccountModel, AccountType } from '@/core/database/entities/AccountModel';
+
+import { appConfig } from '@/config';
+const { MIN_HARVESTER_BALANCE } = appConfig.constants;
+
 //@ts-ignore
 import ButtonCopyToClipboard from '@/components/ButtonCopyToClipboard/ButtonCopyToClipboard.vue';
 // @ts-ignore
@@ -179,6 +183,14 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
     public showConfirmModal = false;
     public isDelegatedHarvestingWarningModalShown = false;
     public activeIndex = 0;
+
+    public get minHarvesterBalance() {
+        if (!MIN_HARVESTER_BALANCE || MIN_HARVESTER_BALANCE < 0) {
+            return 2000;
+        }
+
+        return MIN_HARVESTER_BALANCE / Math.pow(10, 6);
+    }
 
     public get allNodeListUrl() {
         return this.$store.getters['app/explorerUrl'] + 'nodes';

@@ -31,6 +31,7 @@ export interface AppConfig {
         MAX_PASSWORD_LENGTH: number;
         MIN_PASSWORD_LENGTH: number;
         DECIMAL_SEPARATOR: string;
+        MIN_HARVESTER_BALANCE: number;
     };
     title: string;
     marketServerUrl: string;
@@ -47,6 +48,7 @@ const defaultAppConfig: AppConfig = {
         SEED_ACCOUNT_NAME_PREFIX: 'Identity-',
         ANNOUNCE_TRANSACTION_TIMEOUT: 240000,
         DECIMAL_SEPARATOR: Number('1.1').toLocaleString().substring(1, 2),
+        MIN_HARVESTER_BALANCE: 2000000000
     },
     languages: [
         { value: 'en-US', label: 'English' },
