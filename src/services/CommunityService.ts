@@ -80,7 +80,7 @@ export class CommunityService {
 
         return parsedStream.items.map(({ pubDate, creator, title, contentSnippet, link }) => ({
             pubDate,
-            creator,
+            creator: 'dHealth Network',
             title,
             contentSnippet,
             link:
