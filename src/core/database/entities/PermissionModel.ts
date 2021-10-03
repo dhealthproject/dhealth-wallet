@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { PluginBridge } from '@yourdlt/wallet-api-bridge';
+import { PluginBridge } from '@dhealth/wallet-api-bridge';
 
 /**
  * @description Permissions describe in-app entities or items that can be

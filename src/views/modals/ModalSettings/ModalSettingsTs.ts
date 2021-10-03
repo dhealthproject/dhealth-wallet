@@ -1,7 +1,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { AccountModel } from '@/core/database/entities/AccountModel';
-import { NavigationLinks } from '@yourdlt/wallet-components';
+import { NavigationLinks } from '@dhealth/wallet-components';
 // @ts-ignore
 import FormGeneralSettings from '@/views/forms/FormGeneralSettings/FormGeneralSettings.vue';
 // @ts-ignore

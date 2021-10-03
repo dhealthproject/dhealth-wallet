@@ -14,8 +14,8 @@
  *
  */
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { GenericTableDisplay, GenericTableRow } from '@yourdlt/wallet-components';
-import { NavigationLinks } from '@yourdlt/wallet-components';
+import { GenericTableDisplay, GenericTableRow } from '@dhealth/wallet-components';
+import { NavigationLinks } from '@dhealth/wallet-components';
 
 import { PluginModel } from '@/core/database/entities/PluginModel';
 import { AppRoute } from '@/router/AppRoute';

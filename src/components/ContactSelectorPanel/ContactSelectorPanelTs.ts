@@ -17,7 +17,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { ValidationProvider } from 'vee-validate';
 import { AddressBook, IContact } from 'symbol-address-book';
-import { NavigationLinks } from '@yourdlt/wallet-components';
+import { NavigationLinks } from '@dhealth/wallet-components';
 
 // internal dependencies
 import { UIHelpers } from '@/core/utils/UIHelpers';

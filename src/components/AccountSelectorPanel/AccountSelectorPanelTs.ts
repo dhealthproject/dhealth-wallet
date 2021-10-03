@@ -17,8 +17,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { MosaicId, NetworkType } from 'symbol-sdk';
 import { ValidationProvider } from 'vee-validate';
-import { AmountDisplay } from '@yourdlt/wallet-components';
-import { NavigationLinks } from '@yourdlt/wallet-components';
+import { AmountDisplay } from '@dhealth/wallet-components';
+import { NavigationLinks } from '@dhealth/wallet-components';
 
 // internal dependencies
 import { ProfileModel } from '@/core/database/entities/ProfileModel';

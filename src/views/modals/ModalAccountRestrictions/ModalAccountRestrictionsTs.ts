@@ -15,7 +15,7 @@
  */
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { NavigationLinks } from '@yourdlt/wallet-components';
+import { NavigationLinks } from '@dhealth/wallet-components';
 import { AccountModel } from '@/core/database/entities/AccountModel';
 // @ts-ignore
 import FormAccountRestrictionTransaction from '@/views/forms/FormAccountRestrictionTransaction/FormAccountRestrictionTransaction.vue';

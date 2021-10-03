@@ -15,7 +15,7 @@
  */
 import Vue from 'vue';
 import * as _ from 'lodash';
-import { PluginBridge } from '@yourdlt/wallet-api-bridge';
+import { PluginBridge } from '@dhealth/wallet-api-bridge';
 
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { DatabaseTableModelStorage } from '@/core/database/storage/DatabaseTableModelStorage';

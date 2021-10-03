@@ -20,7 +20,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 // internal dependencies
 import { TableAssetType } from '@/components/TableDisplay/TableAssetType';
 import { officialIcons } from '@/views/resources/Images';
-import { PluginBridge } from '@yourdlt/wallet-api-bridge';
+import { PluginBridge } from '@dhealth/wallet-api-bridge';
 
 // child components
 // @ts-ignore

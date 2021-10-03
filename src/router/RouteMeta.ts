@@ -14,7 +14,7 @@
  *
  */
 // internal dependencies
-import { RouteMeta } from '@yourdlt/wallet-api-bridge';
+import { RouteMeta } from '@dhealth/wallet-api-bridge';
 
 /**
  * Metadata added to Vue Router routes

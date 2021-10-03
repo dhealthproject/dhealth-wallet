@@ -15,7 +15,7 @@
  */
 import Vue from 'vue';
 import * as _ from 'lodash';
-import { PluginBridge } from '@yourdlt/wallet-api-bridge';
+import { PluginBridge } from '@dhealth/wallet-api-bridge';
 
 import { PluginModelStorage } from '@/core/database/storage/PluginModelStorage';
 import { PluginModel } from '@/core/database/entities/PluginModel';
@@ -604,7 +604,7 @@ export class PluginService {
     //         // check for obligatory deps
     //         const dependencies = Object.keys(packageJson.dependencies);
 
-    //         if (!dependencies.includes('@yourdlt/wallet-api-bridge') || !dependencies.includes('@yourdlt/wallet-components')) {
+    //         if (!dependencies.includes('@dhealth/wallet-api-bridge') || !dependencies.includes('@dhealth/wallet-components')) {
     //             return reject(`Missing mandatory dependencies`);
     //         }
 

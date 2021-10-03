@@ -16,7 +16,7 @@
 // external dependencies
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { NavigationLinks } from '@yourdlt/wallet-components';
+import { NavigationLinks } from '@dhealth/wallet-components';
 
 // internal dependencies
 // child components

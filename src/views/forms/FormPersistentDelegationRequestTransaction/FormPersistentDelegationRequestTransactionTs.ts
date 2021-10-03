@@ -60,7 +60,7 @@ import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
 // @ts-ignore
 import Alert from '@/components/Alert/Alert.vue';
 import { ValidationProvider } from 'vee-validate';
-import { NavigationLinks } from '@yourdlt/wallet-components';
+import { NavigationLinks } from '@dhealth/wallet-components';
 
 import { HarvestingStatus } from '@/store/Harvesting';
 import { AccountTransactionSigner, TransactionAnnouncerService, TransactionSigner } from '@/services/TransactionAnnouncerService';
