@@ -14,7 +14,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
+// external dependencies
 import Vue from 'vue';
+// @ts-ignore
+import { library } from '@fortawesome/fontawesome-svg-core';
+// @ts-ignore
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons';
+// @ts-ignore
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+// import vue plugins
 import Router from 'vue-router';
 import VueRx from 'vue-rx';
 import moment from 'vue-moment';
@@ -24,26 +33,26 @@ import 'view-design/dist/styles/iview.css';
 import infiniteScroll from 'vue-infinite-scroll';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
+import VueNumber from 'vue-number-animation';
 
 // internal dependencies
 import { UIBootstrapper } from '@/app/UIBootstrapper';
 import { AppStore } from '@/app/AppStore';
-import i18n from '@/language/index.ts';
+import i18n from '@/language/index';
 import router from '@/router/AppRouter';
-import VueNumber from 'vue-number-animation';
 import { VeeValidateSetup } from '@/core/validation/VeeValidateSetup';
 // @ts-ignore
 import App from '@/app/App.vue';
 import clickOutsideDirective from '@/directives/clickOutside';
-import { PluginOptions } from 'vue-toastification/dist/types/src/types';
-// @ts-ignore
-import { library } from '@fortawesome/fontawesome-svg-core';
-// @ts-ignore
-import { faFileCsv } from '@fortawesome/free-solid-svg-icons';
-// @ts-ignore
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-/// region UI plugins
+// plugins provider/injection
+import './injecter';
+if ('PluginInjecter' in window) {
+    console.log('[DEBUG][main.ts] PluginInjecter is now defined');
+    Vue.use(window['PluginInjecter']);
+}
+
+// define usage of UI plugins
 Vue.use(iView, { locale });
 Vue.use(moment as any);
 Vue.use(Router);
@@ -51,22 +60,19 @@ Vue.use(VueRx);
 Vue.use(VueNumber);
 VeeValidateSetup.initialize();
 Vue.use(infiniteScroll);
-const toastDefaultOptions: PluginOptions = {
+Vue.use(Toast, {
     closeButton: false,
     timeout: 3000,
     transition: 'Vue-Toastification__fade',
     transitionDuration: 300,
-};
-Vue.use(Toast, toastDefaultOptions);
+});
 library.add(faFileCsv);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-/// end-region UI plugins
-
-/// directives
 Vue.directive('click-outside', clickOutsideDirective);
-/// end-region directives
 
+// create root instance
 const app = new Vue({
+    // @ts-ignore
     router,
     store: AppStore,
     i18n,
@@ -79,5 +85,7 @@ const app = new Vue({
     render: (h) => h(App),
 });
 
+// mount virtual DOM
 app.$mount('#app');
+
 export default app;

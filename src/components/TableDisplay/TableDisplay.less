@@ -1,8 +1,81 @@
 @import '../../views/resources/css/variables.less';
+
+.hexId-header {
+    text-align: left;
+}
+
+.hexId-cell {
+    text-align: left;
+}
+
+.animation-rotate {
+    animation: auto-rotate infinite linear 1s;
+}
+
+@keyframes auto-rotate {
+    from {
+        transform: rotateZ(0);
+    }
+    to {
+        transform: rotateZ(360deg);
+    }
+}
+
+.padding-bottom {
+    padding-bottom: 0.7rem;
+}
+
 .mosaic-columns {
     // grid-template-columns: 14% 10% repeat(2, 14%) 12% repeat(4, 8%) 4%;
     grid-template-columns: 17% 21% 15% 15% 15% 9% auto;
     grid-template-rows: 100%;
+
+    .supply-header,
+    .balance-header,
+    .expiration-header {
+        text-align: left;
+    }
+
+    .divisibility-header {
+        text-align: center;
+    }
+
+    .transferable-header {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .supplyMutable-header {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .restrictable-header {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .supply-cell,
+    .balance-cell,
+    .expiration-cell {
+        text-align: left;
+    }
+
+    .divisibility-cell {
+        text-align: center;
+    }
+
+    .transferable-cell {
+        text-align: center;
+    }
+
+    .supplyMutable-cell {
+        text-align: center;
+    }
+
+    .restrictable-cell {
+        text-align: center;
+    }
 }
 
 .namespace-columns {
@@ -57,10 +130,6 @@
     }
 }
 
-.hexId-header {
-    text-align: left;
-}
-
 .supply-header,
 .balance-header,
 .expiration-header {
@@ -95,10 +164,6 @@
     border-right: 0.01rem solid rgba(68, 0, 78, 0.1);
 }
 
-.hexId-cell {
-    text-align: left;
-}
-
 .name-cell {
     text-align: left;
 }
@@ -124,6 +189,29 @@
 .restrictable-cell {
     text-align: center;
     border-right: none;
+}
+.plugin-columns {
+    grid-template-columns: 10% 25% 15% 40% 10%;
+    .npmModule-header,
+    .npmModule-cell {
+        text-align: left;
+    }
+    .name-header,
+    .name-cell {
+        text-align: center;
+    }
+    .author-header,
+    .author-cell {
+        text-align: center;
+    }
+    .description-header,
+    .description-cell {
+        text-align: center;
+    }
+    .repository-header,
+    .repository-cell {
+        text-align: left;
+    }
 }
 
 .table-container {
@@ -314,6 +402,7 @@
         .no-data-inner-container {
             display: grid;
             grid-auto-rows: 0.6rem;
+            grid-template-rows: auto;
             grid-template-columns: 100%;
 
             > div {
@@ -352,19 +441,4 @@
             border: none !important;
         }
     }
-}
-.animation-rotate {
-    animation: auto-rotate infinite linear 1s;
-}
-@keyframes auto-rotate {
-    from {
-        transform: rotateZ(0);
-    }
-    to {
-        transform: rotateZ(360deg);
-    }
-}
-
-.padding-bottom {
-    padding-bottom: 0.7rem;
 }

@@ -15,11 +15,13 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "noImplicitAny": false,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "outDir": "./dist/",
     "types": [
       "webpack-env",
-      "jest"
+      "jest",
+      "node"
     ],
     "paths": {
       "@/*": [
@@ -42,7 +44,9 @@
     "src/**/*.vue",
     "__tests__/**/*.ts",
     "__tests__/**/*.tsx",
-    "__mocks__/**/*.ts"
+    "__mocks__/**/*.ts",
+    "node_modules/@types/node/globals.d.ts",
+    "node_modules/@types/node/globals.d.ts"
   ],
   "exclude": [
     "node_modules",

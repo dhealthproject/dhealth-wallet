@@ -17,11 +17,17 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { MosaicId, NetworkType } from 'symbol-sdk';
 import { ValidationProvider } from 'vee-validate';
+import { AmountDisplay } from '@dhealth/wallet-components';
+import { NavigationLinks } from '@dhealth/wallet-components';
+
 // internal dependencies
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { AccountModel, AccountType } from '@/core/database/entities/AccountModel';
 import { AccountService } from '@/services/AccountService';
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';
+import { NetworkCurrencyModel } from '@/core/database/entities/NetworkCurrencyModel';
+import { MosaicModel } from '@/core/database/entities/MosaicModel';
+
 // child components
 // @ts-ignore
 import MosaicAmountDisplay from '@/components/MosaicAmountDisplay/MosaicAmountDisplay.vue';
@@ -32,13 +38,7 @@ import FormLabel from '@/components/FormLabel/FormLabel.vue';
 // @ts-ignore
 import ModalFormSubAccountCreation from '@/views/modals/ModalFormSubAccountCreation/ModalFormSubAccountCreation.vue';
 // @ts-ignore
-import AmountDisplay from '@/components/AmountDisplay/AmountDisplay.vue';
-// @ts-ignore
-import NavigationLinks from '@/components/NavigationLinks/NavigationLinks.vue';
-// @ts-ignore
 import ModalBackupProfile from '@/views/modals/ModalBackupProfile/ModalBackupProfile.vue';
-import { NetworkCurrencyModel } from '@/core/database/entities/NetworkCurrencyModel';
-import { MosaicModel } from '@/core/database/entities/MosaicModel';
 
 @Component({
     components: {
@@ -174,23 +174,27 @@ export class AccountSelectorPanelTs extends Vue {
     }
 
     public get seedAccounts(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.SEED);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.SEED);
     }
 
     public get optInAccounts(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.OPT_IN);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.OPT_IN);
     }
 
     public get pkAccounts(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.PRIVATE_KEY);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.PRIVATE_KEY);
     }
 
     public get ledgerAccount(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.LEDGER);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.LEDGER);
     }
 
     public get ledgerOptInAccount(): AccountModel[] {
-        return this.knownAccounts.filter((_) => _.type === AccountType.LEDGER_OPT_IN);
+        return this.knownAccounts.filter((_) => (!('isListedAccount' in _) || _.isListedAccount) && _.type === AccountType.LEDGER_OPT_IN);
+    }
+
+    public get pluginAccounts(): AccountModel[] {
+        return this.knownAccounts.filter((_) => 'isListedAccount' in _ && !_.isListedAccount);
     }
 
     public get hasAddAccountModal(): boolean {

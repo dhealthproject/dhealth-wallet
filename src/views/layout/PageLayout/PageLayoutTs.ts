@@ -186,10 +186,6 @@ export class PageLayoutTs extends Vue {
             };
         }
 
-        console.log('PageLayoutTs');
-        console.log('pn: ', this.currentProfile.networkType);
-        console.log('nt: ', this.networkType);
-
         if (this.currentProfile && this.currentProfile.networkType !== this.networkType) {
             this.$store.dispatch('network/SET_NETWORK_IS_NOT_MATCHING_PROFILE', true);
             return {

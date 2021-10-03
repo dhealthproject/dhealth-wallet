@@ -182,6 +182,7 @@ export default class FinalizeTs extends Vue {
                 encryptedPrivateKey: simpleWallet.encryptedPrivateKey,
                 path: paths[i],
                 isMultisig: false,
+                isListedAccount: true,
             };
         });
     }
@@ -228,6 +229,7 @@ export default class FinalizeTs extends Vue {
                 encryptedPrivateKey: simpleWallet.encryptedPrivateKey,
                 path: paths[i],
                 isMultisig: false,
+                isListedAccount: true,
             };
         });
     }

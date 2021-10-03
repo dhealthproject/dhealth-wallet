@@ -36,7 +36,6 @@ const request = async (): Promise<string> => {
     });
     return response;
 };
-
 /// end-region protected helpers
 
 export interface ArticleEntry {

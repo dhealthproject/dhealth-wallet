@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +17,16 @@
 // external dependencies
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
+// internal dependencies
+import { TableAssetType } from '@/components/TableDisplay/TableAssetType';
+import { officialIcons } from '@/views/resources/Images';
+import { PluginBridge } from '@dhealth/wallet-api-bridge';
+
 // child components
 // @ts-ignore
 import TableRow from '@/components/TableRow/TableRow.vue';
 // @ts-ignore
 import AmountDisplay from '@/components/AmountDisplay/AmountDisplay.vue';
-import { TableAssetType } from '@/components/TableDisplay/TableAssetType';
 
 @Component({
     components: {
@@ -141,5 +146,24 @@ export class TableRowTs extends Vue {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
         return visible;
+    }
+
+    public get externalLinkIcon() {
+        return officialIcons.voting;
+    }
+
+    public getStatusIndicator(status: string) {
+        switch (status) {
+            case PluginBridge.PluginInstallStatus.Installed:
+                return { cls: 'status-indicator amber', text: this.$t('plugin_status_installed') };
+            case PluginBridge.PluginInstallStatus.Enabled:
+                return { cls: 'status-indicator green', text: this.$t('plugin_status_enabled') };
+            case PluginBridge.PluginInstallStatus.Disabled:
+                return { cls: 'status-indicator amber', text: this.$t('plugin_status_disabled') };
+            case PluginBridge.PluginInstallStatus.Uninstalled:
+                return { cls: 'status-indicator red', text: this.$t('plugin_status_uninstalled') };
+        }
+
+        return { cls: 'status-indicator red', text: this.$t('plugin_status_uninstalled') };
     }
 }

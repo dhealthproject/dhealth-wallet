@@ -6,5 +6,6 @@
         "syntax-dynamic-import"
       ]
     }
-  }
+  },
+  "presets": ["@vue/cli-plugin-babel/preset"]
 }

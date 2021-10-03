@@ -598,6 +598,23 @@
     transition: 0.5s;
 }
 
+.success-button {
+    border: none;
+    background-color: none;
+    position: relative;
+    background: linear-gradient(315.55deg, #124e00 -1.68%, #00c61a 110.7%);
+    color: white;
+    letter-spacing: 0.05em;
+    padding-top: 0.05em;
+    font-weight: 700;
+    z-index: 1;
+    transition: background 0.5s linear;
+}
+
+.success-button:hover {
+    background: linear-gradient(315.55deg, lighten(#124e00, 10%) -1.68%, lighten(#00c61a, 10%) 110.7%);
+}
+
 /*
 .back-button:hover {
     box-shadow: 0 0 0.1rem @grayLight;

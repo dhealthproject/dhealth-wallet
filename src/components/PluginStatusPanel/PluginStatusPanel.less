@@ -1,0 +1,155 @@
+/*
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+
+@import '../../views/resources/css/variables.less';
+@import '../../views/resources/css/common.less';
+
+.plugin-status-wrapper {
+    background-color: transparent;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .plugin-status-inner-container {
+        width: 100%;
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
+        display: grid;
+        grid-template-columns: repeat(3, 33%);
+        grid-template-rows: 100%;
+
+        padding-top: 8px;
+        padding-bottom: 8px;
+
+        border-radius: @borderRadius;
+        background-color: white;
+
+        > div {
+            padding: 18px 0 18px 30px;
+            position: relative;
+
+            .title {
+                margin-bottom: 18px;
+
+                .title_txt {
+                    font-size: @biggerFont;
+                    line-height: 33px;
+                    color: @purpleDark;
+                }
+            }
+        }
+
+        .txt_info {
+            font-size: @biggerFont;
+            font-weight: 400;
+            display: inline-block;
+            color: #5200c6;
+            line-height: 40px;
+
+            button.button-style {
+                padding: 0;
+            }
+        }
+
+        .txt_err {
+            font-size: @biggerFont;
+            font-weight: 400;
+            display: inline-block;
+            color: #c60000;
+            line-height: 40px;
+
+            button.button-style {
+                padding: 0;
+            }
+        }
+
+        .txt-small {
+            font-size: @normalFont;
+            text-transform: uppercase;
+            color: @purpleLightest;
+            line-height: 40px;
+        }
+
+        .status-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 10px;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .amber {
+            background-color: #ffbf00;
+        }
+
+        .level-item {
+            margin-left: 15px;
+        }
+
+        .version-container {
+            .txt_info {
+                margin-left: 50px;
+            }
+        }
+    }
+}
+
+.action-wrapper {
+    margin-top: 0.3em;
+}
+
+.action-button.green {
+    border: none;
+    background-color: none;
+    position: relative;
+    background: linear-gradient(315.55deg, #124e00 -1.68%, #00c61a 110.7%);
+    color: white;
+    letter-spacing: 0.05em;
+    padding-top: 0.05em;
+    font-weight: 700;
+    z-index: 1;
+    transition: background 0.5s linear;
+}
+
+.action-button.green:hover {
+    background: linear-gradient(315.55deg, lighten(#124e00, 10%) -1.68%, lighten(#00c61a, 10%) 110.7%);
+}
+
+.action-button.red {
+    border: none;
+    background-color: none;
+    position: relative;
+    background: linear-gradient(315.55deg, #4e0000 -1.68%, #c60000 110.7%);
+    color: white;
+    letter-spacing: 0.05em;
+    padding-top: 0.05em;
+    font-weight: 700;
+    z-index: 1;
+    transition: background 0.5s linear;
+}
+
+.action-button.red:hover {
+    background: linear-gradient(315.55deg, lighten(#4e0000, 10%) -1.68%, lighten(#c60000, 10%) 110.7%);
+}

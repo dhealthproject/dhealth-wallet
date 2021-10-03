@@ -3,24 +3,30 @@
         <div class="upper-section-container">
             <div class="table-title-container section-title">
                 <div class="user-operation">
-                    <span class="add-metadata-button">
+                    <span v-if="assetType === 'metadata'" class="add-metadata-button">
                         <ButtonAdd :title="$t('add_metadata')" :disabled="false" size="26" @click="$emit('on-add-metadata')" />
                     </span>
-                    <Checkbox v-if="assetType !== 'metadata'" v-model="showExpired" class="table-filter-item-container">
+                    <Checkbox v-if="!['metadata', 'plugin'].includes(assetType)" v-model="showExpired" class="table-filter-item-container">
                         <span v-show="assetType === 'mosaic'" style="margin-left: 0.1rem;">{{ $t('show_expired_mosaics') }}</span>
                         <span v-show="assetType === 'namespace'" style="margin-left: 0.1rem;">{{ $t('show_expired_namespaces') }}</span>
                     </Checkbox>
                     <div v-if="signers.length > 1" style="min-width: 2rem;">
                         <SignerFilter :signers="signers" @signer-change="onSignerSelectorChange" />
                     </div>
-                    <ButtonRefresh v-if="assetType !== 'metadata'" @click="onRefresh" />
+                    <ButtonRefresh v-if="!['metadata', 'plugin'].includes(assetType)" @click="onRefresh" />
                 </div>
             </div>
         </div>
         <div
             :class="[
                 'table-header-container',
-                assetType !== 'metadata' ? (assetType === 'mosaic' ? 'mosaic-columns' : 'namespace-columns') : 'metadata-columns',
+                assetType !== 'metadata'
+                    ? assetType === 'mosaic'
+                        ? 'mosaic-columns'
+                        : assetType === 'namespace'
+                        ? 'namespace-columns'
+                        : 'plugin-columns'
+                    : 'metadata-columns',
             ]"
         >
             <div
@@ -36,7 +42,7 @@
                     :type="sortedBy.direction === 'asc' ? 'md-arrow-dropup' : 'md-arrow-dropdown'"
                 />
             </div>
-            <!-- Enmpty header for the action button column -->
+            <!-- Empty header for the action button column -->
             <div>&nbsp;</div>
         </div>
         <div class="table-body-container">
@@ -60,15 +66,11 @@
                         @on-show-mosaic-supply-change-form="showModifyMosaicSupplyForm"
                         @on-show-metadata="showMetadataValue"
                         @on-show-edit="showModalUpdateMetadata"
+                        @click="$emit('on-clicked-row', index)"
                     />
                 </div>
             </div>
             <div v-if="!isLoading && (!displayedValues || displayedValues.length === 0)" class="no-data-outer-container">
-                <!--<div class="no-data-message-container">
-                    <div>
-                        {{ assetType === 'mosaic' ? $t('no_data_mosaics') : $t('no_data_namespaces') }}
-                    </div>
-                </div>-->
                 <div class="no-data-inner-container">
                     <div v-for="item in nodata" :key="item">
                         &nbsp;

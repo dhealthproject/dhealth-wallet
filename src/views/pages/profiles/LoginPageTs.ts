@@ -17,6 +17,7 @@ import { mapGetters } from 'vuex';
 import { Component, Vue } from 'vue-property-decorator';
 import { NetworkType, Password } from 'symbol-sdk';
 import VideoBackground from 'vue-responsive-video-background-player';
+import _ from 'lodash';
 
 // internal dependencies
 import { $eventBus } from '@/events';
@@ -38,13 +39,13 @@ import { SettingsModel } from '@/core/database/entities/SettingsModel';
 import { AccountService } from '@/services/AccountService';
 import { NetworkTypeHelper } from '@/core/utils/NetworkTypeHelper';
 import { officialIcons } from '@/views/resources/Images';
-import _ from 'lodash';
 
 @Component({
     computed: {
         ...mapGetters({
             currentProfile: 'profile/currentProfile',
             isAuthenticated: 'profile/isAuthenticated',
+            networkType: 'network/networkType',
         }),
     },
     components: {
@@ -82,6 +83,13 @@ export default class LoginPageTs extends Vue {
      * @var {string}
      */
     public currentProfile: ProfileModel;
+
+    /**
+     * Currently active network type
+     * @see {Store.Network}
+     * @type {NetworkType}
+     */
+    public networkType: NetworkType;
 
     /**
      * Profiles repository
@@ -255,6 +263,7 @@ export default class LoginPageTs extends Vue {
             await this.$store.dispatch('network/REST_NETWORK_RENTAL_FEES');
             return this.$router.push({ name: 'dashboard' });
         } catch (e) {
+            console.log(e);
             console.log('Unknown error trying to login', JSON.stringify(e));
             return this.$store.dispatch('notification/ADD_ERROR', `Unknown error trying to login: ${JSON.stringify(e)}`);
         }

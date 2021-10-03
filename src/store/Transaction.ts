@@ -167,6 +167,11 @@ export default {
         confirmedTransactions: (state: TransactionState) => state.confirmedTransactions,
         unconfirmedTransactions: (state: TransactionState) => state.unconfirmedTransactions,
         partialTransactions: (state: TransactionState) => state.partialTransactions,
+        serializedTransactions: (state: TransactionState) => {
+            const dictionary = {};
+            state.transactions.forEach((t) => (dictionary[t.transactionInfo.hash] = t.serialize()));
+            return dictionary;
+        },
     },
     mutations: {
         setInitialized: (state: TransactionState, initialized: boolean) => {

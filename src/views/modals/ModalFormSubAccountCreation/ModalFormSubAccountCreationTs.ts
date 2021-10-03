@@ -66,6 +66,16 @@ export class ModalFormSubAccountCreationTs extends Vue {
     })
     visible: boolean;
 
+    @Prop({
+        default: true
+    })
+    shouldList: boolean;
+
+    @Prop({
+        default: ''
+    })
+    customName: string;
+
     /**
      * Visibility state
      * @type {boolean}
@@ -163,6 +173,10 @@ export class ModalFormSubAccountCreationTs extends Vue {
         this.accountService = new AccountService();
         this.paths = new DerivationService(this.currentProfile.networkType);
         this.formItems.type = this.isPrivateKeyAccount ? 'privatekey_account' : 'child_account';
+
+        if (this.customName && this.customName.length) {
+            this.formItems.name = this.customName;
+        }
     }
 
     /// region computed properties getter/setter
@@ -281,6 +295,7 @@ export class ModalFormSubAccountCreationTs extends Vue {
                         this.formItems.name,
                         this.formItems.privateKey,
                         this.currentProfile.networkType,
+                        this.shouldList,
                     );
                     break;
             }
@@ -309,6 +324,7 @@ export class ModalFormSubAccountCreationTs extends Vue {
             await this.$store.dispatch('account/SET_KNOWN_ACCOUNTS', this.currentProfile.accounts);
             this.$store.dispatch('notification/ADD_SUCCESS', NotificationType.OPERATION_SUCCESS);
             this.$emit('submit', this.formItems);
+            this.$emit('account-added', subAccount.publicKey);
         } catch (error) {
             this.$store.dispatch('notification/ADD_ERROR', 'An error happened, please try again.');
             return null;
@@ -334,6 +350,7 @@ export class ModalFormSubAccountCreationTs extends Vue {
                         this.$store.dispatch('account/SET_KNOWN_ACCOUNTS', this.currentProfile.accounts);
                         this.$store.dispatch('notification/ADD_SUCCESS', NotificationType.OPERATION_SUCCESS);
                         this.$emit('submit', this.formItems);
+                        this.$emit('account-added', res.publicKey);
                     })
                     .catch((error) => {
                         this.errorNotificationHandler(error);
@@ -357,6 +374,7 @@ export class ModalFormSubAccountCreationTs extends Vue {
                     nextPath,
                     this.currentProfile.networkType,
                     childAccountName,
+                    this.shouldList,
                 );
             }
         } catch (error) {
@@ -399,6 +417,7 @@ export class ModalFormSubAccountCreationTs extends Vue {
                 encryptedPrivateKey: '',
                 path: nextPath,
                 isMultisig: false,
+                isListedAccount: this.shouldList,
             };
         } catch (error) {
             this.$store.dispatch('SET_UI_DISABLED', {
