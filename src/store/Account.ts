@@ -236,24 +236,24 @@ export default {
         addToSelectedAddressesToInteract: (state: AccountState, pathNumber: number) => {
             const selectedAccounts = [...state.selectedAddressesToInteract];
             selectedAccounts.push(pathNumber);
-            state.selectedAddressesToInteract = selectedAccounts;
+            Vue.set(state, 'selectedAddressesToInteract', selectedAccounts);
         },
         addToSelectedAddressesOptInToInteract: (state: AccountState, pathNumber: number) => {
             const selectedAccounts = [...state.selectedAddressesOptInToInteract];
             selectedAccounts.push(pathNumber);
-            state.selectedAddressesOptInToInteract = selectedAccounts;
+            Vue.set(state, 'selectedAddressesOptInToInteract', selectedAccounts);
         },
         removeFromSelectedAddressesToInteract: (state: AccountState, pathNumber: number) => {
             const selectedAccounts = [...state.selectedAddressesToInteract];
             const indexToDelete = selectedAccounts.indexOf(pathNumber);
             selectedAccounts.splice(indexToDelete, 1);
-            state.selectedAddressesToInteract = selectedAccounts;
+            Vue.set(state, 'selectedAddressesToInteract', selectedAccounts);
         },
         removeFromSelectedAddressesOptInToInteract: (state: AccountState, pathNumber: number) => {
             const selectedAccounts = [...state.selectedAddressesOptInToInteract];
             const indexToDelete = selectedAccounts.indexOf(pathNumber);
             selectedAccounts.splice(indexToDelete, 1);
-            state.selectedAddressesOptInToInteract = selectedAccounts;
+            Vue.set(state, 'selectedAddressesOptInToInteract', selectedAccounts);
         },
         resetAddressesList: (state: AccountState) => {
             state.addressesList = [];

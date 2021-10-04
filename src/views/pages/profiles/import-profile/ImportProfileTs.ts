@@ -127,9 +127,13 @@ export default class ImportProfileTs extends Vue {
         Vue.nextTick().then(() => {
             setTimeout(() => this.initOptInAccounts(), 300);
         });
-        await this.$store.dispatch('temporary/initialize');
-        this.$store.commit('account/resetSelectedAddressesToInteract');
-        this.$store.commit('account/resetSelectedAddressesOptInToInteract');
+
+        // resets selected addresses only for first step
+        if (this.$route.name === 'profiles.importProfile.info') {
+            await this.$store.dispatch('temporary/initialize');
+            this.$store.commit('account/resetSelectedAddressesToInteract');
+            this.$store.commit('account/resetSelectedAddressesOptInToInteract');
+        }
     }
 
     @Watch('selectedAccounts')
@@ -138,7 +142,7 @@ export default class ImportProfileTs extends Vue {
      * @return {void}
      */
     private async initAccounts() {
-        if (this.initialized || !this.currentProfile || !this.currentProfile.networkType) {
+        if (this.initialized || !this.currentProfile || !this.currentProfile.networkType || !this.currentMnemonic) {
             return;
         }
 
@@ -169,7 +173,7 @@ export default class ImportProfileTs extends Vue {
      */
     @Watch('optInSelectedAccounts')
     private async initOptInAccounts() {
-        if (this.optInInitialized || !this.currentProfile || !this.currentProfile.networkType) {
+        if (this.optInInitialized || !this.currentProfile || !this.currentProfile.networkType || !this.currentMnemonic) {
             return;
         }
 

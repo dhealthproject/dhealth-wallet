@@ -17,7 +17,7 @@
 
 /**
  * --------------------------------------------------------------------------------------
- * @package       YourDLT Wallet
+ * @package       dHealth Wallet
  * @description   This file defines routines to create a cross-platform Electron App.
  * --------------------------------------------------------------------------------------
  */
@@ -84,10 +84,9 @@ class AppMenu {
         label: 'Help',
         role: 'help',
         submenu: [
-          { label: 'Learn More', click: () => shell.openExternal('https://github.com/UsingBlockchain/yourdlt-wallet') },
+          { label: 'About dHealth', click: () => shell.openExternal('https://dhealth.network') },
           { label: 'About YourDLT', click: () => shell.openExternal('https://docs.yourdlt.tools/') },
           { label: 'About UBC Digital', click: () => shell.openExternal('https://ubc.digital') },
-          { label: 'About Using Blockchain Ltd', click: () => shell.openExternal('https://using-blockchain.org') },
         ],
       },
     ]
@@ -691,7 +690,7 @@ class AppPluginManager {
  */
 
 // Set the path of the folder where the persisted data is stored
-app.setPath('userData', path.join(app.getPath('home'), '.yourdlt-wallet'))
+app.setPath('userData', path.join(app.getPath('home'), '.dhealth-wallet'))
 
 // Load platform specific resources
 const iconUrlPath = process.platform === 'darwin' ? './dist/assets/logo.png' : `file://${__dirname}/../dist/assets/logo.png`

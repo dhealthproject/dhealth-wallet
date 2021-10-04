@@ -55,7 +55,7 @@ export class NetworkService {
      */
     public getNetworkModel(
         nodeUrl: string,
-        defaultNetworkType: NetworkType = NetworkType.TEST_NET,
+        defaultNetworkType: NetworkType = NetworkType.MAIN_NET,
         isOffline = false,
     ): Observable<{
         networkModel: NetworkModel;

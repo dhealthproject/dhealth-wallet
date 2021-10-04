@@ -1,5 +1,5 @@
 /**
- * This file is auto-generated using YourDLT Wallet
+ * This file is auto-generated using dHealth Wallet
  *
  * You should never modify the content of this file
  * unless you know what you are doing.
@@ -19,7 +19,7 @@ if ('registerComponents' in plugin0) {
   window.PluginPackages.push({
     plugin: '@yourdlt/plugin-dummy',
     module: plugin0.default,
-    path: '/Users/greg/Sources/using-blockchain/yourdlt-wallet/node_modules/@yourdlt/plugin-dummy',
+    path: '/Users/greg/Sources/using-blockchain/dhealth-wallet/node_modules/@yourdlt/plugin-dummy',
     main: 'dist/YourDLTWalletPluginDummy.common.js'
   });
 }
@@ -30,7 +30,7 @@ if ('registerComponents' in plugin1) {
   window.PluginPackages.push({
     plugin: '@yourdlt/plugin-librarian',
     module: plugin1.default,
-    path: '/Users/greg/Sources/using-blockchain/yourdlt-wallet/node_modules/@yourdlt/plugin-librarian',
+    path: '/Users/greg/Sources/using-blockchain/dhealth-wallet/node_modules/@yourdlt/plugin-librarian',
     main: 'dist/YourDLTWalletPluginLibrarian.common.js'
   });
 }
@@ -41,7 +41,7 @@ if ('registerComponents' in plugin2) {
   window.PluginPackages.push({
     plugin: '@yourdlt/plugin-ninjazzz',
     module: plugin2.default,
-    path: '/Users/greg/Sources/using-blockchain/yourdlt-wallet/node_modules/@yourdlt/plugin-ninjazzz',
+    path: '/Users/greg/Sources/using-blockchain/dhealth-wallet/node_modules/@yourdlt/plugin-ninjazzz',
     main: 'dist/YourDLTWalletPluginNinjaZZZ.common.js'
   });
 }

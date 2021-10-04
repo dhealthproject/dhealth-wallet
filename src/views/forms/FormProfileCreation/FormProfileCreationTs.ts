@@ -68,11 +68,14 @@ export class FormProfileCreationTs extends Vue {
 
     isLedger = false;
 
-    created() {
+    async created() {
         this.profileService = new ProfileService();
         this.formItems.networkType = NetworkType.MAIN_NET;
+
         const { isLedger } = this.$route.meta;
         this.isLedger = isLedger;
+
+        await this.$store.dispatch('network/CONNECT', { networkType: this.formItems.networkType });
     }
 
     /**
@@ -124,23 +127,17 @@ export class FormProfileCreationTs extends Vue {
 
     /// region computed properties getter/setter
     get nextPage() {
-        this.connect(this.formItems.networkType);
         return this.$route.meta.nextPage;
     }
-
     /// end-region computed properties getter/setter
-
-    public connect(newNetworkType) {
-        this.$store.dispatch('network/CONNECT', { networkType: newNetworkType });
-    }
 
     /**
      * Submit action, validates form and creates account in storage
      * @return {void}
      */
-    public submit() {
+    public async submit() {
         // @VEE
-        this.persistAccountAndContinue();
+        await this.persistAccountAndContinue();
         this.resetValidations();
     }
 
@@ -197,7 +194,7 @@ export class FormProfileCreationTs extends Vue {
      * Persist created account and redirect to next step
      * @return {void}
      */
-    private persistAccountAndContinue() {
+    private async persistAccountAndContinue() {
         // -  password stored as hash (never plain.)
         const passwordHash = ProfileService.getPasswordHash(new Password(this.formItems.password));
         const genHash = networkConfig[this.formItems.networkType].networkConfigurationDefaults.generationHash || this.generationHash;
@@ -216,7 +213,7 @@ export class FormProfileCreationTs extends Vue {
         this.profileService.saveProfile(profile);
 
         // execute store actions
-        this.$store.dispatch('profile/SET_CURRENT_PROFILE', profile);
+        await this.$store.dispatch('profile/SET_CURRENT_PROFILE', profile);
         this.$store.dispatch('temporary/SET_PASSWORD', this.formItems.password);
         if (this.isLedger) {
             // try for make sure device was connected for next step require it

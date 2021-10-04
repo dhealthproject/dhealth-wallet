@@ -20,7 +20,7 @@ import { AccountModel, AccountType } from '@/core/database/entities/AccountModel
 import { AccountService } from '@/services/AccountService';
 import { DerivationPathLevels, DerivationService } from '@/services/DerivationService';
 import { MnemonicPassPhrase, Network } from 'symbol-hd-wallets';
-import { Password, SimpleWallet } from 'symbol-sdk';
+import { Password, SimpleWallet, NetworkType } from 'symbol-sdk';
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 
@@ -39,6 +39,11 @@ import { ProfileModel } from '@/core/database/entities/ProfileModel';
     },
 })
 export default class FinalizeTs extends Vue {
+    /**
+     * Form is being submitted
+     */
+    protected isLoading: boolean = false;
+
     /**
      * Currently active profile
      * @see {Store.Profile}
@@ -67,12 +72,6 @@ export default class FinalizeTs extends Vue {
     public derivation: DerivationService;
 
     /**
-     * Account Service
-     * @var {AccountService}
-     */
-    public accountService: AccountService;
-
-    /**
      * Map of selected accounts
      * @var {number[]}
      */
@@ -83,6 +82,13 @@ export default class FinalizeTs extends Vue {
      * @var {number[]}
      */
     public selectedOptInAccounts: number[];
+
+    /**
+     * Currently connected network type
+     * @see {Store.Network}
+     * @var {NetworkType}
+     */
+    public networkType: NetworkType;
 
     /**
      * Controls submit button for terms and conditions
@@ -107,18 +113,27 @@ export default class FinalizeTs extends Vue {
     };
 
     /**
+     * Account Service
+     * @var {AccountService}
+     */
+    public accountService: AccountService = new AccountService();
+
+    /**
      * Profile Service
      * @var {ProfileService}
      */
     public profileService: ProfileService = new ProfileService();
 
+    public get indexesOfAccountsToImport(): number[] {
+        return this.selectedAccounts;
+    }
+
     /**
      * Hook called when the page is mounted
      * @return {void}
      */
-    async mounted() {
-        this.derivation = new DerivationService(this.currentProfile.networkType);
-        this.accountService = new AccountService();
+    created() {
+        this.derivation = new DerivationService(this.networkType);
     }
 
     /**
@@ -145,10 +160,11 @@ export default class FinalizeTs extends Vue {
      * Create an account instance from mnemonic and path
      * @return {AccountModel}
      */
-    private createAccountsFromPathIndexes(indexes: number[]): AccountModel[] {
-        const accountPath = AccountService.getAccountPathByNetworkType(this.currentProfile.networkType);
-        const paths = indexes.map((index) => {
-            if (index == 0) {
+    protected createAccountsFromPathIndexes(): AccountModel[] {
+        const accountPath = AccountService.getAccountPathByNetworkType(this.networkType);
+
+        const paths = this.indexesOfAccountsToImport.map((index) => {
+            if (index === 0) {
                 return accountPath;
             }
 
@@ -157,16 +173,16 @@ export default class FinalizeTs extends Vue {
 
         const accounts = this.accountService.generateAccountsFromPaths(
             new MnemonicPassPhrase(this.currentMnemonic),
-            this.currentProfile.networkType,
+            this.networkType,
             paths,
         );
 
         const simpleWallets = accounts.map((account, i) =>
             SimpleWallet.createFromPrivateKey(
-                `Seed Account ${indexes[i] + 1}`,
+                `Seed Account ${this.indexesOfAccountsToImport[i] + 1}`,
                 this.currentPassword,
                 account.privateKey,
-                this.currentProfile.networkType,
+                this.networkType,
             ),
         );
 
@@ -187,87 +203,35 @@ export default class FinalizeTs extends Vue {
         });
     }
 
-    /**
-     * Create an optin account instance from mnemonic and path
-     * @return {AccountModel}
-     */
-    private createOptInAccountsFromPathIndexes(indexes: number[]): AccountModel[] {
-        const accountPath = AccountService.getAccountPathByNetworkType(this.currentProfile.networkType);
-        const paths = indexes.map((index) => {
-            if (index == 0) {
-                return accountPath;
+    public async finish() {
+        this.isLoading = true;
+
+        const accounts = this.createAccountsFromPathIndexes();
+
+        let numOfAccounts = 0,
+            identifiers = [];
+        while (accounts.length) {
+            const account = accounts.shift();
+
+            // store accounts using repository
+            this.accountService.saveAccount(account);
+
+            // add account to profile
+            await this.$store.dispatch('profile/ADD_ACCOUNT', account);
+
+            // set current account
+            if (numOfAccounts === 0) {
+                await this.$store.dispatch('account/SET_CURRENT_ACCOUNT', account);
             }
 
-            return this.derivation.incrementPathLevel(accountPath, DerivationPathLevels.Profile, index);
-        });
-
-        const accounts = this.accountService.generateAccountsFromPaths(
-            new MnemonicPassPhrase(this.currentMnemonic),
-            this.currentProfile.networkType,
-            paths,
-            Network.BITCOIN,
-        );
-
-        const simpleWallets = accounts.map((account, i) =>
-            SimpleWallet.createFromPrivateKey(
-                `Opt In Seed Account ${indexes[i] + 1}`,
-                this.currentPassword,
-                account.privateKey,
-                this.currentProfile.networkType,
-            ),
-        );
-
-        return simpleWallets.map((simpleWallet, i) => {
-            return {
-                id: SimpleObjectStorage.generateIdentifier(),
-                profileName: this.currentProfile.profileName,
-                name: simpleWallet.name,
-                node: '',
-                type: AccountType.OPT_IN,
-                address: simpleWallet.address.plain(),
-                publicKey: accounts[i].publicKey,
-                encryptedPrivateKey: simpleWallet.encryptedPrivateKey,
-                path: paths[i],
-                isMultisig: false,
-                isListedAccount: true,
-            };
-        });
-    }
-
-    public async finish() {
-        try {
-            // create account models
-            const normalAccounts = this.createAccountsFromPathIndexes(this.selectedAccounts);
-            const optInAccounts = this.createOptInAccountsFromPathIndexes(this.selectedOptInAccounts);
-
-            const accounts = [...optInAccounts, ...normalAccounts];
-            // save newly created accounts
-            accounts.forEach((account, index) => {
-                // Store accounts using repository
-                this.accountService.saveAccount(account);
-                // set current account
-                if (index === 0) {
-                    this.$store.dispatch('account/SET_CURRENT_ACCOUNT', account);
-                }
-                // add accounts to profile
-                this.$store.dispatch('profile/ADD_ACCOUNT', account);
-            });
-
-            // get accounts identifiers
-            const accountIdentifiers = accounts.map((account) => account.id);
-
-            // set known accounts
-            this.$store.dispatch('account/SET_KNOWN_ACCOUNTS', accountIdentifiers);
-
-            this.profileService.updateAccounts(this.currentProfile, accountIdentifiers);
-
-            this.$store.dispatch('temporary/RESET_STATE');
-            await this.$store.dispatch('network/REST_NETWORK_RENTAL_FEES');
-            // execute store actions
-            return this.$router.push({ name: 'dashboard' });
-        } catch (error) {
-            console.log(error);
-            return this.$store.dispatch('notification/ADD_ERROR', error);
+            identifiers.push(account.id);
+            numOfAccounts++;
         }
+
+        this.profileService.updateProfileTermsAndConditionsStatus(this.currentProfile, true);
+        await this.$store.dispatch('account/SET_KNOWN_ACCOUNTS', identifiers);
+        await this.$store.dispatch('temporary/RESET_STATE');
+
+        return this.$router.push({ name: 'dashboard' });
     }
 }

@@ -17,7 +17,7 @@
 
 /**
  * --------------------------------------------------------------------------------------
- * @package       YourDLT Wallet
+ * @package       dHealth Wallet
  * @description   This file defines routines to inject plugins to an Electron app.
  * --------------------------------------------------------------------------------------
  */
@@ -175,7 +175,7 @@ const pluginManager = require('electron-plugin-manager')
   createInjecter() {
     // Adds auto-generation notice
     let injecterSource = `/**
- * This file is auto-generated using YourDLT Wallet
+ * This file is auto-generated using dHealth Wallet
  *
  * You should never modify the content of this file
  * unless you know what you are doing.
@@ -276,7 +276,7 @@ if (!!process.argv && process.argv.length === 3) {
 }
 
 // Set the path of the folder where the persisted data is stored
-app.setPath('userData', path.join(app.getPath('home'), '.yourdlt-wallet'))
+app.setPath('userData', path.join(app.getPath('home'), '.dhealth-wallet'))
 
 // Prepare plugins manager
 new AppPluginInstaller(ipcMain, {

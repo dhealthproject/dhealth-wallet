@@ -30,10 +30,12 @@
                     >
                         {{ $t('back') }}
                     </button>
-                    <button class="inverted-button solid-button button-style create-account-style" :disabled="!marked" @click="finish">
+                    <button class="inverted-button solid-button button-style create-account-style" :disabled="isLoading || !marked" @click="finish">
                         {{ $t('finish') }}
                     </button>
                 </div>
+
+                <Spin v-if="isLoading" size="large" fix class="absolute" />
             </div>
         </div>
     </div>

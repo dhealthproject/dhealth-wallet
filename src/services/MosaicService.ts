@@ -260,14 +260,14 @@ export class MosaicService {
         const namespaceId = currency.namespaceId;
         const ticker = (namespaceId && namespaceId.fullName && namespaceId.fullName.split('.').pop().toUpperCase()) || undefined;
         return new NetworkCurrencyModel(
-            mosaicId?.toHex(),
-            namespaceId?.toHex(),
-            namespaceId.fullName,
+            mosaicId!.toHex(),
+            'id' in namespaceId ? namespaceId?.toHex() : '',
+            'fullName' in namespaceId  ? namespaceId.fullName : 'dhealth.dhp',
             currency.divisibility,
             currency.transferable,
             currency.supplyMutable,
             currency.restrictable,
-            ticker,
+            !!ticker ? ticker : 'DHP',
         );
     }
 
