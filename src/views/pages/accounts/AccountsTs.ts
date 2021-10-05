@@ -60,7 +60,7 @@ export class AccountsTs extends Vue {
      */
     public parentRouteName: string = 'accounts';
 
-    public panelItems = ['accounts', 'addressbook'];
+    public panelItems = ['Accounts', 'Address book'];
 
     public activeIndex = 0;
 

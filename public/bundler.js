@@ -317,6 +317,9 @@ class AppPluginManager {
     //     : 'lin'
     //   )
 
+    // no-limit in maximum event listeners
+    ipcMain.setMaxListeners(0)
+
     // Handles loaded plugins to send components details to App
     ipcMain.removeAllListeners('onPluginLoaded');
     ipcMain.on('onPluginLoaded', (event, pluginJson) => {

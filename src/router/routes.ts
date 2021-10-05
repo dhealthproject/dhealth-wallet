@@ -222,7 +222,7 @@ export const routes: AppRoute[] = [
                 ],
             },
             {
-                path: '/harvesting', //TODO: Harvesting
+                path: '/harvesting',
                 name: 'harvesting',
                 redirect: '/delegatedHarvesting',
                 meta: {

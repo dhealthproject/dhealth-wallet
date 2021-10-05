@@ -17,6 +17,10 @@ import { $pluginBus } from './events';
 
 // enables IPC communicator between main and renderer processes
 if ('electron' in window && 'ipcRenderer' in window['electron']) {
+
+    // no-limit in maximum event listeners
+    window['electron']['ipcRenderer'].setMaxListeners(0);
+
     /**
      * @event ipcMain:onPluginsResolved -> ipcRenderer:onPluginsReady
      * @description This event propagates *installed* plugins as being
