@@ -275,12 +275,9 @@ export default {
                         },
                     ),
                 )
-                .subscribe({
-                    next: (harvestedBlockStats) => {
-                        commit('harvestedBlockStats', harvestedBlockStats);
-                    },
-                    complete: () => commit('isFetchingHarvestedBlockStats', false),
-                });
+                .subscribe((harvestedBlockStats) => commit('harvestedBlockStats', harvestedBlockStats));
+
+            commit('isFetchingHarvestedBlockStats', false)
         },
         SET_CURRENT_SIGNER_HARVESTING_MODEL({ commit }, currentSignerAddress) {
             const harvestingService = new HarvestingService();

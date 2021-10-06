@@ -51,10 +51,12 @@
                             <template v-slot:label> {{ $t('fee') }}: </template>
                             <template v-slot:inputs>
                                 <MaxFeeSelector v-model="formItems.maxFee" :show-fee-label="false" />
+                                <!--
                                 <span v-if="LowFeeValue" class="fee-warning">
                                     <Icon type="ios-warning-outline" />
                                     {{ $t('low_fee_warning_message') }}
                                 </span>
+                                -->
                             </template>
                         </FormRow>
 
@@ -65,18 +67,18 @@
                                         v-if="harvestingStatus === 'INACTIVE'"
                                         type="submit"
                                         class="centered-button button-style submit-button inverted-button"
-                                        :disabled="linking"
+                                        :disabled="isLinkingKeys"
                                         @click="handleSubmit(onStartClick())"
                                     >
-                                        {{ linking ? $t('linking') : $t('link_keys') }}
+                                        {{ isLinkingKeys ? $t('linking') : $t('link_keys') }}
                                     </button>
                                     <button
                                         v-if="!isPersistentDelReqSent && harvestingStatus !== 'INACTIVE' && harvestingStatus !== 'ACTIVE'"
                                         class="centered-button button-style submit-button inverted-button"
-                                        :disabled="activating || linking || !isPublicAndPrivateKeysLinked"
+                                        :disabled="isActivatingHarvesting || isLinkingKeys || !isPublicAndPrivateKeysLinked"
                                         @click="handleSubmit(onActivate())"
                                     >
-                                        {{ activating ? $t('requesting') : $t('request_harvesting') }}
+                                        {{ isActivatingHarvesting ? $t('requesting') : $t('request_harvesting') }}
                                     </button>
                                     <!-- <button
                                         v-if="isPersistentDelReqSent && harvestingStatus !== 'INACTIVE'"
@@ -91,19 +93,19 @@
                                         v-if="harvestingStatus !== 'INACTIVE' && harvestingStatus !== 'KEYS_LINKED'"
                                         type="submit"
                                         class="centered-button button-style submit-button danger-button"
-                                        :disabled="linking || activating"
+                                        :disabled="isLinkingKeys || isActivatingHarvesting"
                                         @click="handleSubmit(onStop())"
                                     >
-                                        {{ linking ? $t('stoping') : $t('stop_harvesting') }}
+                                        {{ isLinkingKeys ? $t('stoping') : $t('stop_harvesting') }}
                                     </button>
                                     <button
                                         v-if="harvestingStatus === 'KEYS_LINKED'"
                                         type="submit"
                                         class="centered-button secondary-outline-button button-style submit-button button"
-                                        :disabled="linking || activating"
+                                        :disabled="isLinkingKeys || isActivatingHarvesting"
                                         @click="handleSubmit(onStop())"
                                     >
-                                        {{ linking ? $t('unlinking') : $t('unlink_keys') }}
+                                        {{ isLinkingKeys ? $t('unlinking') : $t('unlink_keys') }}
                                     </button>
                                 </div>
                             </template>
@@ -298,13 +300,13 @@
         />
         <ModalTransactionConfirmation
             v-if="hasConfirmationModal"
-            :delegated="true"
-            :command="this"
+            :command="command"
             :visible="hasConfirmationModal"
             @success="onConfirmationSuccess"
             @error="onConfirmationError"
             @close="onConfirmationCancel"
             @unlocked="decryptKeys"
+            @transaction-broadcast="onHarvestingActionSubmitted"
         />
         <ModalConfirm
             v-model="isDelegatedHarvestingWarningModalShown"
