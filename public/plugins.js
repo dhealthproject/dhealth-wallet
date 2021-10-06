@@ -85,46 +85,10 @@ const pluginManager = require('electron-plugin-manager')
         const pluginVer  = pluginsConfig[pluginSlug]
         const installPath = path.join(this.pluginsPath, pluginSlug)
 
-        // Passing a plugin name forces re-install
-        // e.g.: npm run plugins:install @yourdlt/plugin-librarian
-        // const isForcedInstall = !!this.singlePlugin && this.singlePlugin === pluginSlug
-
-        // Removes plugin from filesystem
-        // if (isForcedInstall && fs.existsSync(installPath)) {
-        //   console.log(`[INFO][public/plugins.js] Now removing ${pluginSlug}...`)
-        //   rimraf.sync(installPath)
-        // }
-
         try {
-          // Try installing the plugin (if necessary or forced)
-          // if (isForcedInstall || !fs.existsSync(installPath)) {
-          //   console.log(`[INFO][public/plugins.js] Now installing ${pluginSlug}...`)
-          //   await this.installPlugin(pluginSlug, pluginVer)
-          // }
-          // else {
-            //console.log(`[INFO][public/plugins.js] Already installed plugin ${pluginSlug}.`)
-          // }
-
-          // Verify that the plugin folder is compatible
-          // if (! fs.readdirSync(installPath).includes('package.json')) {
-          //   console.error(`[ERROR][public/plugins.js] Could not find a package.json for ${pluginSlug}`)
-          //   continue // incompatibiliy should not break install process
-          // }
-
           // Read package information
           let json = fs.readFileSync(path.join(installPath, 'package.json'))
           let pkg  = JSON.parse(json)
-
-          // Version change in plugins.json forces upgrade
-          // if (pkg && 'version' in pkg && pkg.version !== pluginVer) {
-          //   console.log(`[INFO][public/plugins.js] Now updating ${pluginSlug} from ${pkg.version} to ${pluginVer}...`)
-          //   rimraf.sync(installPath)
-          //   await this.installPlugin(pluginSlug, pluginVer)
-
-          //   // re-read package.json after upgrade
-          //   json = fs.readFileSync(path.join(installPath, 'package.json'))
-          //   pkg  = JSON.parse(json)
-          // }
 
           // Merge loaded plugin and package information
           this.plugins.push({
@@ -152,25 +116,6 @@ const pluginManager = require('electron-plugin-manager')
       return resolve(this.plugins)
     })
   }
-
-  // async installPlugin(plugin, version) {
-  //   // `electron-plugin-manager` uses NPM to install packages.
-  //   return new Promise((resolve, reject) => {
-  //     // must pass "dataPath" because underlying electron-plugin-manager
-  //     // automatically suffixes the path with `plugins` in their path.js
-  //     // @link https://github.com/pksunkara/electron-plugin-manager/blob/master/lib/path.js
-
-  //     pluginManager.install(this.dataPath, plugin, version, (err, pluginPath) => {
-  //       if (!! err) {
-  //         console.error(`[ERROR][public/plugins.js] Error occured installing ${plugin}: ${err}`)
-  //         return reject(err)
-  //       }
-
-  //       console.log(`[INFO][public/plugins.js] Installed ${plugin} at ${pluginPath}`)
-  //       return resolve(pluginPath)
-  //     });
-  //   })
-  // }
 
   createInjecter() {
     // Adds auto-generation notice

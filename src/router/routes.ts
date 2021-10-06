@@ -352,6 +352,8 @@ export const routes: AppRoute[] = [
                 meta: {
                     protected: true,
                     clickable: true,
+                    // should hide from menu for BROWSER
+                    hideFromMenu: !('electron' in window) || !('ipcRenderer' in window['electron']),
                     title: 'sidebar_item_plugins',
                     icon: officialIcons.enterprise,
                 },
