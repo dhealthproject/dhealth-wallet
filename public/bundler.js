@@ -31,12 +31,11 @@ const electronLocalshortcut = require('electron-localshortcut')
 const contextMenu = require('electron-context-menu')
 contextMenu({})
 const pluginManager = require('electron-plugin-manager')
+const axios = require('axios').default
 
 let loadedPluginsCache = [],
     loadedPluginTimes  = {};
 let lastPageReloadTime = 0;
-//XXX move to config
-let jenkinsAuthToken = `6GkgiYa4AjHjZfYp6axiRx6BtqHajNSVq4HGFHPMNyCfGRPMKxTrLJwbBQMyEZo69Ncs54F85ZAjvcqroRvy2JKtDusWAt8WXLiAT6KicsBFURvTxwYVqjURqfsZmCDyar7igW6bmjCyo6GXDBv4H9h8RjsxDXpsBWa3cMw5c5dXef2BqMmX5xhPzqFYhhsbGuNzCvjWmN2A44rLp98MeSAd6iG2pXRgQn2LLFY5ubPqPaAhpdu3hkoCUg6ZQG4c`;
 /// end-region global scoped variables
 
 /**
@@ -48,7 +47,7 @@ let jenkinsAuthToken = `6GkgiYa4AjHjZfYp6axiRx6BtqHajNSVq4HGFHPMNyCfGRPMKxTrLJwb
 class AppMenu {
   constructor(name) {
     const fullScreenCmd = process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11'
-    const develToolsCmd = process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I'
+    const develToolsCmd = process.platform === 'darwin' ? 'Alt+Command+I' : 'F12'
 
     this.name = name
     this.template = [
@@ -386,10 +385,15 @@ class AppPluginManager {
         // Read basic plugin information
         const pluginSlug = plugins[i]
         const pluginVer  = pluginsConfig[pluginSlug]
+
+        if (!pluginSlug || !pluginVer) {
+          continue
+        }
+
         const installPath = path.join(this.pluginsPath, pluginSlug)
 
         try {
-          await this.loadPlugin(pluginSlug)
+          await this.loadPlugin(pluginSlug, pluginVer)
         }
         catch (e) {
           console.log(`Aborting installation for ${pluginSlug}@${pluginVer} located at ${installPath}.`)
@@ -402,195 +406,69 @@ class AppPluginManager {
     })
   }
 
-  loadPlugin(plugin) {
-    const installPath = path.join(this.pluginsPath, plugin)
+  async loadPlugin(pluginSlug, pluginVer) {
+    // read package manifest
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`https://unpkg.com/${pluginSlug}@${pluginVer}/package.json`)
+        .then(response => {
+          // parse package manifest
+          const pkg = response.data;
 
-    // Verify that the plugin folder is compatible
-    if (! fs.readdirSync(installPath).includes('package.json')) {
-      console.error(`Could not find a package.json for ${plugin}`)
-      throw new Error(`Could not find a package.json for ${plugin}`)
-    }
+          // local install path
+          const installPath = path.join(this.pluginsPath, pluginSlug)
 
-    // Read package information
-    const json = fs.readFileSync(path.join(installPath, 'package.json'))
-    const pkg  = JSON.parse(json)
+          // Merge loaded plugin and package information
+          const instance = {
+            npmModule: pkg.name,
+            installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
+            name: pkg.name,
+            version: pkg.version,
+            main: pkg.main,
+            // data from `package.json`
+            author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : ('name' in pkg.author ? pkg.author : { name: 'Unknown' }),
+            description: pkg && 'description' in pkg ? pkg.description : 'N/A',
+            homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
+            repository: pkg && 'repository' in pkg ? pkg.repository : { url: 'N/A' },
+            dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
+          }
 
-    // Merge loaded plugin and package information
-    const instance = {
-      npmModule: pkg.name,
-      installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
-      name: plugin,
-      version: pkg.version,
-      main: pkg.main,
-      // data from `package.json`
-      author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
-      description: pkg && 'description' in pkg ? pkg.description : '',
-      homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
-      repository: pkg && 'repository' in pkg ? pkg.repository : '',
-      dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
-    }
+          this.plugins.push(instance)
+          return resolve(instance)
+        });
+    });
+    
 
-    this.plugins.push(instance)
-    return instance
+    // const installPath = path.join(this.pluginsPath, plugin)
+
+    // // Verify that the plugin folder is compatible
+    // if (! fs.readdirSync(installPath).includes('package.json')) {
+    //   console.error(`Could not find a package.json for ${plugin}`)
+    //   throw new Error(`Could not find a package.json for ${plugin}`)
+    // }1
+
+    // // Read package information
+    // const json = fs.readFileSync(path.join(installPath, 'package.json'))
+    // const pkg  = JSON.parse(json)
+
+    // // Merge loaded plugin and package information
+    // const instance = {
+    //   npmModule: pkg.name,
+    //   installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
+    //   name: plugin,
+    //   version: pkg.version,
+    //   main: pkg.main,
+    //   // data from `package.json`
+    //   author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
+    //   description: pkg && 'description' in pkg ? pkg.description : '',
+    //   homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
+    //   repository: pkg && 'repository' in pkg ? pkg.repository : '',
+    //   dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
+    // }
+
+    // this.plugins.push(instance)
+    // return instance
   }
-
-  // async installPlugin(plugin, version) {
-  //   // Read plugins configuration file
-  //   const configPath = this.pluginsConfPath
-  //   const pluginsConfig = JSON.parse(fs.readFileSync(configPath))
-
-  //   console.log(`[DEBUG][public/bundler.js] Now installing ${plugin} with plugins configuration in '${configPath}'.`);
-
-  //   // Link plugin manager to main IPC event emitter
-  //   pluginManager.manager(ipcMain)
-
-  //   return new Promise((resolve, reject) => {
-  //     // must pass "dataPath" because underlying electron-plugin-manager
-  //     // automatically suffixes the path with `plugins` in their path.js
-  //     // @link https://github.com/pksunkara/electron-plugin-manager/blob/master/lib/path.js
-
-  //     pluginManager.install(this.dataPath, plugin, version, (err, pluginPath) => {
-  //       if (!! err) {
-  //         console.error(`[ERROR][public/bundler.js] Error occured installing ${plugin}: ${err}`)
-  //         return reject(err)
-  //       }
-
-  //       console.log(`[INFO][public/bundler.js] Installed ${plugin} at ${pluginPath}`)
-
-  //       // update plugins.json
-  //       if (!(plugin in pluginsConfig) || pluginsConfig[plugin] !== version) {
-  //         pluginsConfig[plugin] = version
-  //         fs.writeFileSync(configPath, JSON.stringify(pluginsConfig), {mode: 0o644})
-  //       }
-
-  //       return resolve(pluginPath)
-  //     })
-  //   })
-  // }
-
-  // async buildRecipe(recipe, platform) {
-  //   console.log(`[DEBUG][public/bundler.js] Now building recipe with ${Object.keys(recipe).length} plugin(s).`)
-
-  //   // prepare build parameters
-  //   const buildJob = `http://dapps.dhealth.cloud:8080/job/dhealth-dapp-recipes`
-  //   const recipeJson = JSON.stringify(recipe)
-  //   const recipeHash = sha3_512(recipeJson)
-
-  //   console.log(`[DEBUG][public/bundler.js] Computed recipeHash: ${recipeHash}.`)
-
-  //   // save artifact name
-  //   this.buildArtifact = platform === 'mac'
-  //     ? `${recipeHash}.zip` : (
-  //       platform === 'lin'
-  //       ? `${recipeHash}.tar.xz`
-  //       : `${recipeHash}.exe`
-  //     )
-
-  //   // prepares the Jenkins build URL
-  //   const buildUrl = `${buildJob}/buildWithParameters?token=${jenkinsAuthTokens}&recipe=${recipeJson}&platform=${platform}`
-
-  //   return new Promise(async (resolve, reject) => {
-
-  //     // triggers the Jenkins build
-  //     const buildResponse = await fetch(buildUrl, {
-  //       method: 'GET',
-  //     })
-
-  //     if (! buildResponse.ok) {
-  //       return reject(`The build server is currently not available. Please, try again later.`)
-  //     }
-
-  //     // Queue URL can be found in response headers
-  //     // e.g.: http://dapps.dhealth.cloud:8080/queue/item/3/
-  //     const matches  = buildResponse.headers.get('Location').match(
-  //       // picks build number
-  //       new RegExp(`([0-9])\/?$`)
-  //     )
-
-  //     if (!matches || !matches.length) {
-  //       return reject(`Could not determine build number. Please, try again later.`)
-  //     }
-
-  //     // group 1 of regexp holds build number
-  //     return resolve(parseInt(matches[1]))
-  //   });
-  // }
-
-  // async getRecipeStatus(buildNumber) {
-  //   // prepare build parameters
-  //   const buildJob = `http://dapps.dhealth.cloud:8080/job/dhealth-dapp-recipes`
-  //   const statusUrl = `${buildJob}/api/json`
-
-  //   return new Promise(async (resolve, reject) => {
-
-  //     // now query build to get status and info
-  //     const buildResponse = await fetch(statusUrl, {
-  //       method: 'GET',
-  //     });
-
-  //     if (! buildResponse.ok) {
-  //       return reject(`The build server is currently not available. Please, try again later.`)
-  //     }
-
-  //     // receives an array of builds
-  //     const buildJobStatus = await buildResponse.json()
-
-  //     if (! ('builds' in buildJobStatus) || ! buildJobStatus.builds.length) {
-  //       return reject(`No builds were found. Please, try again later.`)
-  //     }
-
-  //     // validates build number
-  //     const findBuild = buildJobStatus.builds.find(b => b.number === buildNumber)
-  //     if (! findBuild) {
-  //       return reject(`Could not find a build with number ${buildNumber}.`)
-  //     }
-
-  //     // with "result" set, the build job has completed.
-  //     if ('result' in findBuild && null !== findBuild.result) {
-  //       return resolve({
-  //         status: findBuild.result,
-  //         artifact: this.buildArtifact,
-  //       });
-  //     }
-
-  //     // no "result" available, resolves info
-  //     return resolve({
-  //       status: 'BUILDING',
-  //       building: lastBuild.building,
-  //       startedAt: lastBuild.timestamp,
-  //       estimatedDuration: lastBuild.estimatedDuration,
-  //     })
-  //   })
-  // }
-
-  // async startBuildJobStatusPolling(buildNumber) {
-  //   this.buildJobStatusPolling = setInterval(async () => {
-  //     const response = await this.getRecipeStatus(buildNumber)
-
-  //     if (response.status === 'SUCCESS') {
-  //       // Hook to execute when recipe was successfully built
-  //       AppMainWindow.webContents.send('onRecipeBuildCompleted', response.artifact)
-  //       clearInterval(this.buildJobStatusPolling)
-  //       this.buildJobStatusPolling = null
-  //     }
-  //     else {
-  //       // Hook to execute when recipe build status was updated
-  //       const elapsedMs = (new Date().valueOf()) - status.startedAt
-  //       AppMainWindow.webContents.send('onRecipeBuildUpdated', elapsedMs)
-  //     }
-
-  //   // Polling every 30 seconds
-  //   }, 30000)
-
-  //   // timeout after 10 minutes
-  //   setTimeout(() => {
-  //     if (this.buildJobStatusPolling !== null) {
-  //       // Hook to execute when recipe build times out
-  //       AppMainWindow.webContents.send('onRecipeBuildTimeout', buildNumber)
-  //       clearInterval(this.buildJobStatusPolling)
-  //     }
-  //   }, 300000)
-  // }
 }
 
 /**

@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [1.1.2][1.1.2] - 08-Oct-2021
+## [1.1.4][1.1.4] - 08-Oct-2021
 
 #### Added
 - i18n: Adds correct namespace suggestion (gh#5)
@@ -35,6 +35,6 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 - Some missing re-branding items for dHealth logos.
 
-[1.1.2]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.0.0...v1.1.2
+[1.1.4]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.0.0...v1.1.4
 [1.0.0]: https://github.com/dhealthproject/dhealth-wallet/releases/tag/v1.0.0
 

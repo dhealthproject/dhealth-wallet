@@ -52,7 +52,7 @@ export class PluginTableService extends AssetTableService {
                 return {
                     status: pluginInfo.status,
                     npmModule: pluginInfo.npmModule + '@v' + pluginInfo.version,
-                    author: pluginInfo.author.name,
+                    author: !!pluginInfo.author && 'name' in pluginInfo.author ? pluginInfo.author.name : 'Unknown',
                     description: pluginInfo.description,
                     repository: pluginInfo.repository.url,
                 };
