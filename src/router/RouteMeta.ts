@@ -13,27 +13,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
+// internal dependencies
+import { RouteMeta } from '@dhealth/wallet-api-bridge';
 
 /**
  * Metadata added to Vue Router routes
  * @interface RouteMeta
  */
-export interface RouteMeta {
-    /**
-     * Authentication required
-     * @type {boolean}
-     */
-    protected: boolean;
-    /**
-     * Localized route name shown in the view
-     * @type {string}
-     */
-    title?: string;
-    // @TODO: REVIEW
-    clickable?: boolean;
-    isLedger?: boolean;
-    icon?: unknown;
-    active?: boolean;
-    nextPage?: string;
-    hideFromMenu?: boolean;
-}
+export { RouteMeta };

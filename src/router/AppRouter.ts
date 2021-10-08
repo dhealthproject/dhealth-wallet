@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +15,11 @@
  *
  */
 // external dependencies
-import Router, { RawLocation } from 'vue-router';
+import Router, { RawLocation, RouteRecordPublic } from 'vue-router';
+import { AppRoute } from './AppRoute';
+
 // internal dependencies
 import { routes } from '@/router/routes';
-import { AppRoute } from './AppRoute';
 import { TabEntry } from './TabEntry';
 import { AppStore } from '@/app/AppStore';
 import { ProfileService } from '@/services/ProfileService';
@@ -28,6 +30,20 @@ import { ProfileService } from '@/services/ProfileService';
  * @extends {Router}
  */
 export class AppRouter extends Router {
+    public static MODULES: string[] = [
+        'dashboard',
+        'mosaics',
+        'multisig',
+        'namespaces',
+        'settings',
+        'accounts',
+        'community',
+        'harvesting',
+        'aggregate',
+        'plugins',
+        'faq',
+    ];
+
     /**
      * Application routes
      */
@@ -70,6 +86,7 @@ export class AppRouter extends Router {
      * @param {string} [parentRouteName]
      * @returns {AppRoute[]}
      */
+    // @ts-ignore
     public getRoutes(parentRouteName?: string): AppRoute[] {
         const parentRoute = this.getParentRoute(parentRouteName);
         if (!parentRoute) {
@@ -109,18 +126,7 @@ export class AppRouter extends Router {
         }
 
         // - find requested top level route
-        const modules = [
-            'dashboard',
-            'mosaics',
-            'multisig',
-            'namespaces',
-            'settings',
-            'accounts',
-            'community',
-            'harvesting',
-            'aggregate',
-            'faq',
-        ];
+        const modules = AppRouter.MODULES;
 
         // - app modules
         const moduleRoutes = appRoute.children.filter(({ name }) => modules.includes(name));

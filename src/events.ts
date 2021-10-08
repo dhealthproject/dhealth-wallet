@@ -25,3 +25,17 @@ import Vue from 'vue';
  */
 export const $eventBus = new Vue();
 /// end-region event bus
+
+/// region plugin bus (events propagated on parallel thread)
+/**
+ * This plugin bus channels following events:
+ *
+ * - onPluginsReady with \a plugins
+ * - onPluginLoaded with \a pluginData
+ * - onPluginActionRequest with \a actionPayload
+ * - onPluginActionResponse with \a responseJson
+ *
+ * @see {store/Plugin}
+ */
+export const $pluginBus = new Vue();
+/// end-region plugin bus

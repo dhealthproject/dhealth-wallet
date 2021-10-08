@@ -55,8 +55,8 @@ export default class ModalTransactionUriImportTs extends Vue {
     }
 
     private sanitizeInput(transactionURI: string) {
-        if (!!transactionURI && !transactionURI.startsWith('web+symbol://')) {
-            return 'web+symbol://' + transactionURI;
+        if (!!transactionURI && !transactionURI.startsWith('web+dhealth://')) {
+            return 'web+dhealth://' + transactionURI;
         }
         return transactionURI;
     }

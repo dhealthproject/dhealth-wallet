@@ -365,10 +365,12 @@ export class ModalTransactionConfirmationTs extends Vue {
     public async onAccountUnlocked({ account, password }: { account: Account; password?: Password }): Promise<void> {
         // - log about unlock success
         this.$store.dispatch('diagnostic/ADD_INFO', `Account ${account.address.plain()} unlocked successfully.`);
+
         // - get transaction stage config
         if (this.$route.path === '/delegatedHarvesting') {
             this.$emit('unlocked', password);
         }
+
         return this.onSigner(new AccountTransactionSigner(account));
     }
 
@@ -568,7 +570,6 @@ export class ModalTransactionConfirmationTs extends Vue {
     }
 
     private async ledgerAccDelHarvestOnStartOrSwap(values) {
-        console.log('start or swap called');
         const { ledgerService, currentPath, isOptinLedgerWallet, ledgerAccount } = values;
         const keyLinkAggregateCompleteTransaction = this.stagedTransactions[0];
         this.$store.dispatch('notification/ADD_SUCCESS', 'verify_device_information');
@@ -903,6 +904,10 @@ export class ModalTransactionConfirmationTs extends Vue {
                     });
                 });
             }
+
+            // - notify about broadcast success
+            this.$emit('transaction-broadcast');
+
             // - notify about successful transaction announce
             this.onConfirmationSuccess();
             this.show = false;
@@ -929,6 +934,13 @@ export class ModalTransactionConfirmationTs extends Vue {
     public onError(error: string) {
         this.$emit('error', error);
     }
+
+    /**
+     * Hook called when child component FormProfileUnlock or
+     * HardwareConfirmationButton emit the 'success' event.
+     * @param {string} message
+     * @return {void}
+     */
     public onConfirmationSuccess() {
         this.$store.dispatch('notification/ADD_SUCCESS', 'success_transactions_signed');
         this.$emit('success');

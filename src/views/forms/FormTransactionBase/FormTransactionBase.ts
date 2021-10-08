@@ -339,9 +339,9 @@ export class FormTransactionBase extends Vue {
         if (this.isMultisigMode()) {
             this.$store.dispatch('account/SET_CURRENT_ACCOUNT', this.currentAccount);
         }
+
         this.resetForm();
         this.hasConfirmationModal = false;
-        this.$emit('on-confirmation-success');
         // Reset form validation
         this.resetFormValidation();
     }

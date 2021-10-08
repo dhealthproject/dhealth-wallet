@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +14,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { createStepImage, importStepImage, officialIcons, walletTypeImages } from '@/views/resources/Images';
+import RouteConfig from 'vue-router';
 import { AppRoute } from './AppRoute';
+
+// internal dependencies
+import { PluginService } from '@/services/PluginService';
+import { createStepImage, importStepImage, officialIcons, walletTypeImages } from '@/views/resources/Images';
 
 export const routes: AppRoute[] = [
     {
@@ -73,16 +78,6 @@ export const routes: AppRoute[] = [
                         // @ts-ignore
                         component: () => import('@/views/pages/dashboard/invoice/DashboardInvoicePage.vue'),
                     },
-                    // {
-                    //   path: '/harvesting',
-                    //   name: 'dashboard.harvesting',
-                    //   meta: {
-                    //     protected: true,
-                    //     title: 'page_title_harvesting',
-                    //   },
-                    //   // @ts-ignore
-                    //   component: () => import('@/views/pages/dashboard/harvesting/DashboardHarvestingPage.vue'),
-                    // }
                 ],
             },
             {
@@ -227,7 +222,7 @@ export const routes: AppRoute[] = [
                 ],
             },
             {
-                path: '/harvesting', //TODO: Harvesting
+                path: '/harvesting',
                 name: 'harvesting',
                 redirect: '/delegatedHarvesting',
                 meta: {
@@ -348,6 +343,55 @@ export const routes: AppRoute[] = [
                         },
                         // @ts-ignore
                         component: () => import('@/views/pages/faq/Dashboard/Dashboard.vue'),
+                    }
+                ]
+            },
+            {
+                path: '/plugins',
+                name: 'plugins',
+                meta: {
+                    protected: true,
+                    clickable: true,
+                    // should hide from menu for BROWSER
+                    hideFromMenu: !('electron' in window) || !('ipcRenderer' in window['electron']),
+                    title: 'sidebar_item_plugins',
+                    icon: officialIcons.enterprise,
+                },
+                redirect: '/pluginsList',
+                // @ts-ignore
+                component: () => import('@/views/pages/plugins/Manager/Manager.vue'),
+                children: [
+                    {
+                        path: '/pluginsList',
+                        name: 'plugins.list',
+                        meta: {
+                            protected: true,
+                            title: 'page_title_plugins',
+                        },
+                        // @ts-ignore
+                        component: () => import('@/views/pages/plugins/List/List.vue'),
+                    },
+                    {
+                        path: '/info',
+                        name: 'plugins.info',
+                        meta: {
+                            protected: true,
+                            hideFromMenu: true,
+                            title: 'page_title_plugins_info',
+                        },
+                        // @ts-ignore
+                        component: () => import('@/views/pages/plugins/Info/Info.vue'),
+                    },
+                    {
+                        path: '/page',
+                        name: 'plugins.page',
+                        meta: {
+                            protected: true,
+                            hideFromMenu: true,
+                            title: 'page_title_plugins_page',
+                        },
+                        // @ts-ignore
+                        component: () => import('@/views/pages/plugins/PageWrapper/PageWrapper.vue'),
                     },
                 ],
             },

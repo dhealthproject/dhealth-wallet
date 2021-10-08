@@ -202,6 +202,7 @@ export class AccountService {
         mnemonic: MnemonicPassPhrase,
         password: Password,
         networkType: NetworkType,
+        shouldList: boolean = true,
     ): AccountModel {
         const default_path = AccountService.getAccountPathByNetworkType(networkType);
         const account = this.getAccountByPath(mnemonic, networkType, default_path);
@@ -219,6 +220,7 @@ export class AccountService {
             encryptedPrivateKey: simpleWallet.encryptedPrivateKey,
             path: default_path,
             isMultisig: false,
+            isListedAccount: shouldList === true,
         };
     }
 
@@ -233,6 +235,7 @@ export class AccountService {
         nextPath: string,
         networkType: NetworkType,
         childAccountName: string,
+        shouldList: boolean = true,
     ): AccountModel {
         // - derive account
         const account = this.getAccountByPath(mnemonic, networkType, nextPath);
@@ -250,6 +253,7 @@ export class AccountService {
             encryptedPrivateKey: simpleWallet.encryptedPrivateKey,
             path: nextPath,
             isMultisig: false,
+            isListedAccount: shouldList === true,
         };
     }
 
@@ -268,6 +272,7 @@ export class AccountService {
         childAccountName: string,
         privateKey: string,
         networkType: NetworkType,
+        shouldList: boolean = true,
     ): AccountModel {
         const account = Account.createFromPrivateKey(privateKey, networkType);
         const simpleWallet = SimpleWallet.createFromPrivateKey(childAccountName, password, account.privateKey, networkType);
@@ -283,6 +288,7 @@ export class AccountService {
             encryptedPrivateKey: simpleWallet.encryptedPrivateKey,
             path: '',
             isMultisig: false,
+            isListedAccount: shouldList === true,
         };
     }
 
@@ -409,6 +415,7 @@ export class AccountService {
         path: string,
         ledgerDisplay: boolean,
         isOptinLedgerWallet: boolean,
+        shouldList: boolean = true,
     ): Promise<AccountModel> {
         const publicKey = await this.getLedgerPublicKeyByPath(networkType, path, ledgerDisplay, isOptinLedgerWallet);
         const address = PublicAccount.createFromPublicKey(publicKey.toUpperCase(), networkType).address;
@@ -423,6 +430,7 @@ export class AccountService {
             encryptedPrivateKey: '',
             path: path,
             isMultisig: false,
+            isListedAccount: shouldList === true,
         };
     }
 

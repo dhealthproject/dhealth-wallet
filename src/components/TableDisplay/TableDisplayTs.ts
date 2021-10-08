@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ import {
 import { MosaicTableService } from '@/services/AssetTableService/MosaicTableService';
 import { NamespaceTableService } from '@/services/AssetTableService/NamespaceTableService';
 import { MetadataTableService } from '@/services/AssetTableService/MetadataTableService';
+import { PluginTableService } from '@/services/AssetTableService/PluginTableService';
 // table asset types
 import { TableAssetType } from './TableAssetType';
 // child components
@@ -52,10 +54,11 @@ import { NamespaceModel } from '@/core/database/entities/NamespaceModel';
 import { MosaicModel } from '@/core/database/entities/MosaicModel';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
 import { AccountModel } from '@/core/database/entities/AccountModel';
+import { MetadataModel } from '@/core/database/entities/MetadataModel';
+import { PluginModel } from '@/core/database/entities/PluginModel';
 import { Signer } from '@/store/Account';
 // @ts-ignore
 import SignerFilter from '@/components/SignerFilter/SignerFilter.vue';
-import { MetadataModel } from '@/core/database/entities/MetadataModel';
 // @ts-ignore
 import ModalMetadataUpdate from '@/views/modals/ModalMetadataUpdate/ModalMetadataUpdate.vue';
 import { PageInfo } from '@/store/Transaction';
@@ -78,6 +81,7 @@ import { PageInfo } from '@/store/Transaction';
             currentAccount: 'account/currentAccount',
             holdMosaics: 'mosaic/holdMosaics',
             ownedNamespaces: 'namespace/ownedNamespaces',
+            knownPlugins: 'plugin/listedPlugins',
             currentConfirmedPage: 'namespace/currentConfirmedPage',
             attachedMetadataList: 'metadata/accountMetadataList',
             networkConfiguration: 'network/networkConfiguration',
@@ -123,6 +127,13 @@ export class TableDisplayTs extends Vue {
     private attachedMetadataList: MetadataModel[];
 
     /**
+     * Known plugins installed locally
+     * @protected
+     * @type {PluginModel[]}
+     */
+    private knownPlugins: PluginModel[];
+
+    /**
      * target mosaic or namespace metadata view
      * @type {MetadataModel[]}
      */
@@ -161,6 +172,8 @@ export class TableDisplayTs extends Vue {
                 return this.isFetchingNamespaces;
             case TableAssetType.Metadata:
                 return this.isFetchingMetadata;
+            case TableAssetType.Plugin:
+                return false;
             default:
                 return this.isFetchingMosaics;
         }
@@ -279,6 +292,9 @@ export class TableDisplayTs extends Vue {
             case TableAssetType.Metadata:
                 return new MetadataTableService(this.currentHeight, this.attachedMetadataList, this.networkConfiguration);
 
+            case TableAssetType.Plugin:
+                return new PluginTableService(this.currentHeight, this.knownPlugins);
+
             default:
                 throw new Error(`Asset type '${this.assetType}' does not exist in TableDisplay.`);
         }
@@ -374,6 +390,10 @@ export class TableDisplayTs extends Vue {
 
             case TableAssetType.Metadata:
                 await this.$store.dispatch('metadata/LOAD_METADATA_LIST');
+                break;
+
+            case TableAssetType.Plugin:
+                await this.$store.dispatch('plugin/LOAD_PLUGINS');
                 break;
         }
     }
@@ -543,6 +563,7 @@ export class TableDisplayTs extends Vue {
             this.isRefreshing = false;
         }
     }
+
     /**
      * open edit metadata modal
      */

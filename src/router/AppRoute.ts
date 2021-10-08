@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 NEM (https://nem.io)
+ * Copyright 2021-present [Using Blockchain Ltd](https://using-blockchain.org), All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@
  *
  */
 // external dependencies
-import RouteConfig from 'vue-router';
+import Vue, { ComponentOptions, AsyncComponent } from "vue";
+import RouteConfig from "vue-router";
 
-// internal dependencies
-import { RouteMeta } from './RouteMeta';
+import { RouteMeta } from "./RouteMeta";
+
+export type Component = ComponentOptions<Vue> | typeof Vue | AsyncComponent;
+export type Dictionary<T> = { [key: string]: T };
 
 /**
  * Vue Router route extension
@@ -25,8 +29,14 @@ import { RouteMeta } from './RouteMeta';
  * @extends {RouteConfig}
  */
 export interface AppRoute extends RouteConfig {
-    name: string;
-    meta: RouteMeta;
-    path?: string;
-    children?: AppRoute[];
+  name: string;
+  meta: RouteMeta;
+  path: string;
+  children?: AppRoute[];
+  components?: Dictionary<Component>;
+  instances?: Dictionary<Vue>;
+  props?:
+    | boolean
+    | Record<string, any>
+    | Dictionary<boolean | Record<string, any>>;
 }

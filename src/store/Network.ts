@@ -278,6 +278,7 @@ export default {
             if (!networkType && currentProfile && currentProfile.networkType) {
                 networkType = currentProfile.networkType;
             }
+
             commit('setOfflineMode', isOffline);
             if (newCandidateUrl) {
                 commit('connectingToNodeInfo', {
@@ -341,11 +342,13 @@ export default {
                     if (
                         nodeNetworkModelResult &&
                         nodeNetworkModelResult.repositoryFactory &&
-                        nodeNetworkModelResult.networkModel.networkType === currentProfile.networkType
+                        nodeNetworkModelResult.networkModel &&
+                        nodeNetworkModelResult.networkModel.networkType === networkType
                     ) {
                         await dispatch('CONNECT_TO_A_VALID_NODE', nodeNetworkModelResult);
                         nodeFound = true;
-                    } else {
+                    }
+                    else {
                         nodesList.splice(inx, 1);
                         if (waitBetweenTrials) {
                             await CommonHelpers.sleep(1000); // labor illusion
@@ -413,6 +416,7 @@ export default {
                 isTryingToConnect: false,
             });
             $eventBus.$emit('newConnection', currentPeer);
+
             // subscribe to updates
             if (oldGenerationHash != networkModel.generationHash) {
                 await dispatch('account/NETWORK_CHANGED', {}, { root: true });

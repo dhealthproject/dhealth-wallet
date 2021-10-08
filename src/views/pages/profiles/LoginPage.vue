@@ -36,7 +36,7 @@
                                     slim
                                 >
                                     <ErrorTooltip field-name="profile_name" :errors="errors">
-                                        <input v-show="false" v-model="formItems.currentProfileName" />
+                                        <input v-show="false" v-model="formItems.currentProfileName" autocomplete="off" />
 
                                         <AutoComplete
                                             v-model="formItems.currentProfileName"
@@ -86,6 +86,7 @@
                                             :class="[!profilesClassifiedByNetworkType ? 'un_click' : '']"
                                             :placeholder="$t('please_enter_your_account_password')"
                                             type="password"
+                                            autocomplete="off"
                                             :disabled="!profilesClassifiedByNetworkType || performingLogin"
                                         />
                                     </ErrorTooltip>

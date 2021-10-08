@@ -63,6 +63,7 @@ export class AccountModel {
     public readonly path: string;
     public readonly isMultisig: boolean;
     public readonly encRemoteAccountPrivateKey?: string;
+    public readonly isListedAccount: boolean = true;
 
     /**
      * Permits to return specific field's mapped object instances

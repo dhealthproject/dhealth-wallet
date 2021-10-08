@@ -113,6 +113,7 @@ export default {
             const settings = new SettingService().getProfileSettings(currentProfile.profileName, currentProfile.networkType);
             dispatch('app/SET_SETTINGS', settings, { root: true });
             dispatch('addressBook/LOAD_ADDRESS_BOOK', null, { root: true });
+            //dispatch('plugin/LOAD_PLUGINS', null, { root: true });
 
             dispatch('network/SET_NETWORK_TYPE', currentProfile.networkType, { root: true });
 

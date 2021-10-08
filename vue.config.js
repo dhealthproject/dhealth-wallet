@@ -43,6 +43,12 @@ module.exports = {
       return args;
     });
   },
+  // Disables module splitting
+  configureWebpack: {
+    optimization: {
+      splitChunks: false
+    }
+  },
   // generate map
   productionSourceMap: true,
   // use template in vue
@@ -79,7 +85,7 @@ module.exports = {
         ws: true,
         changeOrigin: true,
         pathRewrite: { '^/nemflash': '' }
-      },
+      }
     }
   },
   // plugins

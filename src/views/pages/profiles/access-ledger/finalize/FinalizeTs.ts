@@ -218,6 +218,7 @@ export default class FinalizeTs extends Vue {
                 encryptedPrivateKey: '',
                 path: paths[i],
                 isMultisig: false,
+                isListedAccount: true,
             };
         });
     }
@@ -250,6 +251,7 @@ export default class FinalizeTs extends Vue {
                 encryptedPrivateKey: '',
                 path: paths[i],
                 isMultisig: false,
+                isListedAccount: true,
             };
         });
     }

@@ -16,7 +16,7 @@
 // internal dependencies
 import { DerivationPathValidator } from '@/core/validation/validators';
 import { AccountService } from '@/services/AccountService';
-import { NetworkType } from 'symbol-sdk/dist/src/model/network/NetworkType';
+import { NetworkType } from 'symbol-sdk';
 
 export enum DerivationPathLevels {
     Purpose = 1,

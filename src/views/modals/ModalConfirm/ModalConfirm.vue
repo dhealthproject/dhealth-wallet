@@ -10,7 +10,7 @@
                         <img :src="officialIcons.warning" class="warning-icon" />
                     </div>
                 </div>
-                <div class="bottom-space body-text">{{ $t(message) }}</div>
+                <div :class="['bottom-space', 'body-text', useBiggerFont ? 'bigger-font' : '']">{{ $t(message) }}</div>
                 <div v-if="showCheckbox" class="checkbox-container bottom-space">
                     <Checkbox id="Confirmed" :value="isCheckboxChecked" @input="onCheckboxCheck">
                         <span class="checkbox-label">
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="footer">
-                <button class="ivu-btn secondary-outline-button button-style button" @click="cancel">
+                <button v-if="showCancel" class="ivu-btn secondary-outline-button button-style button" @click="cancel">
                     {{ $t('cancel') }}
                 </button>
                 <button

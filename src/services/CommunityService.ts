@@ -36,7 +36,6 @@ const request = async (): Promise<string> => {
     });
     return response;
 };
-
 /// end-region protected helpers
 
 export interface ArticleEntry {
@@ -80,7 +79,7 @@ export class CommunityService {
 
         return parsedStream.items.map(({ pubDate, creator, title, contentSnippet, link }) => ({
             pubDate,
-            creator,
+            creator: 'dHealth Network',
             title,
             contentSnippet,
             link:
