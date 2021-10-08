@@ -93,7 +93,7 @@ const pluginManager = require('electron-plugin-manager')
           // Merge loaded plugin and package information
           this.plugins.push({
             npmModule: pkg.name,
-            installPath: installPath,
+            installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
             name: pluginSlug,
             version: pkg.version,
             main: pkg.main,

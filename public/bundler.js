@@ -370,98 +370,7 @@ class AppPluginManager {
         AppMainWindow.webContents.send('onPluginsResolved', JSON.stringify(plugins))
       }
     )
-
-    // Handles request of installations for plugins (builds plugins.json)
-    // ipcMain.removeAllListeners('onPluginsInstallRequest');
-    // ipcMain.on('onPluginsInstallRequest', (event, recipeJson) => {
-    //   try {
-    //     const recipe = JSON.parse(recipeJson)
-    //     console.log(`[INFO][public/bundler.js] main received onPluginsInstallRequest with ${Object.keys(recipe).length} plugin(s) from App`)
-
-    //     // Hook to execute *before* recipe is uploaded
-    //     AppMainWindow.webContents.send('onBeforeRecipeUploaded', recipeJson)
-
-    //     // Send recipe to build server (Jenkins)
-    //     this.buildRecipe(recipe, this.buildPlatform).then((buildNumber) => {
-
-    //       // Hook to execute when recipe was uploaded
-    //       AppMainWindow.webContents.send('onRecipeUploaded', buildNumber)
-
-    //       // Start polling for build job status (30 seconds)
-    //       this.startBuildJobStatusPolling(buildNumber)
-    //     }).catch(
-    //       (reason) => AppMainWindow.webContents.send('onRecipeBuildError', reason.toString())
-    //     )
-    //   }
-    //   catch (e) {
-    //     AppMainWindow.webContents.send('onRecipeBuildError', `Error parsing JSON for dApps recipe.`)
-    //   }
-
-    //   // // First install plugin
-    //   // this.installPlugin(npmModule, 'latest').then(() => {
-
-    //   //   // Then load plugin definition
-    //   //   const instance = this.loadPlugin(npmModule)
-
-    //   //   // Send information about installed plugin to App
-    //   //   AppMainWindow.webContents.send('onPluginInstalled', JSON.stringify(instance))
-
-    //   //   // Call the plugins bundler (injecter)
-    //   //   this.callBundler(npmModule);
-    //   // }).catch(
-    //   //   (reason) => AppMainWindow.webContents.send('onPluginInstallError', reason.toString())
-    //   // )
-    // })
   }
-
-  // async callBundler(npmModule) {
-
-  //   if (!!npmModule && npmModule.length) {
-  //     // Hook to execute *before* plugin injection starts
-  //     AppMainWindow.webContents.send('onBeforePluginInjected', npmModule);
-  //   }
-
-  //   console.log(`[DEBUG][public/bundler.js] Now executing plugins.js with execPath '${process.execPath}'.`);
-
-  //   return new Promise(async (resolve, reject) => {
-
-  //     // Prepare bundler spawn arguments
-  //     const callSignature = ['./node_modules/electron/cli.js', './dist/plugins.js'];
-  //     if (!!npmModule && npmModule.length) {
-  //       callSignature.push(npmModule);
-  //     }
-
-  //     // Spawn a new child process with electron
-  //     const injecterProc = child_process.spawn(
-  //       process.execPath,
-  //       callSignature,
-  //       { stdio: 'pipe' },
-  //     )
-
-  //     // When injecter is recreated, reload the app
-  //     injecterProc.on('exit', (code, sig) => {
-  //       console.log(`[DEBUG][public/bundler.js] Injecter process exited with code ${code}.`);
-
-  //       if (!!npmModule && npmModule.length) {
-  //         // Send information about injected new plugins
-  //         AppMainWindow.webContents.send('onPluginInjected', npmModule);
-
-  //         // Reload the app and injected plugins
-  //         lastPageReloadTime = new Date().valueOf();
-  //         AppMainWindow.reload();
-  //       }
-
-  //       resolve(code);
-  //     })
-
-  //     // In case of errors, monitor
-  //     injecterProc.on('error', (error) => {
-  //       console.log(`[ERROR][public/bundler.js] Child process for plugin injecter failed with error: ${error.message}.`)
-
-  //       reject(error);
-  //     })
-  //   });
-  // }
 
   async loadPlugins() {
 
@@ -509,7 +418,7 @@ class AppPluginManager {
     // Merge loaded plugin and package information
     const instance = {
       npmModule: pkg.name,
-      installPath: installPath,
+      installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
       name: plugin,
       version: pkg.version,
       main: pkg.main,
