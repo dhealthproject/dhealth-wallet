@@ -2,7 +2,7 @@
     "name": "dhealth-wallet",
     "description": "dHealth Wallet",
     "homepage": "https://github.com/dhealthproject/dhealth-wallet",
-    "version": "1.1.0",
+    "version": "1.1.2",
     "license": "Apache-2.0",
     "author": {
         "name": "Using Blockchain Ltd",
@@ -64,6 +64,7 @@
         "@ledgerhq/hw-transport-webusb": "^5.51.1",
         "@dhealth/wallet-api-bridge": "latest",
         "@dhealth/wallet-components": "latest",
+        "@dhealth/sdk": "1.0.3-alpha-202110081200",
         "@yourdlt/plugin-dummy": "latest",
         "@yourdlt/plugin-librarian": "latest",
         "@yourdlt/plugin-ninjazzz": "latest",
@@ -81,12 +82,12 @@
         "lodash": "^4.17.21",
         "request": "^2.88.0",
         "rss-parser": "^3.12.0",
-        "rxjs": "^6.5.2",
+        "rxjs": "^6.6.7",
         "symbol-address-book": "^1.0.0",
         "symbol-hd-wallets": "0.14.1-alpha-202103051108",
         "symbol-paper-wallets": "^1.0.2",
         "symbol-qr-library": "0.14.1-alpha-202103081047",
-        "symbol-sdk": "1.0.1",
+        "symbol-sdk": "1.0.2-alpha-202108061451",
         "symbol-uri-scheme": "0.6.0",
         "trezor-connect": "^7.0.5",
         "utf8": "^3.0.0",
@@ -233,7 +234,7 @@
         "installerIcon": "./dist/assets/icons/favicon.dhealth.ico"
     },
     "linux": {
-        "category": "Finance",
+        "category": "Utility",
         "icon": "./dist/assets/icons/Icon.icns"
     },
     "resolutions": {

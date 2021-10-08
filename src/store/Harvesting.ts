@@ -21,16 +21,25 @@ import { PageInfo } from '@/store/Transaction';
 import { map, reduce } from 'rxjs/operators';
 import {
     AccountInfo,
-    Address,
-    BalanceChangeReceipt,
-    Order,
-    ReceiptPaginationStreamer,
     ReceiptType,
-    RepositoryFactory,
     RepositoryFactoryHttp,
     SignedTransaction,
     UInt64,
 } from 'symbol-sdk';
+
+// @FIXME: @dhealth/sdk@1.0.3-alpha-202110081200 includes a fix for `PaginationStreamer` to use
+//         the correct rxjs imports (v6) for `defer` and `from` method. Next wallet version should
+//         replace the symbol-sdk dependency to @dhealth/sdk completely. This comment can be deleted
+//         when the dependency swap has happened.
+import {
+    Address,
+    Order,
+    ReceiptPaginationStreamer,
+    TransactionStatementSearchCriteria,
+    BalanceChangeReceipt,
+    RepositoryFactory,
+} from '@dhealth/sdk';
+
 import Vue from 'vue';
 // internal dependencies
 import { AwaitLock } from './AwaitLock';
@@ -214,7 +223,7 @@ export default {
                     pageNumber: pageNumber,
                     pageSize: pageSize,
                     order: Order.Desc,
-                })
+                } as TransactionStatementSearchCriteria)
                 .pipe(
                     map((pageTxStatement) => {
                         const harvestedBlocks = pageTxStatement.data.map(
@@ -233,7 +242,7 @@ export default {
                 )
                 .subscribe({ complete: () => commit('isFetchingHarvestedBlocks', false) });
         },
-        LOAD_HARVESTED_BLOCKS_STATS({ commit, rootGetters }) {
+        LOAD_HARVESTED_BLOCKS_STATS({ commit, dispatch, rootGetters }) {
             const repositoryFactory: RepositoryFactory = rootGetters['network/repositoryFactory'];
             const receiptRepository = repositoryFactory.createReceiptRepository();
             const streamer = ReceiptPaginationStreamer.transactionStatements(receiptRepository);
@@ -247,37 +256,51 @@ export default {
             // for testing => const targetAddress = Address.createFromRawAddress('TD5YTEJNHOMHTMS6XESYAFYUE36COQKPW6MQQQY');
 
             commit('isFetchingHarvestedBlockStats', true);
-            let counter = 0;
+            let totalBlockCount = 0,
+                totalFeesEarned = UInt64.fromUint(0),
+                seed = { totalBlockCount, totalFeesEarned };
             streamer
                 .search({
                     targetAddress: targetAddress,
                     receiptTypes: [ReceiptType.Harvest_Fee],
                     pageNumber: 1,
                     pageSize: 50,
-                })
+                } as TransactionStatementSearchCriteria)
                 .pipe(
                     map(
-                        (t) =>
-                            (({
+                        (t) => {
+                            return ({
                                 blockNo: t.height,
-                                fee: (t.receipts as BalanceChangeReceipt[]).find((r) => r.targetAddress.plain() === targetAddress.plain())
-                                    .amount,
-                            } as unknown) as HarvestedBlock),
+                                fee: (t.receipts as BalanceChangeReceipt[]).find(
+                                    (r) => r.targetAddress.plain() === targetAddress.plain(),
+                                )?.amount,
+                            } as unknown) as HarvestedBlock;
+                        },
                     ),
                     reduce(
                         (acc, harvestedBlock) => ({
-                            totalBlockCount: ++counter,
-                            totalFeesEarned: acc.totalFeesEarned.add(harvestedBlock.fee),
+                            totalBlockCount: ++totalBlockCount,
+                            totalFeesEarned: acc.totalFeesEarned.add(harvestedBlock.fee)
                         }),
-                        {
-                            totalBlockCount: 0,
-                            totalFeesEarned: UInt64.fromUint(0),
-                        },
+                        seed,
                     ),
                 )
-                .subscribe((harvestedBlockStats) => commit('harvestedBlockStats', harvestedBlockStats));
+                .subscribe({
+                    next: (harvestedBlockStats) => {
+                        commit('harvestedBlockStats', harvestedBlockStats);
+                    },
+                    error: (err) => {
+                        dispatch(
+                            'notification/ADD_ERROR',
+                            `An error happened requesting harvesting statistics: ${err.toString()}`,
+                            { root: true }
+                        );
 
-            commit('isFetchingHarvestedBlockStats', false)
+                        commit('harvestedBlockStats', seed);
+                        commit('isFetchingHarvestedBlockStats', false)
+                    },
+                    complete: () => commit('isFetchingHarvestedBlockStats', false),
+                });
         },
         SET_CURRENT_SIGNER_HARVESTING_MODEL({ commit }, currentSignerAddress) {
             const harvestingService = new HarvestingService();

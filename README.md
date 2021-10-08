@@ -65,15 +65,6 @@ npm run dev
 
 4. Visit http://localhost:8080/#/ in your browser.
 
-## Sponsor us
-
-| Platform | Sponsor Link |
-| --- | --- |
-| Paypal | [https://paypal.me/usingblockchainltd](https://paypal.me/usingblockchainltd) |
-| Patreon | [https://patreon.com/usingblockchainltd](https://patreon.com/usingblockchainltd) |
-| Github | [https://github.com/sponsors/UsingBlockchain](https://github.com/sponsors/UsingBlockchain) |
-| :coffee: :coffee: :coffee: | [https://www.buymeacoffee.com/UBCDigital](https://www.buymeacoffee.com/UBCDigital) |
-
 ## Disclaimer
 
   *The author of this package cannot be held responsible for any loss of money or any malintentioned usage forms of this package. Please use this package with caution.*

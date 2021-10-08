@@ -62,23 +62,21 @@ window.PluginInjecter = {
           return ;
         }
 
-        setTimeout(() => {
-          // Persists loaded plugin details
-          // Component data is ignored here
-          const entryPoint = p.path + '/' + p.main;
-          const loadedPlugin = p.module;
-          window.electron.ipcRenderer.send('onPluginLoaded', JSON.stringify({
-            npmModule: p.plugin,
-            entryPoint,
-            installPath: p.path,
-            view: loadedPlugin && 'view' in loadedPlugin ? loadedPlugin.view : '',
-            routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
-            components: loadedPlugin && 'components' in loadedPlugin ? Object.keys(loadedPlugin.components) : [],
-            storages: loadedPlugin && 'storages' in loadedPlugin ? loadedPlugin.storages : [],
-            settings: loadedPlugin && 'settings' in loadedPlugin ? loadedPlugin.settings : [],
-            permissions: loadedPlugin && 'permissions' in loadedPlugin ? loadedPlugin.permissions : [],
-          }));
-        }, 10000);
+        // Persists loaded plugin details
+        // Component data is ignored here
+        const entryPoint = p.path + '/' + p.main;
+        const loadedPlugin = p.module;
+        window.electron.ipcRenderer.send('onPluginLoaded', JSON.stringify({
+          npmModule: p.plugin,
+          entryPoint,
+          installPath: p.path,
+          view: loadedPlugin && 'view' in loadedPlugin ? loadedPlugin.view : '',
+          routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
+          components: loadedPlugin && 'components' in loadedPlugin ? Object.keys(loadedPlugin.components) : [],
+          storages: loadedPlugin && 'storages' in loadedPlugin ? loadedPlugin.storages : [],
+          settings: loadedPlugin && 'settings' in loadedPlugin ? loadedPlugin.settings : [],
+          permissions: loadedPlugin && 'permissions' in loadedPlugin ? loadedPlugin.permissions : [],
+        }));
       }
     )
   }
