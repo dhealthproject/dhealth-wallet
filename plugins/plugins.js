@@ -11,6 +11,7 @@
 const plugin0 = require('@yourdlt/plugin-dummy');
 const plugin1 = require('@yourdlt/plugin-librarian');
 const plugin2 = require('@yourdlt/plugin-ninjazzz');
+const plugin3 = require('@dhealth/plugin-node-monitor');
 window.PluginPackages = [];
 
 if ('registerComponents' in plugin0) {
@@ -43,6 +44,17 @@ if ('registerComponents' in plugin2) {
     module: plugin2.default,
     path: './node_modules/@yourdlt/plugin-ninjazzz',
     main: 'dist/YourDLTWalletPluginNinjaZZZ.common.js'
+  });
+}
+
+if ('registerComponents' in plugin3) {
+  console.log('[DEBUG][plugins/plugins.js] plugin is: ', plugin3);
+
+  window.PluginPackages.push({
+    plugin: '@dhealth/plugin-node-monitor',
+    module: plugin3.default,
+    path: './node_modules/@dhealth/plugin-node-monitor',
+    main: 'dist/dHealthWalletPluginNodeMonitor.common.js'
   });
 }
 

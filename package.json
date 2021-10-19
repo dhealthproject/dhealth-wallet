@@ -64,6 +64,7 @@
         "@ledgerhq/hw-transport-webusb": "^5.51.1",
         "@dhealth/wallet-api-bridge": "file:../dhealth-wallet-api-bridge",
         "@dhealth/wallet-components": "file:../dhealth-wallet-components",
+        "@dhealth/plugin-node-monitor": "file:../plugin-node-monitor",
         "@dhealth/sdk": "1.0.3-alpha-202110081200",
         "@yourdlt/plugin-dummy": "latest",
         "@yourdlt/plugin-librarian": "latest",
