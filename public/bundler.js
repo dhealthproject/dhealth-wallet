@@ -24,13 +24,11 @@
 /// region global scoped variables
 const path = require('path')
 const fs = require('fs')
-const { sha3_512 } = require('js-sha3')
 const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron')
 const name = app.getName()
 const electronLocalshortcut = require('electron-localshortcut')
 const contextMenu = require('electron-context-menu')
 contextMenu({})
-const pluginManager = require('electron-plugin-manager')
 const axios = require('axios').default
 
 let loadedPluginsCache = [],
@@ -409,65 +407,57 @@ class AppPluginManager {
   async loadPlugin(pluginSlug, pluginVer) {
     // read package manifest
     return new Promise((resolve, reject) => {
-      axios
-        .get(`https://unpkg.com/${pluginSlug}@${pluginVer}/package.json`)
-        .then(response => {
-          // parse package manifest
-          const pkg = response.data;
+      // local install path
+      const installPath = path.join(this.pluginsPath, pluginSlug)
 
-          // local install path
-          const installPath = path.join(this.pluginsPath, pluginSlug)
+      // try reading package.json using filesystem
+      if (fs.existsSync(installPath)) {
+        // check obligatory file
+        if (!fs.readdirSync(installPath).includes('package.json')) {
+          console.error(`Could not find a package.json for ${pluginSlug}`)
+          throw new Error(`Could not find a package.json for ${pluginSlug}`)
+        }
 
-          // Merge loaded plugin and package information
-          const instance = {
-            npmModule: pkg.name,
-            installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
-            name: pkg.name,
-            version: pkg.version,
-            main: pkg.main,
-            // data from `package.json`
-            author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : ('name' in pkg.author ? pkg.author : { name: 'Unknown' }),
-            description: pkg && 'description' in pkg ? pkg.description : 'N/A',
-            homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
-            repository: pkg && 'repository' in pkg ? pkg.repository : { url: 'N/A' },
-            dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
-          }
+        // reads package from filesystem
+        const json = fs.readFileSync(path.join(installPath, 'package.json'))
+        const pkg  = JSON.parse(json)
 
-          this.plugins.push(instance)
-          return resolve(instance)
-        });
+        // merges loaded plugin and package information
+        const instance = this.createInstance(installPath, pkg)
+        this.plugins.push(instance)
+        return resolve(instance)
+      }
+      // or remote using unpkg.com
+      else {
+        axios
+          .get(`https://unpkg.com/${pluginSlug}@${pluginVer}/package.json`)
+          .then(response => {
+            // parse package manifest
+            const pkg = response.data;
+
+            // merges loaded plugin and package information
+            const instance = this.createInstance(installPath, pkg)
+            this.plugins.push(instance)
+            return resolve(instance)
+          });
+      }
     });
-    
+  }
 
-    // const installPath = path.join(this.pluginsPath, plugin)
-
-    // // Verify that the plugin folder is compatible
-    // if (! fs.readdirSync(installPath).includes('package.json')) {
-    //   console.error(`Could not find a package.json for ${plugin}`)
-    //   throw new Error(`Could not find a package.json for ${plugin}`)
-    // }1
-
-    // // Read package information
-    // const json = fs.readFileSync(path.join(installPath, 'package.json'))
-    // const pkg  = JSON.parse(json)
-
-    // // Merge loaded plugin and package information
-    // const instance = {
-    //   npmModule: pkg.name,
-    //   installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
-    //   name: plugin,
-    //   version: pkg.version,
-    //   main: pkg.main,
-    //   // data from `package.json`
-    //   author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
-    //   description: pkg && 'description' in pkg ? pkg.description : '',
-    //   homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
-    //   repository: pkg && 'repository' in pkg ? pkg.repository : '',
-    //   dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
-    // }
-
-    // this.plugins.push(instance)
-    // return instance
+  createInstance(installPath, pkg) {
+    return {
+      npmModule: pkg.name,
+      installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
+      name: pkg.name,
+      version: pkg.version,
+      main: pkg.main,
+      // data from `package.json`
+      author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : ('name' in pkg.author ? pkg.author : { name: 'Unknown' }),
+      description: pkg && 'description' in pkg ? pkg.description : 'N/A',
+      homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
+      repository: pkg && 'repository' in pkg ? pkg.repository : { url: 'N/A' },
+      dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
+    }
   }
 }
 

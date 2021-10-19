@@ -113,7 +113,6 @@ export class InfoTs extends Vue {
         } else {
             // update DB cache
             await service.enablePlugin(this.selectedPlugin.npmModule);
-            console.log('routes: ', this.selectedPlugin.routes);
         }
 
         // update store state
@@ -127,5 +126,8 @@ export class InfoTs extends Vue {
         // update component/page state
         this.nextPluginStatus = this.nextPluginStatus === 'enabled' ? 'disabled' : 'enabled';
         this.showPluginStatusChangeModal = false;
+
+        // on status change reload page
+        return window.location.reload();
     }
 }
