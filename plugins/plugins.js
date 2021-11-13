@@ -12,6 +12,7 @@ const plugin0 = require('@yourdlt/plugin-dummy');
 const plugin1 = require('@yourdlt/plugin-librarian');
 const plugin2 = require('@yourdlt/plugin-ninjazzz');
 const plugin3 = require('@dhealth/plugin-node-monitor');
+const plugin4 = require('@dhealthdapps/health-to-earn');
 window.PluginPackages = [];
 
 if ('registerComponents' in plugin0) {
@@ -55,6 +56,17 @@ if ('registerComponents' in plugin3) {
     module: plugin3.default,
     path: './node_modules/@dhealth/plugin-node-monitor',
     main: 'dist/dHealthWalletPluginNodeMonitor.common.js'
+  });
+}
+
+if ('registerComponents' in plugin4) {
+  console.log('[DEBUG][plugins/plugins.js] plugin is: ', plugin4);
+
+  window.PluginPackages.push({
+    plugin: '@dhealthdapps/health-to-earn',
+    module: plugin4.default,
+    path: './node_modules/@dhealthdapps/health-to-earn',
+    main: 'dist/dHealthWalletPluginHealthToEarnStrava.common.js'
   });
 }
 
