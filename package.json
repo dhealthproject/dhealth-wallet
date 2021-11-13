@@ -66,6 +66,7 @@
         "@dhealth/wallet-components": "^1.3.0",
         "@dhealth/plugin-node-monitor": "latest",
         "@dhealth/sdk": "1.0.3-alpha-202110081200",
+        "@dhealthdapps/health-to-earn": "latest",
         "@yourdlt/plugin-dummy": "latest",
         "@yourdlt/plugin-librarian": "latest",
         "@yourdlt/plugin-ninjazzz": "latest",

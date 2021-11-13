@@ -2,5 +2,6 @@
   "@yourdlt/plugin-dummy": "0.3.1",
   "@yourdlt/plugin-librarian": "0.5.2",
   "@yourdlt/plugin-ninjazzz": "1.0.4",
-  "@dhealth/plugin-node-monitor": "0.1.0"
+  "@dhealth/plugin-node-monitor": "1.0.0",
+  "@dhealthdapps/health-to-earn": "1.0.0"
 }
