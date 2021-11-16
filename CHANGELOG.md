@@ -3,6 +3,22 @@ All notable changes to this project will be documented in this file.
 
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.2.0][1.2.0] - 15-Nov-2021
+
+#### Added
+
+- deps: Installs new plugin @dhealth/plugin-node-monitory
+- deps: Installs new plugin @dhealthdapps/health-to-earn
+- fix: Fixes plugin manager navigation controls
+- system: Removes many unused resources (images)
+
+#### Changed
+
+- feat: Disables Ledger import strategy
+- deps: Updates @dhealth/wallet-api-bridge
+- deps: Updates @dhealth/wallet-components
+- deps: Uses @dhealth/sdk
+
 ## [1.1.4][1.1.4] - 08-Oct-2021
 
 #### Added
@@ -35,6 +51,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 - Some missing re-branding items for dHealth logos.
 
+[1.2.0]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.1.4...v1.2.0
 [1.1.4]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.0.0...v1.1.4
 [1.0.0]: https://github.com/dhealthproject/dhealth-wallet/releases/tag/v1.0.0
 

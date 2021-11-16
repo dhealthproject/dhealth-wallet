@@ -20,10 +20,6 @@ import createImg from '@/views/resources/img/icons/Read.svg';
 // @ts-ignore
 import seedImg from '@/views/resources/img/icons/Incoming.svg';
 // @ts-ignore
-import trezorImg from '@/views/resources/img/login/trezor.png';
-// @ts-ignore
-import ledgerImg from '@/views/resources/img/login/ledger.png';
-// @ts-ignore
 import importStepImage1 from '@/views/resources/img/login/1_4.png';
 // @ts-ignore
 import importStepImage2 from '@/views/resources/img/login/2_4.png';
@@ -44,36 +40,6 @@ import createStepImage5 from '@/views/resources/img/login/5_5.png';
 // @ts-ignore
 import dashboardUnconfirmed from '@/views/resources/img/monitor/dash-board/dashboardUnconfirmed.png';
 // @ts-ignore
-import dashboardConfirmed from '@/views/resources/img/monitor/dash-board/dashboardConfirmed.png';
-// @ts-ignore
-import windowDashboard from '@/views/resources/img/window/windowDashboard.png';
-// @ts-ignore
-import windowDashboardActive from '@/views/resources/img/window/windowDashboardActive.png';
-// @ts-ignore
-import windowWallet from '@/views/resources/img/window/windowWallet.png';
-// @ts-ignore
-import windowWalletActive from '@/views/resources/img/window/windowWalletActive.png';
-// @ts-ignore
-import windowMosaic from '@/views/resources/img/window/windowMosaic.png';
-// @ts-ignore
-import windowMosaicActive from '@/views/resources/img/window/windowMosaicActive.png';
-// @ts-ignore
-import windowNamespace from '@/views/resources/img/window/windowNamespace.png';
-// @ts-ignore
-import windowNamespaceActive from '@/views/resources/img/window/windowNamespaceActive.png';
-// @ts-ignore
-import windowMultisig from '@/views/resources/img/window/windowMultisig.png';
-// @ts-ignore
-import windowMultisigActive from '@/views/resources/img/window/windowMultisigActive.png';
-// @ts-ignore
-import windowCommunity from '@/views/resources/img/window/windowCommunity.png';
-// @ts-ignore
-import windowCommunityActive from '@/views/resources/img/window/windowCommunityActive.png';
-// @ts-ignore
-import windowSetting from '@/views/resources/img/window/windowSetting.png';
-// @ts-ignore
-import windowSettingActive from '@/views/resources/img/window/windowSettingActive.png';
-// @ts-ignore
 import selected from '@/views/resources/img/monitor/mosaics/selected.png';
 // @ts-ignore
 import unselected from '@/views/resources/img/monitor/mosaics/unselected.png';
@@ -85,57 +51,19 @@ import accountRestrictionAlt from '@/views/resources/img/icons/account-restricti
 // @ts-ignore
 import accountRestriction from '@/views/resources/img/icons/account-restriction.png';
 // @ts-ignore
-import addAccount from '@/views/resources/img/icons/add-profile.png';
-// @ts-ignore
-import addAggregate from '@/views/resources/img/icons/add-aggregate.png';
-// @ts-ignore
 import aggregate from '@/views/resources/img/icons/aggregate.svg';
 // @ts-ignore
 import aggregateTransaction from '@/views/resources/img/icons/aggregate-transaction.png';
 // @ts-ignore
 import alias from '@/views/resources/img/icons/alias.png';
 // @ts-ignore
-import apiNode from '@/views/resources/img/icons/api-node.png';
-// @ts-ignore
-import blockchainBlock from '@/views/resources/img/icons/blockchain-block.png';
-// @ts-ignore
-import blockchain from '@/views/resources/img/icons/blockchain.png';
-// @ts-ignore
-import block from '@/views/resources/img/icons/block.png';
-// @ts-ignore
-import blocks from '@/views/resources/img/icons/blocks.png';
-// @ts-ignore
-import blockTime from '@/views/resources/img/icons/block-time.png';
-// @ts-ignore
-import card from '@/views/resources/img/icons/card.png';
-// @ts-ignore
-import certificate from '@/views/resources/img/icons/certificate.png';
-// @ts-ignore
-import checkMark from '@/views/resources/img/icons/check-mark.png';
-// @ts-ignore
-import confirmed from '@/views/resources/img/icons/confirmed.png';
-// @ts-ignore
-import crossChain from '@/views/resources/img/icons/cross-chain.png';
-// @ts-ignore
-import cryptography from '@/views/resources/img/icons/cryptography.png';
-// @ts-ignore
 import customerAlice from '@/views/resources/img/icons/customer-alice.png';
 // @ts-ignore
-import customerBob from '@/views/resources/img/icons/customer-bob.png';
-// @ts-ignore
-import customerCharlie from '@/views/resources/img/icons/customer-charlie.png';
-// @ts-ignore
 import dashboard from '@/views/resources/img/icons/dashboard.png';
-// @ts-ignore
-import delegatedHarvesting from '@/views/resources/img/icons/delegated-harvesting.png';
-// @ts-ignore
-import encryptedMessage from '@/views/resources/img/icons/encrypted-message.png';
 // @ts-ignore
 import enterprise from '@/views/resources/img/icons/enterprise.png';
 // @ts-ignore
 import explorer from '@/views/resources/img/newicons/NavExplorer.svg';
-// @ts-ignore
-import fingerprint from '@/views/resources/img/icons/fingerprint.png';
 // @ts-ignore
 import harvest from '@/views/resources/img/icons/harvest.svg';
 // @ts-ignore
@@ -144,8 +72,6 @@ import history from '@/views/resources/img/icons/history.png';
 import incoming from '@/views/resources/img/icons/incoming.png';
 // @ts-ignore
 import lock from '@/views/resources/img/icons/lock.png';
-// @ts-ignore
-import message from '@/views/resources/img/icons/message.png';
 // @ts-ignore
 import metadata from '@/views/resources/img/icons/metadata.png';
 // @ts-ignore
@@ -163,39 +89,17 @@ import namespace from '@/views/resources/img/icons/namespace.svg';
 // @ts-ignore
 import namespaceTransaction from '@/views/resources/img/icons/namespace.png';
 // @ts-ignore
-import nem2Cli from '@/views/resources/img/icons/nem2-cli.png';
-// @ts-ignore
-import nem2Sdk from '@/views/resources/img/icons/nem2-sdk.png';
-// @ts-ignore
 import news from '@/views/resources/img/icons/news.svg';
-// @ts-ignore
-import nodeReputation from '@/views/resources/img/icons/node-reputation.png';
-// @ts-ignore
-import nodes from '@/views/resources/img/icons/nodes.png';
-// @ts-ignore
-import notMultisig from '@/views/resources/img/icons/not-multisig.png';
 // @ts-ignore
 import outgoing from '@/views/resources/img/icons/outgoing.png';
 // @ts-ignore
 import pending from '@/views/resources/img/icons/pending.png';
 // @ts-ignore
-import privateChain from '@/views/resources/img/icons/private-chain.png';
-// @ts-ignore
-import privateKey from '@/views/resources/img/icons/private-key.png';
-// @ts-ignore
 import publicChain from '@/views/resources/img/icons/public-chain.png';
 // @ts-ignore
 import publicKey from '@/views/resources/img/icons/public-key.png';
 // @ts-ignore
-import publicPrivateKey from '@/views/resources/img/icons/public-private-key.png';
-// @ts-ignore
-import qr from '@/views/resources/img/icons/qr.png';
-// @ts-ignore
-import receive from '@/views/resources/img/icons/receive.png';
-// @ts-ignore
 import receive2 from '@/views/resources/img/icons/receive2.png';
-// @ts-ignore
-import send from '@/views/resources/img/icons/send.png';
 // @ts-ignore
 import send2 from '@/views/resources/img/icons/send2.png';
 // @ts-ignore
@@ -203,25 +107,7 @@ import sent from '@/views/resources/img/icons/sent.png';
 // @ts-ignore
 import settings from '@/views/resources/img/newicons/NavSettings.svg';
 // @ts-ignore
-import signatureRequired from '@/views/resources/img/icons/signature-required.png';
-// @ts-ignore
-import signCosign from '@/views/resources/img/icons/sign-cosign.png';
-// @ts-ignore
-import spamThrottle from '@/views/resources/img/icons/spam-throttle.png';
-// @ts-ignore
-import statistics from '@/views/resources/img/icons/statistics.png';
-// @ts-ignore
-import transactions from '@/views/resources/img/icons/transactions.png';
-// @ts-ignore
-import transfer from '@/views/resources/img/icons/transfer.png';
-// @ts-ignore
-import transferTransactions from '@/views/resources/img/icons/transfer-transactions.png';
-// @ts-ignore
-import unlock from '@/views/resources/img/icons/unlock.png';
-// @ts-ignore
 import wallet from '@/views/resources/img/icons/wallet.svg';
-// @ts-ignore
-import xymCoin from '@/views/resources/img/icons/xym-coin.png';
 // @ts-ignore
 import voting from '@/views/resources/img/navbar/explorer.svg';
 // @ts-ignore
@@ -239,8 +125,6 @@ import infoWhite from '@/views/resources/img/icons/info-white.png';
 export const walletTypeImages = {
     createImg,
     seedImg,
-    trezorImg,
-    ledgerImg,
 };
 
 export const importStepImage = {
@@ -260,63 +144,25 @@ export const createStepImage = {
 
 export const dashboardImages = {
     dashboardUnconfirmed,
-    dashboardConfirmed,
     selected,
     unselected,
-};
-
-export const leftBarIcons = {
-    windowDashboard,
-    windowDashboardActive,
-    windowWallet,
-    windowWalletActive,
-    windowMosaic,
-    windowMosaicActive,
-    windowNamespace,
-    windowNamespaceActive,
-    windowMultisig,
-    windowMultisigActive,
-    windowCommunity,
-    windowCommunityActive,
-    windowSetting,
-    windowSettingActive,
 };
 
 // icons provided by the marketing agency
 export const officialIcons = {
     accountRestrictionAlt,
     accountRestriction,
-    addAccount,
-    addAggregate,
     aggregate,
     aggregateTransaction,
     alias,
-    apiNode,
-    blockchainBlock,
-    blockchain,
-    block,
-    blocks,
-    blockTime,
-    card,
-    certificate,
-    checkMark,
-    confirmed,
-    crossChain,
-    cryptography,
     customerAlice,
-    customerBob,
-    customerCharlie,
     dashboard,
-    delegatedHarvesting,
-    encryptedMessage,
     enterprise,
     explorer,
-    fingerprint,
     harvest,
     history,
     incoming,
     lock,
-    message,
     metadata,
     mosaic,
     mosaicRestriction,
@@ -325,36 +171,16 @@ export const officialIcons = {
     multisig,
     namespace,
     namespaceTransaction,
-    nem2Cli,
-    nem2Sdk,
     news,
-    nodeReputation,
-    nodes,
-    notMultisig,
     outgoing,
     pending,
-    privateChain,
-    privateKey,
     publicChain,
     publicKey,
-    publicPrivateKey,
-    qr,
-    receive,
     receive2,
-    send,
     send2,
     sent,
     settings,
-    signatureRequired,
-    signCosign,
-    spamThrottle,
-    statistics,
-    transactions,
-    transfer,
-    transferTransactions,
-    unlock,
     wallet,
-    xymCoin,
     voting,
     faucet,
     warning,

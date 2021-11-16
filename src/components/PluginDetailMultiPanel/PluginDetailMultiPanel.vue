@@ -2,7 +2,7 @@
     <div class="plugin-details-container">
         <NavigationLinks
             :direction="'horizontal'"
-            :items="['summary', 'routes', 'database', 'settings', 'permissions']"
+            :items="['Summary', 'Routes', 'Database', 'Settings', 'Permissions']"
             :current-item-index="activeSubpage"
             translation-prefix="tab_plugin_details_"
             @selected="(i) => (activeSubpage = i)"

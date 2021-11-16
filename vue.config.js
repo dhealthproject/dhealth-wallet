@@ -8,7 +8,9 @@ const web = process.env.WEB || false;
 
 console.log(`Building package ${packageVersion} for Web: ${web}`);
 
+const os = require('os')
 const path = require('path')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   // base url
@@ -18,11 +20,13 @@ module.exports = {
   // output dir
   outputDir: './dist',
   assetsDir: 'static',
+
   // eslint-loader check
-  lintOnSave: true,
-  // webpack
-  // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
+  lintOnSave: false,
+
+  // webpack plugins
   chainWebpack: (config) => {
+    // defines network and keys
     config.plugin('define').tap((args) => {
       const env = args[0]['process.env'];
       let keys;
@@ -42,13 +46,28 @@ module.exports = {
       };
       return args;
     });
+
+    // increases memory limit
+    config.plugin('fork-ts-checker').tap(args => {
+      let totalMem = Math.floor(os.totalmem() / 1024 / 1024);
+      let allowUseMem = totalMem > 4096 ? 4096 : 1000;
+
+      args[0].memoryLimit = allowUseMem;
+      return args
+    })
   },
-  // Disables module splitting
+
+  // webpack configuration
   configureWebpack: {
     optimization: {
-      splitChunks: false
-    }
+      // disable module splitting
+      splitChunks: false,
+    },
+    resolve: {
+      symlinks: false,
+    },
   },
+
   // generate map
   productionSourceMap: true,
   // use template in vue
@@ -58,12 +77,12 @@ module.exports = {
     // ExtractTextPlugin
     extract: false,
     //  CSS source maps?
-    sourceMap: false,
+    sourceMap: true,
     // css loader
     loaderOptions: {
       postcss: {
         config: {
-          path: '.postcss.config.js'
+          path: './postcss.config.js'
         }
       }
     },
