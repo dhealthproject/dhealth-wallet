@@ -31,10 +31,14 @@ const registerPlugin = ($app, p) => {
     k => $app.component(k, p.module.components[k])
   );
 
+  console.log("[DEBUG][plugins/plugins.js] electron: ", ('electron' in window) && ('ipcRenderer' in window['electron']));
+
   // Stops here with missing IPC
   if (!('electron' in window) || !('ipcRenderer' in window['electron'])) {
     return ;
   }
+
+  console.log("[DEBUG][plugins/plugins.js] Now sending onPluginLoaded");
 
   // Persists loaded plugin details
   // Component data is ignored here

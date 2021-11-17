@@ -45,7 +45,7 @@ let lastPageReloadTime = 0;
 class AppMenu {
   constructor(name) {
     const fullScreenCmd = process.platform === 'darwin' ? 'Ctrl+Command+F' : 'CmdOrCtrl+F'
-    const develToolsCmd = process.platform === 'darwin' ? 'Alt+Command+I' : 'CmdOrCtrl+D'
+    const develToolsCmd = process.platform === 'darwin' ? 'Ctrl+Command+I' : 'CmdOrCtrl+I'
 
     this.name = name
     this.template = [
@@ -61,12 +61,7 @@ class AppMenu {
             }
           }},
           { label: 'Toggle Developer Tools', accelerator: develToolsCmd, click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.toggleDevTools()
-            }
-            else {
-              AppMainWindow.webContents.toggleDevTools()
-            }
+              AppMainWindow.webContents.openDevTools({ mode: 'detach' })
           }},
         ],
       },
@@ -131,7 +126,8 @@ class AppWindow {
         nodeIntegration: false,
         nodeIntegrationInWorker: false,
         enableRemoteModule: false,
-        preload: path.resolve(__dirname, 'preload.js')
+        preload: path.resolve(__dirname, 'preload.js'),
+        devTools: true,
       },
       resizable: true,
     }
@@ -187,7 +183,7 @@ class AppWindow {
     this.manager = new AppPluginManager(ipcMain, {})
   }
 
-  onMacReady(options) {
+  onElectronReady(options) {
     // re-require electron because "screen" cannot be used before "ready"
     const size = require('electron').screen.getPrimaryDisplay().workAreaSize
     const width = parseInt(size.width)
@@ -199,7 +195,7 @@ class AppWindow {
       options.windowConfig = Object.assign({}, options.windowConfig, {
         width: width - (width * 0.3),
         height: width * 0.45,
-        autoHideMenuBar: false,
+        autoHideMenuBar: process.platform === 'win32',
       })
     }
     // 30%-45px off from screen height for smaller screens
@@ -209,26 +205,40 @@ class AppWindow {
       options.windowConfig = Object.assign({}, options.windowConfig, {
         width: width - 100,
         height: height - 50,
-        autoHideMenuBar: false,
+        autoHideMenuBar: process.platform === 'win32',
       })
     }
 
     AppMainWindow = new BrowserWindow(options.windowConfig)
-    AppMainWindow.loadFile(options.loadUrl)
+
+    // load as file
+    if (process.platform === 'darwin') {
+      AppMainWindow.loadFile(options.loadUrl)
+    }
+    // load as URL
+    else {
+      AppMainWindow.loadURL(options.loadUrl)
+    }
+
+    AppMainWindow.once('ready-to-show', () => {
+      AppMainWindow.show()
+    })
     AppMainWindow.on('closed', function () {
       AppMainWindow = null
     })
-    AppMainWindow.webContents.on('did-finish-load', () => {
-      lastPageReloadTime = new Date().valueOf();
-      this.setupPlugins()
+    AppMainWindow.on('will-resize', (event) => {
+      event.preventDefault()
     })
+    // AppMainWindow.webContents.on('did-finish-load', () => {
+    //   lastPageReloadTime = new Date().valueOf();
+    //   this.setupPlugins()
+    // })
 
     const menu = Menu.buildFromTemplate(options.template)
     Menu.setApplicationMenu(menu)
-
   }
 
-  onUniversalReady(options) {
+  onBrowserReady(options) {
     // re-require electron because "screen" cannot be used before "ready"
     const size = require('electron').screen.getPrimaryDisplay().workAreaSize
     let width = size.width
@@ -264,17 +274,14 @@ class AppWindow {
     AppMainWindow.on('will-resize', (event) => {
       event.preventDefault()
     })
-    AppMainWindow.webContents.on('did-finish-load', () => {
-      lastPageReloadTime = new Date().valueOf();
-      this.setupPlugins()
-    })
   }
 
   create() {
-    if (process.platform === 'darwin') {
-      app.on('ready', () => this.onMacReady(this.options))
+    const electron_os = ['darwin', 'freebsd', 'openbsd', 'linux', 'win32'];
+    if (electron_os.includes(process.platform)) {
+      app.on('ready', () => this.onElectronReady(this.options))
     } else {
-      app.on('ready', () => this.onUniversalReady(this.options))
+      app.on('ready', () => this.onBrowserReady(this.options))
       app.on('ready', function () {
         electronLocalshortcut.register('CommandOrControl+R', function () {
           AppMainWindow.reload()
@@ -291,6 +298,11 @@ class AppWindow {
         if (url.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g)) {
           shell.openExternal(url)
         }
+      })
+
+      webContents.on('did-finish-load', () => {
+        lastPageReloadTime = new Date().valueOf();
+        this.setupPlugins()
       })
     })
   }
@@ -407,6 +419,7 @@ class AppPluginManager {
 
       // try reading package.json using filesystem
       if (fs.existsSync(installPath)) {
+
         // check obligatory file
         if (!fs.readdirSync(installPath).includes('package.json')) {
           console.error(`Could not find a package.json for ${pluginSlug}`)
@@ -424,7 +437,7 @@ class AppPluginManager {
       }
       // or remote using unpkg.com
       else {
-        console.log('[INFO][public/bundler.js] Falling back to unpkg.com plugin manifest..')
+        console.log(`[DEBUG][public/bundler.js] Plugin ${pluginSlug} using unpkg manifest`)
 
         axios
           .get(`https://unpkg.com/${pluginSlug}@${pluginVer}/package.json`)
@@ -444,7 +457,7 @@ class AppPluginManager {
   createInstance(installPath, pkg) {
     return {
       npmModule: pkg.name,
-      installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
+      installPath: `${installPath.replace(/(.*)(plugins([\/\\]).*)/, '.$3$2')}`, // e.g. "./plugins/@dhealthdapps/health-to-earn"
       name: pkg.name,
       version: pkg.version,
       main: pkg.main,

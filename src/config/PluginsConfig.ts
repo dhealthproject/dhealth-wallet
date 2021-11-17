@@ -19,7 +19,13 @@ export interface PluginsConfig {
     registryPlugins: PluginModel[];
 }
 
-const pluginFactory = (npmModule, description, authorName = 'YourDLT by Using Blockchain Ltd', isOfficial = false) => {
+const pluginFactory = (
+    npmModule,
+    description,
+    authorName = 'YourDLT by Using Blockchain Ltd',
+    isOfficial = false,
+    homepage = 'https://github.com/dhealthproject',
+) => {
     return new PluginModel(
         npmModule,
         undefined, // installPath
@@ -29,7 +35,7 @@ const pluginFactory = (npmModule, description, authorName = 'YourDLT by Using Bl
         undefined, // view
         { name: authorName },
         description,
-        undefined, // homepage
+        homepage, // homepage
         undefined, // repository
         undefined, // dependencies
         undefined, // status
@@ -54,11 +60,11 @@ const badgeFactory = (icon, label, color) => {
 
 const defaultPluginsConfig: PluginsConfig = {
     registryPlugins: [
-        pluginFactory('@dhealth/plugin-node-monitor', 'Node manager plugin for dHealth Network. Running a node? Monitor it here! Get alerts inside your Wallet when your node harvested a new block or interact with your node\'s delegated harvesters.', 'dHealth Network', true),
-        pluginFactory('@dhealthdapps/health-to-earn', 'Health to Earn with Strava is a showcase to earn dhealth.dhp with your Strava account.', 'dHealth Network', true),
-        pluginFactory('@yourdlt/plugin-dummy', 'Example Plugin for dHealth Wallets. Fork this repository on Github to start developing your own.', 'YourDLT by Using Blockchain Ltd', false),
-        pluginFactory('@yourdlt/plugin-librarian', 'Librarian lets you organize your on-chain data. This plugin applies natural language to a transactions list. Organize and locate your data with Tags for transactions, accounts, mosaics and namespaces.', 'YourDLT by Using Blockchain Ltd', false),
-        pluginFactory('@yourdlt/plugin-ninjazzz', 'NinjaZZZ enlightens your lazy times. Find and catch the NinjaZZZ that show on idle time. You can then also claim ownership of caught NinjaZZZ by issuing a transaction right on the dHealth Network.', 'YourDLT by Using Blockchain Ltd', false),
+        pluginFactory('@dhealth/plugin-node-monitor', 'Node Monitor helps monitor your dHealth Network Nodes.', 'dHealth Network', true),
+        pluginFactory('@dhealthdapps/health-to-earn', 'dHealth Network - Health to Earn showcase with Strava.', 'dHealth Network', true),
+        pluginFactory('@yourdlt/plugin-dummy', 'Example Plugin for YourDLT / dHealth / Symbol Wallets.', 'YourDLT by Using Blockchain Ltd', false),
+        pluginFactory('@yourdlt/plugin-librarian', 'Librarian helps organize your on-chain data with YourDLT.', 'YourDLT by Using Blockchain Ltd', false),
+        pluginFactory('@yourdlt/plugin-ninjazzz', 'NinjaZZZ enlightens your lazy times. Hint: **Idle time**.', 'YourDLT by Using Blockchain Ltd', false),
     ],
 };
 const resolvedPluginsConfig: PluginsConfig = window['pluginsConfig'] || defaultPluginsConfig;

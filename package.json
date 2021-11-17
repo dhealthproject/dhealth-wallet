@@ -2,7 +2,7 @@
     "name": "dhealth-wallet",
     "description": "dHealth Wallet",
     "homepage": "https://github.com/dhealthproject/dhealth-wallet",
-    "version": "1.2.1-beta",
+    "version": "1.2.0-RC",
     "license": "Apache-2.0",
     "author": {
         "name": "Using Blockchain Ltd",
@@ -183,6 +183,7 @@
         "files": [
             "dist/**/*",
             "package.json",
+            "public/plugins",
             "public/bundler.js",
             "public/preload.js"
         ],
@@ -240,7 +241,7 @@
         "installerIcon": "./dist/assets/icons/favicon.dhealth.ico"
     },
     "linux": {
-        "category": "Utility",
+        "category": "Network",
         "icon": "./dist/assets/icons/Icon.icns"
     },
     "resolutions": {
