@@ -65,35 +65,35 @@ window.PluginInjecter = {
     registerPlugin($app, {
       plugin: '@yourdlt/plugin-dummy',
       module: plugin0.default,
-      path: './node_modules/@yourdlt/plugin-dummy',
+      path: './plugins/@yourdlt/plugin-dummy',
       main: 'dist/YourDLTWalletPluginDummy.umd.min.js'
     });
 
     registerPlugin($app, {
       plugin: '@yourdlt/plugin-librarian',
       module: plugin1.default,
-      path: './node_modules/@yourdlt/plugin-librarian',
+      path: './plugins/@yourdlt/plugin-librarian',
       main: 'dist/YourDLTWalletPluginLibrarian.umd.min.js'
     });
 
     registerPlugin($app, {
       plugin: '@yourdlt/plugin-ninjazzz',
       module: plugin2.default,
-      path: './node_modules/@yourdlt/plugin-ninjazzz',
+      path: './plugins/@yourdlt/plugin-ninjazzz',
       main: 'dist/YourDLTWalletPluginNinjaZZZ.umd.min.js'
     });
 
     registerPlugin($app, {
       plugin: '@dhealth/plugin-node-monitor',
       module: plugin3.default,
-      path: './node_modules/@dhealth/plugin-node-monitor',
+      path: './plugins/@dhealth/plugin-node-monitor',
       main: 'dist/dHealthWalletPluginNodeMonitor.umd.min.js'
     });
 
     registerPlugin($app, {
       plugin: '@dhealthdapps/health-to-earn',
       module: plugin4.default,
-      path: './node_modules/@dhealthdapps/health-to-earn',
+      path: './plugins/@dhealthdapps/health-to-earn',
       main: 'dist/dHealthWalletPluginHealthToEarnStrava.umd.min.js'
     });
 

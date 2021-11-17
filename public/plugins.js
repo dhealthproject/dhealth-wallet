@@ -39,9 +39,9 @@ const pluginManager = require('electron-plugin-manager')
   constructor(ipcMain, options) {
     // Setup filesystem paths
     this.dataPath = options.dataPath
-    this.pluginsPath = path.join(__dirname, '../node_modules')
-    this.pluginsConfPath = path.join(this.dataPath, 'plugins/plugins.json')
-    this.injecterPath = path.join(this.dataPath, 'plugins/plugins.js')
+    this.pluginsPath = path.join(__dirname, `plugins`)
+    this.pluginsConfPath = path.join(__dirname, `plugins${path.sep}plugins.json`)
+    this.injecterPath = path.join(__dirname, `plugins${path.sep}plugins.js`)
     this.singlePlugin = 'plugin' in options ? options.plugin : undefined;
 
     // Evaluate filesystem and setup
@@ -93,7 +93,7 @@ const pluginManager = require('electron-plugin-manager')
           // Merge loaded plugin and package information
           this.plugins.push({
             npmModule: pkg.name,
-            installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
+            installPath: `${installPath.replace(/(.*)(plugins([\/\\]).*)/, '.$3$2')}`, // e.g. "./plugins/@dhealthdapps/health-to-earn"
             name: pluginSlug,
             version: pkg.version,
             main: pkg.main,
@@ -231,6 +231,6 @@ app.setPath('userData', path.join(app.getPath('home'), '.dhealth-wallet'))
 
 // Prepare plugins manager
 new AppPluginInstaller(ipcMain, {
-  dataPath: path.join(__dirname, '../'),
+  dataPath: app.getPath('userData'),
   plugin: which,
 })

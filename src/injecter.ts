@@ -106,4 +106,4 @@ if ('electron' in window && 'ipcRenderer' in window['electron']) {
 }
 
 // adds window.PluginInjecter to inject plugins on page load
-import '../plugins/plugins';
+import '../public/plugins/plugins';

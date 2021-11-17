@@ -44,8 +44,8 @@ let lastPageReloadTime = 0;
  */
 class AppMenu {
   constructor(name) {
-    const fullScreenCmd = process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11'
-    const develToolsCmd = process.platform === 'darwin' ? 'Alt+Command+I' : 'F12'
+    const fullScreenCmd = process.platform === 'darwin' ? 'Ctrl+Command+F' : 'CmdOrCtrl+F'
+    const develToolsCmd = process.platform === 'darwin' ? 'Alt+Command+I' : 'CmdOrCtrl+D'
 
     this.name = name
     this.template = [
@@ -63,6 +63,9 @@ class AppMenu {
           { label: 'Toggle Developer Tools', accelerator: develToolsCmd, click: (item, focusedWindow) => {
             if (focusedWindow) {
               focusedWindow.toggleDevTools()
+            }
+            else {
+              AppMainWindow.webContents.toggleDevTools()
             }
           }},
         ],
@@ -302,17 +305,9 @@ class AppWindow {
 class AppPluginManager {
   constructor(ipcMain, options) {
     // Setup filesystem paths
-    this.dataPath = path.join(__dirname, '../')
-    this.pluginsPath = path.join(__dirname, '../node_modules')
-    this.pluginsConfPath = path.join(this.dataPath, 'plugins/plugins.json')
-    // this.buildJobStatusPolling = undefined
-    // this.buildArtifact = undefined
-    // this.buildPlatform = process.platform === 'darwin' 
-    //   ? 'mac' : (
-    //     process.platform === 'win32' 
-    //     ? 'win'
-    //     : 'lin'
-    //   )
+    this.dataPath = app.getPath('userData')
+    this.pluginsPath = path.join(__dirname, 'plugins')
+    this.pluginsConfPath = path.join(__dirname, `plugins${path.sep}plugins.json`)
 
     // no-limit in maximum event listeners
     ipcMain.setMaxListeners(0)
@@ -429,6 +424,8 @@ class AppPluginManager {
       }
       // or remote using unpkg.com
       else {
+        console.log('[INFO][public/bundler.js] Falling back to unpkg.com plugin manifest..')
+
         axios
           .get(`https://unpkg.com/${pluginSlug}@${pluginVer}/package.json`)
           .then(response => {
