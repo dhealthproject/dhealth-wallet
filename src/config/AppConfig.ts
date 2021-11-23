@@ -54,6 +54,8 @@ const defaultAppConfig: AppConfig = {
         { value: 'en-US', label: 'English' },
         { value: 'zh-CN', label: '中文' },
         { value: 'ja-JP', label: '日本語' },
+        { value: 'fr-FR', label: 'Français' },
+        { value: 'de-DE', label: 'Deutsch' }
     ],
     marketServerUrl: 'http://app.nemcn.io',
     articlesFeedUrl: 'https://dhealth.network/feed',
