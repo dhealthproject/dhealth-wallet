@@ -1,5 +1,5 @@
 
-<p align="center"><img src="https://dhealth.network/wp-content/uploads/2021/01/dHealth-Network-Logo-color-change.png"></p>
+<p align="center"><img src="https://dhealth.network/wp-content/uploads/2021/01/dHealth-Network-Logo-color-change.png" width="400px"></p>
 
 # dHealth Wallet
 

@@ -178,7 +178,8 @@ export class PluginService {
     public getPlugins(): PluginModel[] {
         try {
             const allPlugins = this.pluginModelStorage.get() || [];
-            return _.uniqBy(allPlugins, 'npmModule');
+            const result = _.uniqBy(allPlugins, 'npmModule');
+            return result;
         } catch (e) {
             return [];
         }

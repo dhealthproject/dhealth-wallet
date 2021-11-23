@@ -24,13 +24,11 @@
 /// region global scoped variables
 const path = require('path')
 const fs = require('fs')
-const { sha3_512 } = require('js-sha3')
 const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron')
 const name = app.getName()
 const electronLocalshortcut = require('electron-localshortcut')
 const contextMenu = require('electron-context-menu')
 contextMenu({})
-const pluginManager = require('electron-plugin-manager')
 const axios = require('axios').default
 
 let loadedPluginsCache = [],
@@ -46,8 +44,8 @@ let lastPageReloadTime = 0;
  */
 class AppMenu {
   constructor(name) {
-    const fullScreenCmd = process.platform === 'darwin' ? 'Ctrl+Command+F' : 'F11'
-    const develToolsCmd = process.platform === 'darwin' ? 'Alt+Command+I' : 'F12'
+    const fullScreenCmd = process.platform === 'darwin' ? 'Ctrl+Command+F' : 'CmdOrCtrl+F'
+    const develToolsCmd = process.platform === 'darwin' ? 'Ctrl+Command+I' : 'CmdOrCtrl+I'
 
     this.name = name
     this.template = [
@@ -63,9 +61,7 @@ class AppMenu {
             }
           }},
           { label: 'Toggle Developer Tools', accelerator: develToolsCmd, click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.toggleDevTools()
-            }
+              AppMainWindow.webContents.openDevTools({ mode: 'detach' })
           }},
         ],
       },
@@ -130,7 +126,8 @@ class AppWindow {
         nodeIntegration: false,
         nodeIntegrationInWorker: false,
         enableRemoteModule: false,
-        preload: path.resolve(__dirname, 'preload.js')
+        preload: path.resolve(__dirname, 'preload.js'),
+        devTools: true,
       },
       resizable: true,
     }
@@ -186,7 +183,7 @@ class AppWindow {
     this.manager = new AppPluginManager(ipcMain, {})
   }
 
-  onMacReady(options) {
+  onElectronReady(options) {
     // re-require electron because "screen" cannot be used before "ready"
     const size = require('electron').screen.getPrimaryDisplay().workAreaSize
     const width = parseInt(size.width)
@@ -198,7 +195,7 @@ class AppWindow {
       options.windowConfig = Object.assign({}, options.windowConfig, {
         width: width - (width * 0.3),
         height: width * 0.45,
-        autoHideMenuBar: false,
+        autoHideMenuBar: process.platform === 'win32',
       })
     }
     // 30%-45px off from screen height for smaller screens
@@ -208,26 +205,40 @@ class AppWindow {
       options.windowConfig = Object.assign({}, options.windowConfig, {
         width: width - 100,
         height: height - 50,
-        autoHideMenuBar: false,
+        autoHideMenuBar: process.platform === 'win32',
       })
     }
 
     AppMainWindow = new BrowserWindow(options.windowConfig)
-    AppMainWindow.loadFile(options.loadUrl)
+
+    // load as file
+    if (process.platform === 'darwin') {
+      AppMainWindow.loadFile(options.loadUrl)
+    }
+    // load as URL
+    else {
+      AppMainWindow.loadURL(options.loadUrl)
+    }
+
+    AppMainWindow.once('ready-to-show', () => {
+      AppMainWindow.show()
+    })
     AppMainWindow.on('closed', function () {
       AppMainWindow = null
     })
-    AppMainWindow.webContents.on('did-finish-load', () => {
-      lastPageReloadTime = new Date().valueOf();
-      this.setupPlugins()
+    AppMainWindow.on('will-resize', (event) => {
+      event.preventDefault()
     })
+    // AppMainWindow.webContents.on('did-finish-load', () => {
+    //   lastPageReloadTime = new Date().valueOf();
+    //   this.setupPlugins()
+    // })
 
     const menu = Menu.buildFromTemplate(options.template)
     Menu.setApplicationMenu(menu)
-
   }
 
-  onUniversalReady(options) {
+  onBrowserReady(options) {
     // re-require electron because "screen" cannot be used before "ready"
     const size = require('electron').screen.getPrimaryDisplay().workAreaSize
     let width = size.width
@@ -263,17 +274,14 @@ class AppWindow {
     AppMainWindow.on('will-resize', (event) => {
       event.preventDefault()
     })
-    AppMainWindow.webContents.on('did-finish-load', () => {
-      lastPageReloadTime = new Date().valueOf();
-      this.setupPlugins()
-    })
   }
 
   create() {
-    if (process.platform === 'darwin') {
-      app.on('ready', () => this.onMacReady(this.options))
+    const electron_os = ['darwin', 'freebsd', 'openbsd', 'linux', 'win32'];
+    if (electron_os.includes(process.platform)) {
+      app.on('ready', () => this.onElectronReady(this.options))
     } else {
-      app.on('ready', () => this.onUniversalReady(this.options))
+      app.on('ready', () => this.onBrowserReady(this.options))
       app.on('ready', function () {
         electronLocalshortcut.register('CommandOrControl+R', function () {
           AppMainWindow.reload()
@@ -291,6 +299,11 @@ class AppWindow {
           shell.openExternal(url)
         }
       })
+
+      webContents.on('did-finish-load', () => {
+        lastPageReloadTime = new Date().valueOf();
+        this.setupPlugins()
+      })
     })
   }
 }
@@ -304,17 +317,9 @@ class AppWindow {
 class AppPluginManager {
   constructor(ipcMain, options) {
     // Setup filesystem paths
-    this.dataPath = path.join(__dirname, '../')
-    this.pluginsPath = path.join(__dirname, '../node_modules')
-    this.pluginsConfPath = path.join(this.dataPath, 'plugins/plugins.json')
-    // this.buildJobStatusPolling = undefined
-    // this.buildArtifact = undefined
-    // this.buildPlatform = process.platform === 'darwin' 
-    //   ? 'mac' : (
-    //     process.platform === 'win32' 
-    //     ? 'win'
-    //     : 'lin'
-    //   )
+    this.dataPath = app.getPath('userData')
+    this.pluginsPath = path.join(__dirname, 'plugins')
+    this.pluginsConfPath = path.join(__dirname, `plugins${path.sep}plugins.json`)
 
     // no-limit in maximum event listeners
     ipcMain.setMaxListeners(0)
@@ -409,65 +414,60 @@ class AppPluginManager {
   async loadPlugin(pluginSlug, pluginVer) {
     // read package manifest
     return new Promise((resolve, reject) => {
-      axios
-        .get(`https://unpkg.com/${pluginSlug}@${pluginVer}/package.json`)
-        .then(response => {
-          // parse package manifest
-          const pkg = response.data;
+      // local install path
+      const installPath = path.join(this.pluginsPath, pluginSlug)
 
-          // local install path
-          const installPath = path.join(this.pluginsPath, pluginSlug)
+      // try reading package.json using filesystem
+      if (fs.existsSync(installPath)) {
 
-          // Merge loaded plugin and package information
-          const instance = {
-            npmModule: pkg.name,
-            installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
-            name: pkg.name,
-            version: pkg.version,
-            main: pkg.main,
-            // data from `package.json`
-            author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : ('name' in pkg.author ? pkg.author : { name: 'Unknown' }),
-            description: pkg && 'description' in pkg ? pkg.description : 'N/A',
-            homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
-            repository: pkg && 'repository' in pkg ? pkg.repository : { url: 'N/A' },
-            dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
-          }
+        // check obligatory file
+        if (!fs.readdirSync(installPath).includes('package.json')) {
+          console.error(`Could not find a package.json for ${pluginSlug}`)
+          throw new Error(`Could not find a package.json for ${pluginSlug}`)
+        }
 
-          this.plugins.push(instance)
-          return resolve(instance)
-        });
+        // reads package from filesystem
+        const json = fs.readFileSync(path.join(installPath, 'package.json'))
+        const pkg  = JSON.parse(json)
+
+        // merges loaded plugin and package information
+        const instance = this.createInstance(installPath, pkg)
+        this.plugins.push(instance)
+        return resolve(instance)
+      }
+      // or remote using unpkg.com
+      else {
+        console.log(`[DEBUG][public/bundler.js] Plugin ${pluginSlug} using unpkg manifest`)
+
+        axios
+          .get(`https://unpkg.com/${pluginSlug}@${pluginVer}/package.json`)
+          .then(response => {
+            // parse package manifest
+            const pkg = response.data;
+
+            // merges loaded plugin and package information
+            const instance = this.createInstance(installPath, pkg)
+            this.plugins.push(instance)
+            return resolve(instance)
+          });
+      }
     });
-    
+  }
 
-    // const installPath = path.join(this.pluginsPath, plugin)
-
-    // // Verify that the plugin folder is compatible
-    // if (! fs.readdirSync(installPath).includes('package.json')) {
-    //   console.error(`Could not find a package.json for ${plugin}`)
-    //   throw new Error(`Could not find a package.json for ${plugin}`)
-    // }1
-
-    // // Read package information
-    // const json = fs.readFileSync(path.join(installPath, 'package.json'))
-    // const pkg  = JSON.parse(json)
-
-    // // Merge loaded plugin and package information
-    // const instance = {
-    //   npmModule: pkg.name,
-    //   installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
-    //   name: plugin,
-    //   version: pkg.version,
-    //   main: pkg.main,
-    //   // data from `package.json`
-    //   author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : pkg.author,
-    //   description: pkg && 'description' in pkg ? pkg.description : '',
-    //   homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
-    //   repository: pkg && 'repository' in pkg ? pkg.repository : '',
-    //   dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
-    // }
-
-    // this.plugins.push(instance)
-    // return instance
+  createInstance(installPath, pkg) {
+    return {
+      npmModule: pkg.name,
+      installPath: `${installPath.replace(/(.*)(plugins([\/\\]).*)/, '.$3$2')}`, // e.g. "./plugins/@dhealthdapps/health-to-earn"
+      name: pkg.name,
+      version: pkg.version,
+      main: pkg.main,
+      // data from `package.json`
+      author: pkg && 'author' in pkg && typeof pkg.author === 'string' ? {name: pkg.author} : ('name' in pkg.author ? pkg.author : { name: 'Unknown' }),
+      description: pkg && 'description' in pkg ? pkg.description : 'N/A',
+      homepage: pkg && 'homepage' in pkg ? pkg.homepage : '',
+      repository: pkg && 'repository' in pkg ? pkg.repository : { url: 'N/A' },
+      dependencies: pkg && 'dependencies' in pkg ? pkg.dependencies : {},
+    }
   }
 }
 

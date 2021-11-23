@@ -1,12 +1,15 @@
 <template>
     <div class="plugin-status-wrapper">
-        <div class="plugin-status-inner-container">
+        <div :class="{
+            'plugin-status-inner-container': true,
+            'justify-center': !pluginUsageDescriptor.action,
+        } ">
             <div class="status-container">
                 <div class="title">
-                    <span class="title_txt">{{ $t('plugins_panel_action_enable') }}</span>
+                    <span class="title_txt">{{ pluginActionDescriptor.label }}</span>
                 </div>
-                <div class="level">
-                    <div class="level-left">
+                <div class="level align-center">
+                    <div class="level-center">
                         <div class="action-wrapper">
                             <IconButton
                                 v-if="pluginActionDescriptor.action"
@@ -24,18 +27,9 @@
                 </div>
             </div>
 
-            <div class="package-container">
-                <div class="title">
-                    <span class="title_txt">{{ $t('plugins_panel_package') }}</span>
-                </div>
-                <span class="txt_info">
-                    <span>
-                        {{ plugin.npmModule }}
-                    </span>
-                </span>
-            </div>
-
-            <div class="version-container">
+            <div
+                v-if="pluginUsageDescriptor.action"
+                class="version-container">
                 <div class="title">
                     <span class="title_txt">{{ $t('plugins_panel_usenow') }}</span>
                 </div>

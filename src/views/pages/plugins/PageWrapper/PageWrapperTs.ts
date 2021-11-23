@@ -159,7 +159,9 @@ export class PageWrapperTs extends Vue {
             return null;
         }
 
-        const components = this.selectedPlugin.components;
+        const components = 'length' in this.selectedPlugin.components
+            ? this.selectedPlugin.components
+            : Object.keys(this.selectedPlugin.components);
         if (!components.length) {
             return null;
         }

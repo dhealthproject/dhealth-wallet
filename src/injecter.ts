@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
+// internal dependencies
 import { $pluginBus } from './events';
 
 // enables IPC communicator between main and renderer processes
@@ -105,4 +106,4 @@ if ('electron' in window && 'ipcRenderer' in window['electron']) {
 }
 
 // adds window.PluginInjecter to inject plugins on page load
-import '../plugins/plugins';
+import '../public/plugins/plugins';

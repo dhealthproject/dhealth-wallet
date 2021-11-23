@@ -39,9 +39,9 @@ const pluginManager = require('electron-plugin-manager')
   constructor(ipcMain, options) {
     // Setup filesystem paths
     this.dataPath = options.dataPath
-    this.pluginsPath = path.join(__dirname, '../node_modules')
-    this.pluginsConfPath = path.join(this.dataPath, 'plugins/plugins.json')
-    this.injecterPath = path.join(this.dataPath, 'plugins/plugins.js')
+    this.pluginsPath = path.join(__dirname, `plugins`)
+    this.pluginsConfPath = path.join(__dirname, `plugins${path.sep}plugins.json`)
+    this.injecterPath = path.join(__dirname, `plugins${path.sep}plugins.js`)
     this.singlePlugin = 'plugin' in options ? options.plugin : undefined;
 
     // Evaluate filesystem and setup
@@ -93,7 +93,7 @@ const pluginManager = require('electron-plugin-manager')
           // Merge loaded plugin and package information
           this.plugins.push({
             npmModule: pkg.name,
-            installPath: `${installPath.replace(/(.*)(node_modules([\/\\]).*)/, '.$3$2')}`,
+            installPath: `${installPath.replace(/(.*)(plugins([\/\\]).*)/, '.$3$2')}`, // e.g. "./plugins/@dhealthdapps/health-to-earn"
             name: pluginSlug,
             version: pkg.version,
             main: pkg.main,
@@ -135,63 +135,71 @@ const pluginManager = require('electron-plugin-manager')
 const plugin${i} = require('${p.npmModule}');`);
 
     // Prepares Vue components available in plugins
-    injecterSource += `
-window.PluginPackages = [];
-`;
+    injecterSource += `\n
+/**
+ * This method registers components and settings of
+ * installed plugins and updates storage to contain
+ * the correct reference to modules.
+ *
+ * @param   {Vue}   $app  The Vue instance.
+ * @param   {any}   p     The imported NPM module.
+ * @returns {void}
+ */
+const registerPlugin = ($app, p) => {
+  console.log("[DEBUG][plugins/plugins.js] components are: ", p.module.components);
 
-    // Checks for Vue components registration function
-    this.plugins.forEach(
-      (p, i) => injecterSource += `
-if ('registerComponents' in plugin${i}) {
-  console.log('[DEBUG][plugins/plugins.js] plugin is: ', plugin${i});
+  // Registers components
+  Object.keys(p.module.components).forEach(
+    k => $app.component(k, p.module.components[k])
+  );
 
-  window.PluginPackages.push({
-    plugin: '${p.npmModule}',
-    module: plugin${i}.default,
-    path: '${p.installPath}',
-    main: '${p.main}'
-  });
-}
-`);
+  // Stops here with missing IPC
+  if (!('electron' in window) || !('ipcRenderer' in window['electron'])) {
+    return ;
+  }
+
+  // Persists loaded plugin details
+  // Component data is ignored here
+  const entryPoint = p.path + '/' + p.main;
+  const loadedPlugin = p.module;
+  window.electron.ipcRenderer.send('onPluginLoaded', JSON.stringify({
+    npmModule: p.plugin,
+    entryPoint,
+    installPath: p.path,
+    view: loadedPlugin && 'view' in loadedPlugin ? loadedPlugin.view : '',
+    routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
+    components: loadedPlugin && 'components' in loadedPlugin ? Object.keys(loadedPlugin.components) : [],
+    storages: loadedPlugin && 'storages' in loadedPlugin ? loadedPlugin.storages : [],
+    settings: loadedPlugin && 'settings' in loadedPlugin ? loadedPlugin.settings : [],
+    permissions: loadedPlugin && 'permissions' in loadedPlugin ? loadedPlugin.permissions : [],
+  }));
+};`;
 
     // Creates plugin injecter function to be used in renderer
-    injecterSource += `
+    injecterSource += `\n
+/**
+ * This object serves as an installable Vue plugin.
+ *
+ * @example
+ * Vue.use(window['PluginInjecter']);
+ */
 window.PluginInjecter = {
-  install(Vue, opts) {
-    window.PluginPackages.forEach(
-      p => {
-        console.log("[DEBUG][plugins/plugins.js] components are: ", p.module.components);
+  install($app, opts) {\n`;
 
-        // Registers components
-        Object.keys(p.module.components).forEach(
-          k => Vue.component(k, p.module.components[k])
-        );
+  this.plugins.forEach(
+    (p, i) => injecterSource += `
+    registerPlugin($app, {
+      plugin: '${p.npmModule}',
+      module: plugin${i}.default,
+      path: '${p.installPath}',
+      main: '${p.main}'
+    });
+`);
 
-        // Stops here with missing IPC
-        if (!('electron' in window) || !('ipcRenderer' in window['electron'])) {
-          return ;
-        }
-
-        // Persists loaded plugin details
-        // Component data is ignored here
-        const entryPoint = p.path + '/' + p.main;
-        const loadedPlugin = p.module;
-        window.electron.ipcRenderer.send('onPluginLoaded', JSON.stringify({
-          npmModule: p.plugin,
-          entryPoint,
-          installPath: p.path,
-          view: loadedPlugin && 'view' in loadedPlugin ? loadedPlugin.view : '',
-          routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
-          components: loadedPlugin && 'components' in loadedPlugin ? Object.keys(loadedPlugin.components) : [],
-          storages: loadedPlugin && 'storages' in loadedPlugin ? loadedPlugin.storages : [],
-          settings: loadedPlugin && 'settings' in loadedPlugin ? loadedPlugin.settings : [],
-          permissions: loadedPlugin && 'permissions' in loadedPlugin ? loadedPlugin.permissions : [],
-        }));
-      }
-    )
+    // Closes install() and PluginInjecter
+    injecterSource += `
   }
-}
-`;
+};`;
 
     console.log(`[INFO][public/plugins.js] Now creating injecter at ${this.injecterPath}`);
 
@@ -223,6 +231,6 @@ app.setPath('userData', path.join(app.getPath('home'), '.dhealth-wallet'))
 
 // Prepare plugins manager
 new AppPluginInstaller(ipcMain, {
-  dataPath: path.join(__dirname, '../'),
+  dataPath: app.getPath('userData'),
   plugin: which,
 })

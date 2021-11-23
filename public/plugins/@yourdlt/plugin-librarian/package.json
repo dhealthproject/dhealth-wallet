@@ -1,0 +1,96 @@
+{
+  "_from": "@yourdlt/plugin-librarian@latest",
+  "_id": "@yourdlt/plugin-librarian@0.5.5",
+  "_inBundle": false,
+  "_integrity": "sha512-l0LqRBHyMNu2g8kvheepB7Gs8PFQ/0RfXCey432g4ntFkOawMLtmeaW1nlvxR805LOx54dCZtbZl/n9rhZNRkA==",
+  "_location": "/@yourdlt/plugin-librarian",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@yourdlt/plugin-librarian@latest",
+    "name": "@yourdlt/plugin-librarian",
+    "escapedName": "@yourdlt%2fplugin-librarian",
+    "scope": "@yourdlt",
+    "rawSpec": "latest",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@yourdlt/plugin-librarian/-/plugin-librarian-0.5.5.tgz",
+  "_shasum": "107a62d945db4cbf7c79bd078de566763963ccb2",
+  "_spec": "@yourdlt/plugin-librarian@latest",
+  "_where": "/Users/greg/Sources/using-blockchain/dhealth-wallet",
+  "author": {
+    "name": "Using Blockchain Ltd",
+    "email": "info@ubc.digital",
+    "url": "https://using-blockchain.org"
+  },
+  "browser": {
+    "./sfc": "dist/views/Library/Library.vue"
+  },
+  "bugs": {
+    "url": "https://github.com/UsingBlockchain/yourdlt-plugin-librarian/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@dhealth/sdk": "^1.0.3-alpha-202110081200",
+    "@dhealth/wallet-api-bridge": "^1.3.0",
+    "@dhealth/wallet-components": "^1.3.0",
+    "@ubcdigital/symbol-taxonomy": "^1.0.3",
+    "vee-validate": "^3.2.3"
+  },
+  "deprecated": false,
+  "description": "Librarian helps organize your on-chain data with YourDLT.",
+  "devDependencies": {
+    "@babel/compat-data": "^7.14.0",
+    "@babel/core": "^7.14.2",
+    "@vue/cli-plugin-babel": "^4.5.13",
+    "@vue/cli-plugin-typescript": "^4.5.13",
+    "@vue/cli-plugin-unit-jest": "^4.5.13",
+    "@vue/cli-service": "^4.5.13",
+    "@vue/eslint-config-typescript": "^5.0.1",
+    "@vue/test-utils": "^1.2.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-runtime": "^6.22.0",
+    "babel-plugin-transform-vue-jsx": "^3.5.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "cpy-cli": "^3.1.1",
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
+    "rimraf": "^3.0.2",
+    "semver": "^5.3.0",
+    "typescript": "^3.9.9",
+    "vue": "^2.6.10",
+    "vue-property-decorator": "^8.1.0",
+    "vue-template-compiler": "^2.5.2"
+  },
+  "files": [
+    "dist/*",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "homepage": "https://github.com/UsingBlockchain/yourdlt-plugin-librarian#readme",
+  "license": "LGPL-3.0-only",
+  "main": "dist/YourDLTWalletPluginLibrarian.umd.min.js",
+  "name": "@yourdlt/plugin-librarian",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UsingBlockchain/yourdlt-plugin-librarian.git"
+  },
+  "scripts": {
+    "build": "npm run build:lib && npm run build:ts && npm run copy:vue",
+    "build:lib": "vue-cli-service build --target lib --name YourDLTWalletPluginLibrarian src/Librarian.ts --mode production --formats umd-min",
+    "build:ts": "tsc --emitDeclarationOnly",
+    "copy:vue": "cpy '**/*.vue' '../dist/' --cwd=src --parents",
+    "serve": "vue-cli-service serve"
+  },
+  "types": "dist/types/Librarian.d.ts",
+  "version": "0.5.5"
+}
