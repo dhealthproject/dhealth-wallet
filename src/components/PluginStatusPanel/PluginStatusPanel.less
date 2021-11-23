@@ -31,8 +31,9 @@
         padding-left: 0.2rem;
         padding-right: 0.2rem;
         display: grid;
-        grid-template-columns: repeat(3, 33%);
+        grid-auto-flow: column;
         grid-template-rows: 100%;
+        justify-content: space-between;
 
         padding-top: 8px;
         padding-bottom: 8px;
@@ -104,8 +105,17 @@
             background-color: #ffbf00;
         }
 
+        .level.align-center {
+            text-align: center;
+            justify-content: center;
+        }
+
         .level-item {
             margin-left: 15px;
+        }
+
+        .level-center {
+            justify-content: center;
         }
 
         .version-container {
@@ -113,6 +123,10 @@
                 margin-left: 50px;
             }
         }
+    }
+
+    .plugin-status-inner-container.justify-center {
+        justify-content: center;
     }
 }
 

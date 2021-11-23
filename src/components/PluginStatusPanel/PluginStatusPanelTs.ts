@@ -46,6 +46,7 @@ export class PluginStatusPanelTs extends Vue {
                     event: 'on-clicked-enable',
                     action: true,
                     cls: 'success-button',
+                    label: this.$t('plugin_action_enable_label'),
                     text: this.$t('plugin_action_enable_text'),
                     icon: 'md-checkmark',
                 };
@@ -54,6 +55,7 @@ export class PluginStatusPanelTs extends Vue {
                     event: 'on-clicked-disable',
                     action: true,
                     cls: 'danger-button',
+                    label: this.$t('plugin_action_disable_label'),
                     text: this.$t('plugin_action_disable_text'),
                     icon: 'md-trash',
                 };
@@ -62,6 +64,7 @@ export class PluginStatusPanelTs extends Vue {
                     event: 'on-clicked-enable',
                     action: true,
                     cls: 'success-button',
+                    label: this.$t('plugin_action_enable_label'),
                     text: this.$t('plugin_action_enable_text'),
                     icon: 'md-checkmark',
                 };
