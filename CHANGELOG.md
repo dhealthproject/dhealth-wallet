@@ -11,6 +11,11 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 - deps: Installs new plugin @dhealthdapps/health-to-earn
 - fix: Fixes plugin manager navigation controls
 - system: Removes many unused resources (images)
+- plugins: Adds latest plugin injecter (plugins:install)
+- plugins: Adds plugin support for Windows, Linux & MacOS
+- i18n: Adds french translations from team
+- i18n: Adds german translations from team
+
 
 #### Changed
 
@@ -18,6 +23,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 - deps: Updates @dhealth/wallet-api-bridge
 - deps: Updates @dhealth/wallet-components
 - deps: Uses @dhealth/sdk
+- deps: Plugins are now built with --formats umd-min
+- i18n: Updates language files for chinese and japanese
 
 ## [1.1.4][1.1.4] - 08-Oct-2021
 
