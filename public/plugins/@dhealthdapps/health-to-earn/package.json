@@ -1,8 +1,8 @@
 {
   "_from": "@dhealthdapps/health-to-earn@latest",
-  "_id": "@dhealthdapps/health-to-earn@1.0.4",
+  "_id": "@dhealthdapps/health-to-earn@1.0.5",
   "_inBundle": false,
-  "_integrity": "sha512-utgQZv5/Kes+HJPChstOzkNgUzx4o/pndU2BC811uQtWtA0oXNLe/aXeO77QLB4vFrfJGj+OoFq/eZUCuR5P3g==",
+  "_integrity": "sha512-oRjvhBkzLMtvdhn/xZIz3uWmTG18UcjXC1U11HTre0InKnXH3kE2Obva09BuP2gxGqSlgMa/DzICouenfFiRdg==",
   "_location": "/@dhealthdapps/health-to-earn",
   "_phantomChildren": {
     "follow-redirects": "1.14.5"
@@ -21,8 +21,8 @@
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/@dhealthdapps/health-to-earn/-/health-to-earn-1.0.4.tgz",
-  "_shasum": "0fc65a8a176fc57174d5009f2d7babbce40f93a6",
+  "_resolved": "https://registry.npmjs.org/@dhealthdapps/health-to-earn/-/health-to-earn-1.0.5.tgz",
+  "_shasum": "e7770d5259be5309c89fb8d5db8350343d0e2e8d",
   "_spec": "@dhealthdapps/health-to-earn@latest",
   "_where": "/Users/greg/Sources/using-blockchain/dhealth-wallet",
   "author": {
@@ -46,7 +46,7 @@
     "moment": "^2.29.1"
   },
   "deprecated": false,
-  "description": "dHealth Network - Health to Earn showcase with Strava",
+  "description": "dHealth Network - Health to Earn showcase powered by Strava",
   "devDependencies": {
     "@babel/compat-data": "^7.14.0",
     "@babel/core": "^7.14.2",
@@ -95,5 +95,5 @@
     "serve": "npm run serve --prefix firebase-app/functions"
   },
   "types": "dist/types/Strava.d.ts",
-  "version": "1.0.4"
+  "version": "1.0.5"
 }
