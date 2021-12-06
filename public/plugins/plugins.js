@@ -13,6 +13,7 @@ const plugin1 = require('@yourdlt/plugin-librarian');
 const plugin2 = require('@yourdlt/plugin-ninjazzz');
 const plugin3 = require('@dhealth/plugin-node-monitor');
 const plugin4 = require('@dhealthdapps/health-to-earn');
+const plugin5 = require('@dhealthdapps/bridge');
 
 /**
  * This method registers components and settings of
@@ -100,6 +101,14 @@ window.PluginInjecter = {
       path: './plugins/@dhealthdapps/health-to-earn',
       main: 'dist/dHealthWalletPluginHealthToEarnStrava.umd.min.js'
     });
+
+    registerPlugin($app, {
+      plugin: '@dhealthdapps/bridge',
+      module: plugin5.default,
+      path: './plugins/@dhealthdapps/bridge',
+      main: 'dist/dHealthWalletPluginBridge.umd.min.js'
+    });
+
 
   }
 };
