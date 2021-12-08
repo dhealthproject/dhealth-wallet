@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.2.2][1.2.2] - 08-Dec-2021
+
+#### Added
+
+- plugins: Adds compatibility with aggregate transactions in health-to-earn.
+- plugins: Adds referral code implementation for health-to-earn.
+
+#### Changed
+
+- deps: Updates @dhealthdapps/health-to-earn to version `v1.1.0`.
+
 ## [1.2.1][1.2.1] - 24-Nov-2021
 
 #### Added
@@ -57,6 +68,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 - Some missing re-branding items for dHealth logos.
 
+[1.2.2]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.1.4...v1.2.1
 [1.1.4]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.0.0...v1.1.4
 [1.0.0]: https://github.com/dhealthproject/dhealth-wallet/releases/tag/v1.0.0
