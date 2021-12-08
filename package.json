@@ -2,7 +2,7 @@
     "name": "dhealth-wallet",
     "description": "dHealth Wallet",
     "homepage": "https://github.com/dhealthproject/dhealth-wallet",
-    "version": "1.2.1",
+    "version": "1.2.2-alpha202112082101",
     "license": "Apache-2.0",
     "author": {
         "name": "Using Blockchain Ltd",
