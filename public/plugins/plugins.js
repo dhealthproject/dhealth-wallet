@@ -32,13 +32,14 @@ const registerPlugin = ($app, p) => {
     k => $app.component(k, p.module.components[k])
   );
 
-  console.log("[DEBUG][plugins/plugins.js] electron: ", ('electron' in window) && ('ipcRenderer' in window['electron']));
+  // console.log("[DEBUG][plugins/plugins.js] electron: ", ('electron' in window) && ('ipcRenderer' in window['electron']));
 
   // Stops here with missing IPC
   if (!('electron' in window) || !('ipcRenderer' in window['electron'])) {
     return ;
   }
 
+  // console.log("[DEBUG][plugins/plugins.js] loadedPlugin is: ", p.module);
   console.log("[DEBUG][plugins/plugins.js] Now sending onPluginLoaded");
 
   // Persists loaded plugin details
@@ -49,6 +50,8 @@ const registerPlugin = ($app, p) => {
     npmModule: p.plugin,
     entryPoint,
     installPath: p.path,
+    name: loadedPlugin && 'name' in loadedPlugin ? loadedPlugin.name : p.plugin,
+    friendlyName: loadedPlugin && 'friendlyName' in loadedPlugin ? loadedPlugin.friendlyName : p.plugin,
     view: loadedPlugin && 'view' in loadedPlugin ? loadedPlugin.view : '',
     routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
     components: loadedPlugin && 'components' in loadedPlugin ? Object.keys(loadedPlugin.components) : [],

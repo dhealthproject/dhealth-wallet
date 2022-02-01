@@ -29,6 +29,7 @@ export class PluginModel {
         public readonly npmModule: string,
         public readonly installPath: string = '',
         public readonly name: string = '',
+        public readonly friendlyName: string = '',
         public readonly version: string = '',
         public readonly main: string = '',
         public readonly view: string = '',

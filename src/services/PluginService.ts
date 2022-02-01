@@ -271,7 +271,8 @@ export class PluginService {
                     fields,
                 );
             });
-            //console.log('Performing update in DB with: ', updated);
+            console.log('Performing update in DB with: ', updated);
+            console.log('Performing update in DB with fields: ', fields);
         } catch (e) {
             // create new plugin entry
             let p = new PluginModel(npmModule);

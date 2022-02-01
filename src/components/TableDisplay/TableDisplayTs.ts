@@ -343,11 +343,20 @@ export class TableDisplayTs extends Vue {
      *
      */
     get showExpired(): boolean {
+        if (this.assetType === 'plugin') {
+            return this.filteredBy.fieldName === 'uninstalled' && this.filteredBy.filteringType === 'show';
+        }
+
         return this.filteredBy.fieldName === 'expiration' && this.filteredBy.filteringType === 'show';
     }
 
     set showExpired(newVal: boolean) {
-        this.setFilteredBy('expiration');
+        if (this.assetType === 'plugin') {
+            this.setFilteredBy('uninstalled');
+        }
+        else {
+            this.setFilteredBy('expiration');
+        }
     }
 
     /**
@@ -403,7 +412,9 @@ export class TableDisplayTs extends Vue {
      */
     public setDefaultFiltering(): void {
         const defaultFilteringType: FilteringTypes = 'hide';
-        const defaultFilteringFieldName: string = 'expiration';
+        const defaultFilteringFieldName: string = this.assetType === 'plugin'
+            ? 'uninstalled'
+            : 'expiration';
 
         Vue.set(this, 'filteredBy', {
             fieldName: defaultFilteringFieldName,

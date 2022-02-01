@@ -21,6 +21,7 @@ export interface PluginsConfig {
 
 const pluginFactory = (
     npmModule,
+    friendlyName,
     description,
     authorName = 'YourDLT by Using Blockchain Ltd',
     isOfficial = false,
@@ -30,6 +31,7 @@ const pluginFactory = (
         npmModule,
         undefined, // installPath
         npmModule,
+        friendlyName,
         'latest',
         undefined, // main
         undefined, // view
@@ -60,11 +62,12 @@ const badgeFactory = (icon, label, color) => {
 
 const defaultPluginsConfig: PluginsConfig = {
     registryPlugins: [
-        pluginFactory('@dhealth/plugin-node-monitor', 'Node Monitor helps monitor your dHealth Network Nodes.', 'dHealth Network', true),
-        pluginFactory('@dhealthdapps/health-to-earn', 'dHealth Network - Health to Earn showcase with Strava.', 'dHealth Network', true),
-        pluginFactory('@yourdlt/plugin-dummy', 'Example Plugin for YourDLT / dHealth / Symbol Wallets.', 'YourDLT by Using Blockchain Ltd', false),
-        pluginFactory('@yourdlt/plugin-librarian', 'Librarian helps organize your on-chain data with YourDLT.', 'YourDLT by Using Blockchain Ltd', false),
-        pluginFactory('@yourdlt/plugin-ninjazzz', 'NinjaZZZ enlightens your lazy times. Hint: **Idle time**.', 'YourDLT by Using Blockchain Ltd', false),
+        pluginFactory('@dhealth/plugin-node-monitor', 'Node Monitor', 'Node Monitor helps monitor your dHealth Network Nodes.', 'dHealth Network', true),
+        pluginFactory('@dhealthdapps/health-to-earn', 'Health to Earn', 'dHealth Network - Health to Earn showcase with Strava.', 'dHealth Network', true),
+        pluginFactory('@dhealthdapps/bridge', 'dHealth Bridge', 'Unidirectional Bridge for ERC20-DHP (Ethereum) to native DHP (dHealth)', 'dHealth Network', true),
+        pluginFactory('@yourdlt/plugin-dummy', 'Dummy', 'Example Plugin for YourDLT / dHealth / Symbol Wallets.', 'YourDLT by Using Blockchain Ltd', false),
+        pluginFactory('@yourdlt/plugin-librarian', 'Librarian', 'Librarian helps organize your on-chain data with YourDLT.', 'YourDLT by Using Blockchain Ltd', false),
+        pluginFactory('@yourdlt/plugin-ninjazzz', 'NinjaZZZ', 'NinjaZZZ enlightens your lazy times. Hint: **Idle time**.', 'YourDLT by Using Blockchain Ltd', false),
     ],
 };
 const resolvedPluginsConfig: PluginsConfig = window['pluginsConfig'] || defaultPluginsConfig;

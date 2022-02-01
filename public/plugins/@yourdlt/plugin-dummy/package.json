@@ -1,8 +1,8 @@
 {
   "_from": "@yourdlt/plugin-dummy@latest",
-  "_id": "@yourdlt/plugin-dummy@0.3.3",
+  "_id": "@yourdlt/plugin-dummy@0.3.4",
   "_inBundle": false,
-  "_integrity": "sha512-MjWBP7RFj5hmDF146VkbZWSZNzoZtG6ywM0wY2NYg9W9aET/fTnCX5w6RR+N+TRAtSJHmNdrepJD1FjmGbKowg==",
+  "_integrity": "sha512-A6KxFYw47izW8auFTU3/N7GL2RXP6wnwEyr5XV583KmrF3y5rPwwxXuInDtBax4S9GlSTEs6SjlE/Bb3xm6Sfg==",
   "_location": "/@yourdlt/plugin-dummy",
   "_phantomChildren": {},
   "_requested": {
@@ -19,8 +19,8 @@
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/@yourdlt/plugin-dummy/-/plugin-dummy-0.3.3.tgz",
-  "_shasum": "6629f050eb8ae7d48743ade2d6cf6b84d72e70e5",
+  "_resolved": "https://registry.npmjs.org/@yourdlt/plugin-dummy/-/plugin-dummy-0.3.4.tgz",
+  "_shasum": "7fe9c879a9b403d3ebea1ff7a7ab62035da50485",
   "_spec": "@yourdlt/plugin-dummy@latest",
   "_where": "/Users/greg/Sources/using-blockchain/dhealth-wallet",
   "author": {
@@ -89,5 +89,5 @@
     "serve": "vue-cli-service serve src/Dummy.ts"
   },
   "types": "dist/Dummy.d.ts",
-  "version": "0.3.3"
+  "version": "0.3.4"
 }

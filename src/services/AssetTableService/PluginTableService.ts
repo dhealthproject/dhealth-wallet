@@ -30,10 +30,10 @@ export class PluginTableService extends AssetTableService {
     public getTableFields(): TableField[] {
         return [
             { name: 'status', label: 'table_header_status' },
-            { name: 'npmModule', label: 'table_header_npm_module' },
-            { name: 'author', label: 'table_header_author' },
+            { name: 'name', label: 'table_header_name' },
+            { name: 'version', label: 'table_header_version' },
             { name: 'description', label: 'table_header_description' },
-            { name: 'repository', label: 'table_header_repository' },
+            { name: 'author', label: 'table_header_author' },
         ];
     }
 
@@ -47,14 +47,17 @@ export class PluginTableService extends AssetTableService {
 
         // - get reactive plugins data from the store
         return this.plugins
-            .map((pluginInfo) => {
+            .map((pluginInfo: PluginModel) => {
                 // - map table fields
                 return {
                     status: pluginInfo.status,
-                    npmModule: pluginInfo.npmModule + '@v' + pluginInfo.version,
-                    author: !!pluginInfo.author && 'name' in pluginInfo.author ? pluginInfo.author.name : 'Unknown',
+                    name: (!!pluginInfo.friendlyName && pluginInfo.friendlyName.length
+                        ? pluginInfo.friendlyName
+                        : pluginInfo.name
+                    ),
+                    version: `v${pluginInfo.version}`,
                     description: pluginInfo.description,
-                    repository: pluginInfo.repository.url,
+                    author: !!pluginInfo.author && 'name' in pluginInfo.author ? pluginInfo.author.name : 'Unknown',
                 };
             })
             .filter((x) => x); // filter out plugins that are not yet available

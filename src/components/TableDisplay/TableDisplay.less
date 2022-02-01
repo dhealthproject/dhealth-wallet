@@ -191,13 +191,18 @@
     border-right: none;
 }
 .plugin-columns {
-    grid-template-columns: 10% 25% 15% 40% 10%;
+    grid-template-columns: 10% 25% 10% 40% 15%;
     .npmModule-header,
     .npmModule-cell {
         text-align: left;
     }
     .name-header,
     .name-cell {
+        text-align: center;
+        font-weight: @bolder;
+    }
+    .version-header,
+    .version-cell {
         text-align: center;
     }
     .author-header,

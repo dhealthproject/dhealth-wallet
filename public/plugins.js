@@ -166,6 +166,8 @@ const registerPlugin = ($app, p) => {
     npmModule: p.plugin,
     entryPoint,
     installPath: p.path,
+    name: loadedPlugin && 'name' in loadedPlugin ? loadedPlugin.name : p.plugin,
+    friendlyName: loadedPlugin && 'friendlyName' in loadedPlugin ? loadedPlugin.friendlyName : p.plugin,
     view: loadedPlugin && 'view' in loadedPlugin ? loadedPlugin.view : '',
     routes: loadedPlugin && 'routes' in loadedPlugin ? loadedPlugin.routes : [],
     components: loadedPlugin && 'components' in loadedPlugin ? Object.keys(loadedPlugin.components) : [],

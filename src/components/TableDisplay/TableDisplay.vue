@@ -6,9 +6,10 @@
                     <span v-if="assetType === 'metadata'" class="add-metadata-button">
                         <ButtonAdd :title="$t('add_metadata')" :disabled="false" size="26" @click="$emit('on-add-metadata')" />
                     </span>
-                    <Checkbox v-if="!['metadata', 'plugin'].includes(assetType)" v-model="showExpired" class="table-filter-item-container">
+                    <Checkbox v-if="!['metadata'].includes(assetType)" v-model="showExpired" class="table-filter-item-container">
                         <span v-show="assetType === 'mosaic'" style="margin-left: 0.1rem;">{{ $t('show_expired_mosaics') }}</span>
                         <span v-show="assetType === 'namespace'" style="margin-left: 0.1rem;">{{ $t('show_expired_namespaces') }}</span>
+                        <span v-show="assetType === 'plugin'" style="margin-left: 0.1rem;">{{ $t('show_uninstalled_plugins') }}</span>
                     </Checkbox>
                     <div v-if="signers.length > 1" style="min-width: 2rem;">
                         <SignerFilter :signers="signers" @signer-change="onSignerSelectorChange" />

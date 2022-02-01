@@ -1,8 +1,8 @@
 {
   "_from": "@yourdlt/plugin-librarian@latest",
-  "_id": "@yourdlt/plugin-librarian@0.5.5",
+  "_id": "@yourdlt/plugin-librarian@0.5.6",
   "_inBundle": false,
-  "_integrity": "sha512-l0LqRBHyMNu2g8kvheepB7Gs8PFQ/0RfXCey432g4ntFkOawMLtmeaW1nlvxR805LOx54dCZtbZl/n9rhZNRkA==",
+  "_integrity": "sha512-usVWjpPk4K8HnCadxAXuqBo9xTsXBhWP8BCXhRZNQiv2q60+fA0kUEx8NO/c0NaLRKrhwj5x9mGGjAwh8zAH2g==",
   "_location": "/@yourdlt/plugin-librarian",
   "_phantomChildren": {},
   "_requested": {
@@ -19,8 +19,8 @@
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/@yourdlt/plugin-librarian/-/plugin-librarian-0.5.5.tgz",
-  "_shasum": "107a62d945db4cbf7c79bd078de566763963ccb2",
+  "_resolved": "https://registry.npmjs.org/@yourdlt/plugin-librarian/-/plugin-librarian-0.5.6.tgz",
+  "_shasum": "2c506ef9aae6779f454ddf5afead18de35117a27",
   "_spec": "@yourdlt/plugin-librarian@latest",
   "_where": "/Users/greg/Sources/using-blockchain/dhealth-wallet",
   "author": {
@@ -92,5 +92,5 @@
     "serve": "vue-cli-service serve"
   },
   "types": "dist/types/Librarian.d.ts",
-  "version": "0.5.5"
+  "version": "0.5.6"
 }

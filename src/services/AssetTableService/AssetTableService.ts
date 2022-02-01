@@ -92,6 +92,14 @@ export abstract class AssetTableService {
             return values.filter((value) => 'expired' in value && value.expired);
         }
 
+        if (filter.fieldName === 'uninstalled') {
+            return values.filter((value) => 'status' in value && (
+                filter.filteringType === 'hide' && value.status !== 'uninstalled'
+            ) || (
+                filter.filteringType === 'show' /** show all */
+            ));
+        }
+
         throw new Error(`Sorting by '${filter.fieldName}' field is not yet implemented`);
     }
 
