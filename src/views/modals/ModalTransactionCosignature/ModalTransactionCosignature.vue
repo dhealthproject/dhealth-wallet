@@ -50,6 +50,10 @@
                         <div class="explain">
                             <span class="subtitle">{{ $t('transaction_needs_cosignature') }}</span>
                             <p>{{ $t('transaction_needs_cosignature_explain') }}</p>
+                            <p class="red">
+                                <img class="icon" :src="warningIconSrc" />
+                                {{ $t('transaction_needs_cosignature_warning') }}
+                            </p>
                         </div>
 
                         <HardwareConfirmationButton v-if="isUsingHardwareWallet" @success="onSigner" @error="onError" />
@@ -74,8 +78,22 @@
 
 <script lang="ts">
 import { ModalTransactionCosignatureTs } from './ModalTransactionCosignatureTs';
-export default class ModalTransactionCosignature extends ModalTransactionCosignatureTs {}
+import { officialIcons } from '@/views/resources/Images';
+import { Component } from 'vue-property-decorator';
+
+@Component
+export default class ModalTransactionCosignature extends ModalTransactionCosignatureTs {
+    private ImageWarning = officialIcons.warning;
+
+    get warningIconSrc(): boolean {
+        return this.ImageWarning;
+    }
+}
 </script>
 <style lang="less" scoped>
 @import './ModalTransactionCosignature.less';
+.icon {
+    width: 0.2rem;
+    flex: auto 0 0;
+}
 </style>

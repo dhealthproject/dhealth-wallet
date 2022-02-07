@@ -1122,6 +1122,7 @@
   "transaction_has_cosignature": "Mitunterschriften erhalten",
   "transaction_needs_cosignature": "Transaktion wartet auf Mitunterschrift(en)",
   "transaction_needs_cosignature_explain": "Diese Multisignatur-Transaktion muss von mehreren Parteien unterzeichnet werden, bevor sie genehmigt wird. Bitte geben Sie Ihr Passwort ein und bestätigen Sie, um Ihre Unterschrift hinzuzufügen.",
+  "transaction_needs_cosignature_warning": "Diese Multi-Signatur-Transaktion wurde nicht von Ihnen oder einem Konto ausgestellt, dessen Mitunterzeichner Sie sind. Bitte seien Sie vorsichtig und überprüfen Sie den Transaktionsinhalt, bevor Sie Ihr Passwort eingeben.",
   "transaction_needs_cosignature_explain_signed": "Diese Transaktion erfordert die Zustimmung mehrerer Parteien durch das Senden einer gemeinsamen Unterschrift. Sie haben bereits eine Mitunterschrift für diese Transaktion gesendet. Bitte warten Sie, bis andere Mitunterzeichner zustimmen. Sie können den QR-Code herunterladen und an andere Mitunterzeichner senden, damit diese ihren Teil einfach unterschreiben können.",
   "transaction_qr_action_desc": "Klicken Sie auf Weiter, um die Transferseite mit diesen Details zu öffnen.",
   "transaction_qr_signed_action_desc": "Klicken Sie auf Weiter, um die Transaktion mit diesen Details zu übertragen.",
