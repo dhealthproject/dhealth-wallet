@@ -108,4 +108,25 @@ export class MultisigService {
         const account = accounts.find((wlt) => address.plain() === wlt.address);
         return (account && account.name) || address.plain();
     }
+
+
+    /**
+     * Checks if the given address in the given multisignature tree
+     * @param multisigAccountGraph Multisig tree structure
+     * @param address Address to search in the tree
+     * @returns
+     */
+     public static isAddressInMultisigTree(multisigAccountGraph: Map<number, MultisigAccountInfo[]>, address: string): boolean {
+        for (const [l, levelAccounts] of multisigAccountGraph) {
+            for (const levelAccount of levelAccounts) {
+                if (
+                    levelAccount.accountAddress.plain() === address ||
+                    levelAccount.cosignatoryAddresses?.some((c) => c.plain() === address)
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
