@@ -67,12 +67,12 @@ export class ModalFormSubAccountCreationTs extends Vue {
     visible: boolean;
 
     @Prop({
-        default: true
+        default: true,
     })
     shouldList: boolean;
 
     @Prop({
-        default: ''
+        default: '',
     })
     customName: string;
 

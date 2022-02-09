@@ -10,10 +10,7 @@
                 />
             </div>
             <div class="dashboard-bottom-left-container">
-                <PluginDetailMultiPanel
-                    :plugin="selectedPlugin"
-                    @on-clicked-readme="openReadme"
-                />
+                <PluginDetailMultiPanel :plugin="selectedPlugin" @on-clicked-readme="openReadme" />
             </div>
         </div>
         <div class="dashboard-right-container">
@@ -21,9 +18,7 @@
                 <span class="title_txt">{{ $t('sidebar_title_plugin_details') }}</span>
             </div>
             <div class="plugin-information">
-                <PluginInformationSidebar
-                    :plugin="selectedPlugin"
-                />
+                <PluginInformationSidebar :plugin="selectedPlugin" />
             </div>
         </div>
 

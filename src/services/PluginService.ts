@@ -224,7 +224,11 @@ export class PluginService {
                 ),
             )
             // overwrite "uninstalled" storage status for discovered plugins
-            .map((p) => (p.status === PluginBridge.PluginInstallStatus.Uninstalled ? { ...p, status: PluginBridge.PluginInstallStatus.Installed } : p));
+            .map((p) =>
+                p.status === PluginBridge.PluginInstallStatus.Uninstalled
+                    ? { ...p, status: PluginBridge.PluginInstallStatus.Installed }
+                    : p,
+            );
 
         // set "uninstalled" flags
         uninstalled = uninstalled.map((p) =>

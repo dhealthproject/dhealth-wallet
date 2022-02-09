@@ -18,12 +18,11 @@ import { PluginModel } from '@/core/database/entities/PluginModel';
 
 @Component
 export default class PluginInformationSidebarTs extends Vue {
-
     /**
      * The active plugin.
      * @var {PluginModel}
      */
-    @Prop({default: null}) plugin: PluginModel;
+    @Prop({ default: null }) plugin: PluginModel;
 
     public get mailtoAuthor(): string {
         return 'mailto:' + this.plugin.author.email;

@@ -31,7 +31,7 @@ export class PluginStatusPanelTs extends Vue {
      * The active plugin.
      * @var {PluginModel}
      */
-    @Prop({default: null}) plugin: PluginModel;
+    @Prop({ default: null }) plugin: PluginModel;
 
     /**
      * Controls the checkbox state

@@ -90,7 +90,10 @@ export default {
 
             // set current plugin
             const plugins = getters['listedPlugins'];
-            commit('currentPlugin', plugins.find(p => p.npmModule === npmModule));
+            commit(
+                'currentPlugin',
+                plugins.find((p) => p.npmModule === npmModule),
+            );
         },
 
         RESET_PLUGINS({ commit }) {
@@ -117,9 +120,13 @@ export default {
         },
 
         SAVE_DISCOVERED_PLUGINS({ dispatch, commit }, listedPlugins) {
-            dispatch('diagnostic/ADD_DEBUG', `Store action plugin/SAVE_DISCOVERED_PLUGINS dispatched with ${listedPlugins.length} plugins`, {
-                root: true,
-            });
+            dispatch(
+                'diagnostic/ADD_DEBUG',
+                `Store action plugin/SAVE_DISCOVERED_PLUGINS dispatched with ${listedPlugins.length} plugins`,
+                {
+                    root: true,
+                },
+            );
 
             const updatedPlugins = new PluginService().setPlugins(listedPlugins);
             commit('listedPlugins', [...updatedPlugins]);

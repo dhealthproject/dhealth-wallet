@@ -1,6 +1,7 @@
 <template>
     <div class="login-profile-wrapper">
-        <div class="login-background-section"><!-- <VideoBackground class="video-background-section" :src="require('@/views/resources/videos/symbol_3d_rotate.mp4')"> -->
+        <div class="login-background-section">
+            <!-- <VideoBackground class="video-background-section" :src="require('@/views/resources/videos/symbol_3d_rotate.mp4')"> -->
 
             <div class="switch-language-container">
                 <button class="trigger-accountlink" @click="$router.push('offlineTransaction')">
@@ -41,12 +42,17 @@
                                         <AutoComplete
                                             v-model="formItems.currentProfileName"
                                             placeholder=" "
-                                            :class="['select-account', !profilesClassifiedByNetworkType ? 'un_click' : 'profile-name-input']"
+                                            :class="[
+                                                'select-account',
+                                                !profilesClassifiedByNetworkType ? 'un_click' : 'profile-name-input',
+                                            ]"
                                             :disabled="performingLogin"
                                         >
                                             <div class="auto-complete-sub-container scroll">
                                                 <div class="tips-in-sub-container">
-                                                    {{ $t(profilesClassifiedByNetworkType ? 'select_a_profile' : 'no_profiles_in_database') }}
+                                                    {{
+                                                        $t(profilesClassifiedByNetworkType ? 'select_a_profile' : 'no_profiles_in_database')
+                                                    }}
                                                 </div>
                                                 <div v-if="profilesClassifiedByNetworkType">
                                                     <div v-for="pair in profilesClassifiedByNetworkType" :key="pair.networkType">
@@ -137,8 +143,8 @@
 
             <span class="version-panel">{{ $t('version') }}: {{ packageVersion }}</span>
             <span class="copyright_label">{{ $t('copyright') }}</span>
-
-        </div><!-- </VideoBackground> -->
+        </div>
+        <!-- </VideoBackground> -->
     </div>
 </template>
 
