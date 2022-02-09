@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { Address, NamespaceId } from 'symbol-sdk';
 
 @Component
@@ -42,7 +42,8 @@ export class AddressDisplayTs extends Vue {
      * Load transaction details
      * @return {Promise<void>}
      */
-    protected async loadDetails(): Promise<void> {
+    @Watch('address', { immediate: true })
+    async loadDetails(): Promise<void> {
         this.descriptor = '';
         if (!this.address) {
             return;

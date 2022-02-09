@@ -26,7 +26,7 @@ describe('ButtonCopyToClipboard', () => {
     test('receive a property "value" correctly', () => {
         expect(vm.value).toBe('123');
     });
-    test('Click on Button should call method "copyToClipboard" when prop "value" exists', () => {
+    test('Click on Button should not call method "copyToClipboard" when prop "value" does not exists', () => {
         UIHelpers.copyToClipboard = jest.fn();
         wrapper.find('Button').trigger('click');
         expect(UIHelpers.copyToClipboard).toBeCalledWith('123');
