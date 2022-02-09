@@ -15,10 +15,10 @@
  *
  */
 // external dependencies
-import Vue, { ComponentOptions, AsyncComponent } from "vue";
-import RouteConfig from "vue-router";
+import Vue, { ComponentOptions, AsyncComponent } from 'vue';
+import RouteConfig from 'vue-router';
 
-import { RouteMeta } from "./RouteMeta";
+import { RouteMeta } from './RouteMeta';
 
 export type Component = ComponentOptions<Vue> | typeof Vue | AsyncComponent;
 export type Dictionary<T> = { [key: string]: T };
@@ -29,14 +29,11 @@ export type Dictionary<T> = { [key: string]: T };
  * @extends {RouteConfig}
  */
 export interface AppRoute extends RouteConfig {
-  name: string;
-  meta: RouteMeta;
-  path: string;
-  children?: AppRoute[];
-  components?: Dictionary<Component>;
-  instances?: Dictionary<Vue>;
-  props?:
-    | boolean
-    | Record<string, any>
-    | Dictionary<boolean | Record<string, any>>;
+    name: string;
+    meta: RouteMeta;
+    path: string;
+    children?: AppRoute[];
+    components?: Dictionary<Component>;
+    instances?: Dictionary<Vue>;
+    props?: boolean | Record<string, any> | Dictionary<boolean | Record<string, any>>;
 }

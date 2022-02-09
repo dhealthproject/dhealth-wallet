@@ -15,6 +15,8 @@ export default class TransactionUriDisplayTs extends Vue {
     @Prop({ default: null }) readonly transaction?: Transaction;
 
     public get transactionURI() {
-        return new TransactionURI(this.transaction?.serialize(), TransactionMapping.createFromPayload).build().replace(/^web\+symbol/, 'web+dhealth');
+        return new TransactionURI(this.transaction?.serialize(), TransactionMapping.createFromPayload)
+            .build()
+            .replace(/^web\+symbol/, 'web+dhealth');
     }
 }

@@ -353,8 +353,7 @@ export class TableDisplayTs extends Vue {
     set showExpired(newVal: boolean) {
         if (this.assetType === 'plugin') {
             this.setFilteredBy('uninstalled');
-        }
-        else {
+        } else {
             this.setFilteredBy('expiration');
         }
     }
@@ -412,9 +411,7 @@ export class TableDisplayTs extends Vue {
      */
     public setDefaultFiltering(): void {
         const defaultFilteringType: FilteringTypes = 'hide';
-        const defaultFilteringFieldName: string = this.assetType === 'plugin'
-            ? 'uninstalled'
-            : 'expiration';
+        const defaultFilteringFieldName: string = this.assetType === 'plugin' ? 'uninstalled' : 'expiration';
 
         Vue.set(this, 'filteredBy', {
             fieldName: defaultFilteringFieldName,

@@ -343,8 +343,8 @@ export const routes: AppRoute[] = [
                         },
                         // @ts-ignore
                         component: () => import('@/views/pages/faq/Dashboard/Dashboard.vue'),
-                    }
-                ]
+                    },
+                ],
             },
             {
                 path: '/plugins',

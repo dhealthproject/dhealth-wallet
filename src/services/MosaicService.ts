@@ -262,7 +262,7 @@ export class MosaicService {
         return new NetworkCurrencyModel(
             mosaicId!.toHex(),
             'id' in namespaceId ? namespaceId?.toHex() : '',
-            'fullName' in namespaceId  ? namespaceId.fullName : 'dhealth.dhp',
+            'fullName' in namespaceId ? namespaceId.fullName : 'dhealth.dhp',
             currency.divisibility,
             currency.transferable,
             currency.supplyMutable,

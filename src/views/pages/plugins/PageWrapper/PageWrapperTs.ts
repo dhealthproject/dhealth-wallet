@@ -159,9 +159,8 @@ export class PageWrapperTs extends Vue {
             return null;
         }
 
-        const components = 'length' in this.selectedPlugin.components
-            ? this.selectedPlugin.components
-            : Object.keys(this.selectedPlugin.components);
+        const components =
+            'length' in this.selectedPlugin.components ? this.selectedPlugin.components : Object.keys(this.selectedPlugin.components);
         if (!components.length) {
             return null;
         }
@@ -201,13 +200,10 @@ export class PageWrapperTs extends Vue {
     }
 
     public onAccountRequestCompleted(childPublicKey: string) {
-        console.log("[DEBUG][PageWrapperTs.ts] Added account with public key: ", childPublicKey);
+        console.log('[DEBUG][PageWrapperTs.ts] Added account with public key: ', childPublicKey);
 
         // communicate public key to plugin
-        window['electron']['ipcRenderer'].send(
-            'onPluginAccountResponse',
-            JSON.stringify({ publicKey: childPublicKey }),
-        );
+        window['electron']['ipcRenderer'].send('onPluginAccountResponse', JSON.stringify({ publicKey: childPublicKey }));
     }
 
     public onTransactionPrepared(transaction: TransactionURI<Transaction>) {

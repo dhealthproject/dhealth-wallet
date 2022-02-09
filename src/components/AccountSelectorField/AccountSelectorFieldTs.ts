@@ -94,7 +94,7 @@ export class AccountSelectorFieldTs extends Vue {
     }
 
     public get currentAccounts(): AccountModel[] {
-        return this.knownAccounts.filter(_ => !('isListedAccount' in _) || _.isListedAccount);
+        return this.knownAccounts.filter((_) => !('isListedAccount' in _) || _.isListedAccount);
     }
 
     /**
