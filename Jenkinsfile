@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Download dependencies') {
             steps {
-                sh 'npm ci'
+                sh 'npm install'
             }
         }
 
