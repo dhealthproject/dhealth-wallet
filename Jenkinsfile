@@ -3,7 +3,8 @@ pipeline {
     stages {
         stage('Download dependencies') {
             steps {
-                sh 'npm ci'
+                sh 'npm install'
+                sh 'cp public/plugins/plugins.empty.js public/plugins/plugins.js'
             }
         }
 
@@ -15,7 +16,7 @@ pipeline {
 
         stage('Build software') {
             steps {
-                sh 'npm run build:web'
+                sh 'npm run build'
             }
         }
 
