@@ -16,7 +16,19 @@
 // external dependencies
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { AccountAddressRestrictionTransaction, AccountMetadataTransaction, AggregateTransaction, MosaicId, MultisigAccountInfo, MultisigAccountModificationTransaction, NamespaceId, Transaction, TransactionStatus, TransactionType, TransferTransaction } from 'symbol-sdk';
+import {
+    AccountAddressRestrictionTransaction,
+    AccountMetadataTransaction,
+    AggregateTransaction,
+    MosaicId,
+    MultisigAccountInfo,
+    MultisigAccountModificationTransaction,
+    NamespaceId,
+    Transaction,
+    TransactionStatus,
+    TransactionType,
+    TransferTransaction,
+} from 'symbol-sdk';
 // internal dependencies
 import { Formatters } from '@/core/utils/Formatters';
 import { TimeHelpers } from '@/core/utils/TimeHelpers';
@@ -116,7 +128,7 @@ export class TransactionRowTs extends Vue {
 
     private multisigAccountGraphInfo: MultisigAccountInfo[][];
 
-         /// region computed properties getter/setter
+    /// region computed properties getter/setter
     public get view(): TransactionView<Transaction> {
         return TransactionViewFactory.getView(this.$store, this.transaction);
     }
@@ -323,5 +335,4 @@ export class TransactionRowTs extends Vue {
             }
         }
     }
-
 }

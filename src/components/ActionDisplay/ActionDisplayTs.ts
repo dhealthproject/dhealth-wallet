@@ -73,8 +73,8 @@ export class ActionDisplayTs extends Vue {
     /**
      * Watches aggregate transaction sender value
      */
-     @Watch('aggregateTransactionSenderAddress', { immediate: true })
-     onSenderAddressChange() {
+    @Watch('aggregateTransactionSenderAddress', { immediate: true })
+    onSenderAddressChange() {
         if (this.aggregateTransactionSenderAddress && this.aggregateTransactionSenderAddress.plain()) {
             this.hasAggregateBondedSigner = true;
         }
