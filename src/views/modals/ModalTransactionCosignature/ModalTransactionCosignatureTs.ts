@@ -190,9 +190,9 @@ export class ModalTransactionCosignatureTs extends Vue {
                     (addr) => addr.plain() === this.currentAccount.address,
                 );
             this.hideCosignerWarning =
-            msigAccModificationCurrentAddressAdded ||
-            (this.multisigAccountGraph &&
-                MultisigService.isAddressInMultisigTree(this.multisigAccountGraph, this.transaction.signer.address.plain()));
+                msigAccModificationCurrentAddressAdded ||
+                (this.multisigAccountGraph &&
+                    MultisigService.isAddressInMultisigTree(this.multisigAccountGraph, this.transaction.signer.address.plain()));
 
             if (cosignList.find((m) => this.currentAccount.address === m.plain()) !== undefined) {
                 return true;

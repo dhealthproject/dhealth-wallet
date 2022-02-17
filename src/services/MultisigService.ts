@@ -109,14 +109,13 @@ export class MultisigService {
         return (account && account.name) || address.plain();
     }
 
-
     /**
      * Checks if the given address in the given multisignature tree
      * @param multisigAccountGraph Multisig tree structure
      * @param address Address to search in the tree
      * @returns
      */
-     public static isAddressInMultisigTree(multisigAccountGraph: Map<number, MultisigAccountInfo[]>, address: string): boolean {
+    public static isAddressInMultisigTree(multisigAccountGraph: Map<number, MultisigAccountInfo[]>, address: string): boolean {
         for (const [l, levelAccounts] of multisigAccountGraph) {
             for (const levelAccount of levelAccounts) {
                 if (
