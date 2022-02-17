@@ -1351,5 +1351,6 @@
     "modal_plugin_install_details_packaging_done": "Die Verpackung wurde erfolgreich abgeschlossen.",
     "modal_plugin_install_details_button_close": "schließen",
     "modal_title_confirm_account_request": "Anfrage zur Kontoerstellung",
-    "modal_text_confirm_account_request": "Dieses Plugin hat die Erstellung eines neuen Kontos angefordert.\n\nBitte klicken Sie auf die Schaltfläche unten, um fortzufahren und diese Anfrage zuzulassen."
+    "modal_text_confirm_account_request": "Dieses Plugin hat die Erstellung eines neuen Kontos angefordert.\n\nBitte klicken Sie auf die Schaltfläche unten, um fortzufahren und diese Anfrage zuzulassen.",
+    "lock_hash_algorithm": "Hash-Algorithmus"
 }

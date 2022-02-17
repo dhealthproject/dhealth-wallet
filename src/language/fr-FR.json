@@ -1351,5 +1351,6 @@
     "modal_plugin_install_details_packaging_done": "Emballage terminé avec succès.",
     "modal_plugin_install_details_button_close": "fermer",
     "modal_title_confirm_account_request": "Demande de création de compte",
-    "modal_text_confirm_account_request": "Cette extension a demandé la création d'un nouveau compte.\n\nVeuillez cliquer sur le bouton ci-dessous pour continuer et autoriser cette demande."
+    "modal_text_confirm_account_request": "Cette extension a demandé la création d'un nouveau compte.\n\nVeuillez cliquer sur le bouton ci-dessous pour continuer et autoriser cette demande.",
+    "lock_hash_algorithm": "Algorithme de hachage"
 }

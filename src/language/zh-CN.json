@@ -1353,5 +1353,6 @@
     "modal_plugin_install_details_packaging_done": "Packaging completed successfully.",
     "modal_plugin_install_details_button_close": "Close",
     "modal_title_confirm_account_request": "Account creation request",
-    "modal_text_confirm_account_request": "This plugin requested the creation of a new account.\n\nPlease, click on the button below to continue and allow this request."
+    "modal_text_confirm_account_request": "This plugin requested the creation of a new account.\n\nPlease, click on the button below to continue and allow this request.",
+    "lock_hash_algorithm": "哈希算法"
 }
