@@ -26,32 +26,32 @@ export class ViewSecretLockTransaction extends TransactionView<SecretLockTransac
      * Displayed items
      */
     protected resolveDetailItems(): TransactionDetailItem[] {
-      const attachedMosaic: AttachedMosaic = {
-          id: this.transaction.mosaic.id,
-          mosaicHex: this.transaction.mosaic.id.toHex(),
-          amount: this.transaction.mosaic.amount.compact(),
-      };
-      return [
-          { key: 'transfer_target', value: this.transaction.recipientAddress, isAddress: true },
-          {
-              key: `mosaics`,
-              value: attachedMosaic,
-              isMosaic: true,
-          },
-          { key: 'duration', value: this.transaction.duration.compact() },
-          {
-              key: 'secret',
-              value: this.transaction.secret,
-          },
-          {
-              key: 'lock_hash_algorithm',
-              value:
-                  this.transaction.hashAlgorithm === LockHashAlgorithm.Op_Sha3_256
-                      ? 'SHA3-256'
-                      : this.transaction.hashAlgorithm === LockHashAlgorithm.Op_Hash_256
-                      ? 'HASH-256'
-                      : 'HASH-160',
-          },
-      ];
-  }
+        const attachedMosaic: AttachedMosaic = {
+            id: this.transaction.mosaic.id,
+            mosaicHex: this.transaction.mosaic.id.toHex(),
+            amount: this.transaction.mosaic.amount.compact(),
+        };
+        return [
+            { key: 'transfer_target', value: this.transaction.recipientAddress, isAddress: true },
+            {
+                key: `mosaics`,
+                value: attachedMosaic,
+                isMosaic: true,
+            },
+            { key: 'duration', value: this.transaction.duration.compact() },
+            {
+                key: 'secret',
+                value: this.transaction.secret,
+            },
+            {
+                key: 'lock_hash_algorithm',
+                value:
+                    this.transaction.hashAlgorithm === LockHashAlgorithm.Op_Sha3_256
+                        ? 'SHA3-256'
+                        : this.transaction.hashAlgorithm === LockHashAlgorithm.Op_Hash_256
+                        ? 'HASH-256'
+                        : 'HASH-160',
+            },
+        ];
+    }
 }
