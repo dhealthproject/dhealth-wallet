@@ -22,7 +22,7 @@ export default class AccountLinks extends AccountMultisigGraphTs {}
     /deep/.ivu-tree-title {
         font-family: @symbolFont;
         font-size: @normalFont;
-        color: @purpleDark;
+        color: @primary;
     }
 }
 </style>

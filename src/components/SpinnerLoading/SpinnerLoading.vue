@@ -87,7 +87,7 @@ export default class SpinnerLoading extends Vue {
     margin: 0 auto 30px;
     display: block;
     border-radius: 50%;
-    background-color: @purpleDark;
+    background-color: @primary;
     width: 50px;
     height: 50px;
     animation: ani-spin-bounce 1s 0s ease-in-out infinite;
@@ -103,7 +103,7 @@ export default class SpinnerLoading extends Vue {
 .loading-overlay-message {
     font-size: @biggerFont;
     margin-bottom: 20px;
-    color: @purpleDark;
+    color: @primary;
 }
 
 .close-text {

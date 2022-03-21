@@ -10,10 +10,12 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 - feat/ui: Adds secret lock & secret proof transaction views 
 - feat/ui: Adds warning message on co-signature modal
 - fix: Fixes transaction contact mismatch (fixes #18)
+- fix: Fixes issues with swaps amounts in plugins
 
 #### Changed
 
 - deps: Updates dependencies to remove warnings (fixes #13)
+- ui: Changes theme colors and fixes static colors to use theme
 
 ## [1.3.0][1.3.0] - 01-Feb-2022
 

@@ -20,7 +20,7 @@ import { appConfig } from '@/config';
 
 // import logo as an image
 // @ts-ignore
-import logo from '@/views/resources/logo-dhealth.png';
+import logo from '@/views/resources/logo.dhealth.blue.png';
 
 @Component
 export class AppLogoTs extends Vue {
