@@ -17,23 +17,29 @@
  * Skin
  **/
 @import '../fonts/fonts.less';
-@themeGradient: linear-gradient(315.55deg, #000065 -1.68%, #0000c9 110.7%);
-@themeGradientLighten: linear-gradient(315.55deg, lighten(#000065, 10%) -1.68%, lighten(#0000c9, 10%) 110.7%);
-@primary: #000065;
-@secondary: #0101a3;
-@primaryLighten: lighten(#000065, 10%);
-@secondaryLighten: lighten(#0101a3, 10%);
+@primary: #150867; // royal blue
+@secondary: #2970ff; // navy
+@primaryLighten: lighten(#2970ff, 10%);
+@secondaryLighten: lighten(#150867, 10%);
+@accentOrange: #ff8f78; // tangerine
+@accentMint: #bdebe5; // mint
+@accentTurquoise: #41e3ce; // turquoise
 @accentPink: #ff00ff;
-@accentPinkLight: rgba(255, 0, 255, 0.1);
-@accentPinkHover: rgba(255, 0, 255, 0.6);
 @accentBlue: #00c8ff;
 @accentGreen: #33dd50;
 @accentGreenLight: rgba(51, 221, 80, 0.1);
-@accentOrange: #ff9600;
 @dustyBlue: #cfd6e4;
 @noDataColor: rgba(180, 180, 180, 0.6);
 @pink: #ff00fa;
 @backgroundColor: #f3f4f8;
+@themeGradient: linear-gradient(315.55deg, #2970ff -1.68%, #150867 110.7%);
+@themeGradientLighten: linear-gradient(315.55deg, lighten(#2970ff, 10%) -1.68%, lighten(#150867, 10%) 110.7%);
+
+/**
+ * Overwrites
+ */
+@accentPinkLight: #41e3ce0f;
+@accentPinkHover: #41e3ceaa;
 
 /**
  * Colors
