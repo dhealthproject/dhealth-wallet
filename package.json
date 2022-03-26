@@ -59,7 +59,7 @@
     },
     "dependencies": {
         "@dhealth/plugin-node-monitor": "latest",
-        "@dhealth/sdk": "1.0.3-alpha-202110081200",
+        "@dhealth/sdk": "1.0.3-alpha-202201201200",
         "@dhealth/wallet-api-bridge": "^1.3.0",
         "@dhealth/wallet-components": "^1.3.0",
         "@dhealthdapps/bridge": "latest",

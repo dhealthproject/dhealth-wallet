@@ -4,5 +4,5 @@
   "@yourdlt/plugin-ninjazzz": "1.0.8",
   "@dhealth/plugin-node-monitor": "1.0.3",
   "@dhealthdapps/health-to-earn": "1.1.1",
-  "@dhealthdapps/bridge": "1.0.0"
+  "@dhealthdapps/bridge": "1.1.0"
 }

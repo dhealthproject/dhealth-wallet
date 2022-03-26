@@ -16,6 +16,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 - deps: Updates dependencies to remove warnings (fixes #13)
 - ui: Changes theme colors and fixes static colors to use theme
+- ui: Updates colorway to changed colors for dHealth
 
 ## [1.3.0][1.3.0] - 01-Feb-2022
 
