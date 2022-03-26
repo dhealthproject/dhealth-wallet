@@ -48,7 +48,7 @@ export default class ProtectedPrivateKeyDisplay extends ProtectedPrivateKeyDispl
     font-weight: bold;
     cursor: pointer;
     background-color: transparent;
-    color: @purpleLightest;
+    color: @secondaryLighten;
 }
 
 .timer-span {

@@ -16,7 +16,7 @@
         margin-left: 0.2rem;
         &.active {
             font-weight: @bold;
-            color: @purpleDark;
+            color: @primary;
         }
         &.inactive {
             font-weight: @symbolFontLight;
@@ -105,7 +105,7 @@
                 /deep/ .value {
                     font-family: @symbolFontLight;
                     text-overflow: ellipsis;
-                    color: @purpleDark;
+                    color: @primary;
                 }
 
                 /deep/ .value {
@@ -163,7 +163,7 @@
     color: @grayLight;
     font-family: @symbolFontSemiBold;
     &.done {
-        color: @purpleDark;
+        color: @primary;
     }
     &.done:before {
         content: '';
@@ -176,20 +176,20 @@
         background-repeat: no-repeat;
     }
     &.active {
-        background: linear-gradient(315.55deg, #44004e -1.68%, #5200c6 110.7%);
+        background: @themeGradient;
         color: @white;
     }
 }
 
 .title {
-    color: @purpleDark;
+    color: @primary;
     font-size: 23px;
     font-family: @normalFont;
     margin-bottom: 0.1rem;
 }
 
 .description-text {
-    color: @purpleDark;
+    color: @primary;
     font-size: @smallFont;
     margin-top: 0.3rem;
 

@@ -1,6 +1,6 @@
 <template>
     <div class="step-2-wrapper">
-        <img src="@/views/resources/dhealth-network-long.png" />
+        <img src="@/views/resources/logo.dhealth.blue.png" />
         <Progress stroke-color="#ff00ff" :percent="percent" />
     </div>
 </template>

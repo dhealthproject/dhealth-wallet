@@ -62,7 +62,7 @@ export default class Info extends InfoTs {}
     margin: 0.2rem 0;
     .section-title {
         font-weight: 600;
-        color: @purpleDark;
+        color: @primary;
         font-family: @symbolFont;
     }
 }

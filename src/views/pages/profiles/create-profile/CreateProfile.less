@@ -35,19 +35,19 @@
         }
 
         .text1 {
-            color: @purpleDark;
+            color: @primary;
             font-size: 30px;
             font-family: @normalFont;
             margin-bottom: 5%;
         }
 
         .text {
-            color: @purpleDark;
+            color: @primary;
             font-size: @bigFont;
             margin-bottom: 2%;
         }
         .text_red {
-            color: @purpleDark;
+            color: @primary;
             font-family: @symbolFontSemiBold;
             font-size: @bigFont;
         }
@@ -80,7 +80,7 @@
                 font-family: @symbolFontSemiBold;
                 display: flex;
                 &.done {
-                    color: @purpleDark;
+                    color: @primary;
                 }
                 &.done:before {
                     content: '';
@@ -92,7 +92,7 @@
                     background-repeat: no-repeat;
                 }
                 &.active {
-                    background: linear-gradient(315.55deg, #44004e -1.68%, #5200c6 110.7%);
+                    background: @themeGradient;
                     color: @white;
                 }
             }
@@ -136,5 +136,5 @@
 }
 .success-title {
     font-size: @biggestFont;
-    color: @purpleDark;
+    color: @primary;
 }
