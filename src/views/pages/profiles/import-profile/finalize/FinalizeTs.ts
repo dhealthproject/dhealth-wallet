@@ -19,7 +19,7 @@ import { ProfileService } from '@/services/ProfileService';
 import { AccountModel, AccountType } from '@/core/database/entities/AccountModel';
 import { AccountService } from '@/services/AccountService';
 import { DerivationPathLevels, DerivationService } from '@/services/DerivationService';
-import { MnemonicPassPhrase, Network } from 'symbol-hd-wallets';
+import { MnemonicPassPhrase } from 'symbol-hd-wallets';
 import { Password, SimpleWallet, NetworkType } from 'symbol-sdk';
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
@@ -208,8 +208,8 @@ export default class FinalizeTs extends Vue {
 
         const accounts = this.createAccountsFromPathIndexes();
 
-        let numOfAccounts = 0,
-            identifiers = [];
+        let numOfAccounts = 0;
+        const identifiers = [];
         while (accounts.length) {
             const account = accounts.shift();
 

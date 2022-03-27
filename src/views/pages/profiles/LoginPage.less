@@ -19,7 +19,7 @@
 .login-profile-wrapper {
     width: 100%;
     height: 100%;
-    background: linear-gradient(315.55deg, #44004e -1.68%, #5200c6 110.7%);
+    background: @themeGradient;
     opacity: 1;
     overflow: hidden;
     position: absolute;
@@ -65,7 +65,6 @@
                 // padding-bottom: 30px;
                 text-align: justify;
 
-
                 .top-welcome-text {
                     // position: absolute;
                     // top: 32%;
@@ -101,7 +100,7 @@
                 justify-content: center;
 
                 /deep/.ivu-select {
-                    color: @purpleDark;
+                    color: @primary;
 
                     .ivu-select-dropdown {
                         top: unset !important;
@@ -135,7 +134,7 @@
             .login-title {
                 font-size: 0.3rem;
                 font-weight: bold;
-                color: @purpleDark;
+                color: @primary;
                 @black: rgba(51, 51, 51, 1);
                 margin-bottom: 0.4rem;
             }
@@ -145,7 +144,7 @@
             }
 
             /deep/.ivu-tooltip-rel::after {
-                content: "";
+                content: '';
                 background: linear-gradient(315.55deg, #700081 -1.68%, #6700f9 110.7%);
                 display: block;
                 height: 3px;
@@ -159,7 +158,7 @@
                 height: 0.37rem;
                 padding-left: 0.11rem;
                 font-size: @normalFont;
-                color: @purpleDark;
+                color: @primary;
                 border-radius: 0;
                 margin-top: 0.1rem;
                 background: #f6f6f6;
@@ -171,7 +170,7 @@
             .profile-name,
             .input-password {
                 font-size: 0.2rem;
-                color: @purpleDark;
+                color: @primary;
                 font-weight: 400;
             }
 
@@ -219,7 +218,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background: linear-gradient(315.55deg, #44004e -1.68%, #5200c6 110.7%);
+                background: @themeGradient;
                 width: 100%;
                 font-size: 20px;
                 margin: 0;
@@ -232,7 +231,7 @@
             }
 
             .button:hover {
-                background: linear-gradient(315.55deg, lighten(#44004e, 10%) -1.68%, lighten(#5200c6, 10%) 110.7%);
+                background: @themeGradient;
             }
         }
     }
@@ -275,7 +274,7 @@
     }
 
     .button {
-        background: @purpleLight;
+        background: @secondaryLighten;
         border-radius: 0.04rem;
         border: none;
         color: @white;
@@ -395,7 +394,7 @@
 
 .trigger-accountlink {
     font-size: @smallFont !important;
-    color: @purpleDark;
+    color: @primary;
     display: flex;
     align-items: center;
     background-color: transparent;

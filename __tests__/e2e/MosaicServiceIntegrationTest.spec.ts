@@ -17,10 +17,12 @@ import {
     AccountInfo,
     AccountRepository,
     Address,
+    Currency,
     MosaicFlags,
     MosaicId,
     MosaicInfo,
     MosaicRepository,
+    NamespaceId,
     NetworkCurrencies,
     NetworkType,
     Page,
@@ -85,7 +87,28 @@ when(mockRepoFactory.createMosaicRepository()).thenReturn(mosaicRepository);
 when(mockRepoFactory.getEpochAdjustment()).thenReturn(of(1573430400));
 when(mockRepoFactory.getGenerationHash()).thenReturn(of('Some Gen Hash'));
 when(mockRepoFactory.getNetworkType()).thenReturn(of(NetworkType.MIJIN_TEST));
-when(mockRepoFactory.getCurrencies()).thenReturn(of(NetworkCurrencies.PUBLIC));
+when(mockRepoFactory.getCurrencies()).thenReturn(
+    of(
+        new NetworkCurrencies(
+            new Currency({
+                namespaceId: new NamespaceId('dhealth.dhp'),
+                mosaicId: new MosaicId('5A4935C1D66E6AC4'),
+                transferable: true,
+                supplyMutable: false,
+                restrictable: false,
+                divisibility: 6,
+            }),
+            new Currency({
+                namespaceId: new NamespaceId('dhealth.dhp'),
+                mosaicId: new MosaicId('5A4935C1D66E6AC4'),
+                transferable: true,
+                supplyMutable: false,
+                restrictable: false,
+                divisibility: 6,
+            }),
+        ),
+    ),
+);
 const repositoryFactory = instance(mockRepoFactory);
 
 describe('services/MosaicService', () => {

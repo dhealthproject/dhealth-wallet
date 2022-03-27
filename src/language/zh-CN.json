@@ -1100,6 +1100,9 @@
     "transaction_has_cosignature": "已接收的联合签名",
     "transaction_needs_cosignature": "等待共同签名的交易",
     "transaction_needs_cosignature_explain": "这笔交易需要多方联署审批，请立即解锁您的帐户以发送联名交易。",
+    "transaction_cosignature_warning_unknown_cosigner": "您即将签署的交易不是您创建的。",
+    "transaction_cosignature_warning_dont_sign": "不知道交易来源的千万不要签！",
+    "transaction_cosignature_warning_proceed": "我理解并请继续。",
     "transaction_needs_cosignature_explain_signed": "此交易需要多方通过发送共同签名进行批准。\n您已经为此交易发送了共同签名。\n请等待其他共同签署人批准。\n您可以下载QR码并将其发送给其他共同签名者，以使他们可以轻松地对其部分进行签名。",
     "transaction_qr_action_desc": "单击继续以打开包含这些详细信息的传输页面。",
     "transaction_qr_code": "交易二维码",
@@ -1350,5 +1353,6 @@
     "modal_plugin_install_details_packaging_done": "Packaging completed successfully.",
     "modal_plugin_install_details_button_close": "Close",
     "modal_title_confirm_account_request": "Account creation request",
-    "modal_text_confirm_account_request": "This plugin requested the creation of a new account.\n\nPlease, click on the button below to continue and allow this request."
+    "modal_text_confirm_account_request": "This plugin requested the creation of a new account.\n\nPlease, click on the button below to continue and allow this request.",
+    "lock_hash_algorithm": "哈希算法"
 }

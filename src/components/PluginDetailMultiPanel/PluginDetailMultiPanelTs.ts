@@ -33,12 +33,11 @@ import IconButton from '@/components/IconButton/IconButton.vue';
     },
 })
 export class PluginDetailMultiPanelTs extends Vue {
-
     /**
      * The active plugin.
      * @var {PluginModel}
      */
-    @Prop({default: null}) plugin: PluginModel;
+    @Prop({ default: null }) plugin: PluginModel;
 
     public subpageIndexes: { [k: string]: number } = {
         summary: 0,
@@ -82,9 +81,7 @@ export class PluginDetailMultiPanelTs extends Vue {
     }
 
     public get pluginComponents(): any[] {
-        return this.plugin.components && this.plugin.components.length 
-            ? this.plugin.components.map((c) => ({ name: c }))
-            : [];
+        return this.plugin.components && this.plugin.components.length ? this.plugin.components.map((c) => ({ name: c })) : [];
     }
 
     public get pluginDependencies(): any[] {
@@ -94,18 +91,18 @@ export class PluginDetailMultiPanelTs extends Vue {
     }
 
     public get pluginStorages(): any[] {
-        return this.plugin.storages && this.plugin.storages.length 
+        return this.plugin.storages && this.plugin.storages.length
             ? this.plugin.storages.map((s) => ({
-                storageKey: s.storageKey,
-                entries: 0, //!!datarows && 'data' in datarows ? datarows.data.length : 0,
-                description: s.description,
-            })) 
+                  storageKey: s.storageKey,
+                  entries: 0, //!!datarows && 'data' in datarows ? datarows.data.length : 0,
+                  description: s.description,
+              }))
             : [];
     }
 
     public get pluginSettings(): any[] {
-        let dictionary = [],
-            buckets = [];
+        let buckets = [];
+        const dictionary = [];
         buckets = this.plugin.settings;
         buckets.forEach((bucket) => {
             const fields = Object.keys(bucket);
@@ -118,20 +115,18 @@ export class PluginDetailMultiPanelTs extends Vue {
         });
 
         // fixes lint rule "prefer-const"
-        return dictionary && dictionary.length
-            ? dictionary
-            : []
+        return dictionary && dictionary.length ? dictionary : [];
     }
 
     public get pluginPermissions(): any[] {
         return this.plugin.permissions && this.plugin.permissions.length
-        ? this.plugin.permissions.map((p) => ({
-            name: p.name,
-            type: p.type,
-            target: p.target,
-            description: p.description,
-        }))
-        : [];
+            ? this.plugin.permissions.map((p) => ({
+                  name: p.name,
+                  type: p.type,
+                  target: p.target,
+                  description: p.description,
+              }))
+            : [];
     }
     /// end-region computed properties
 

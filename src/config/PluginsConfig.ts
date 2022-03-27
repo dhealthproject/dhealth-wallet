@@ -19,6 +19,10 @@ export interface PluginsConfig {
     registryPlugins: PluginModel[];
 }
 
+const badgeFactory = (icon, label, color) => {
+    return { icon, label, color } as PluginBadge;
+};
+
 const pluginFactory = (
     npmModule,
     friendlyName,
@@ -47,27 +51,56 @@ const pluginFactory = (
         undefined, // settings
         undefined, // permissions
         'https://yourdlt.tools/logo-yourdlt-192x192.png',
-        isOfficial ? [
-            badgeFactory('ios-checkbox-outline', 'Official', '#33dd50'),
-            badgeFactory('ios-star-outline', 'Recommended', '#33dd50')
-        ] : [
-            badgeFactory('md-people', 'Community', '#00c8ff')
-        ]
+        isOfficial
+            ? [badgeFactory('ios-checkbox-outline', 'Official', '#33dd50'), badgeFactory('ios-star-outline', 'Recommended', '#33dd50')]
+            : [badgeFactory('md-people', 'Community', '#00c8ff')],
     );
-}
-
-const badgeFactory = (icon, label, color) => {
-    return { icon, label, color } as PluginBadge;
-}
+};
 
 const defaultPluginsConfig: PluginsConfig = {
     registryPlugins: [
-        pluginFactory('@dhealth/plugin-node-monitor', 'Node Monitor', 'Node Monitor helps monitor your dHealth Network Nodes.', 'dHealth Network', true),
-        pluginFactory('@dhealthdapps/health-to-earn', 'Health to Earn', 'dHealth Network - Health to Earn showcase with Strava.', 'dHealth Network', true),
-        pluginFactory('@dhealthdapps/bridge', 'dHealth Bridge', 'Unidirectional Bridge for ERC20-DHP (Ethereum) to native DHP (dHealth)', 'dHealth Network', true),
-        pluginFactory('@yourdlt/plugin-dummy', 'Dummy', 'Example Plugin for YourDLT / dHealth / Symbol Wallets.', 'YourDLT by Using Blockchain Ltd', false),
-        pluginFactory('@yourdlt/plugin-librarian', 'Librarian', 'Librarian helps organize your on-chain data with YourDLT.', 'YourDLT by Using Blockchain Ltd', false),
-        pluginFactory('@yourdlt/plugin-ninjazzz', 'NinjaZZZ', 'NinjaZZZ enlightens your lazy times. Hint: **Idle time**.', 'YourDLT by Using Blockchain Ltd', false),
+        pluginFactory(
+            '@dhealth/plugin-node-monitor',
+            'Node Monitor',
+            'Node Monitor helps monitor your dHealth Network Nodes.',
+            'dHealth Network',
+            true,
+        ),
+        pluginFactory(
+            '@dhealthdapps/health-to-earn',
+            'Health to Earn',
+            'dHealth Network - Health to Earn showcase with Strava.',
+            'dHealth Network',
+            true,
+        ),
+        pluginFactory(
+            '@dhealthdapps/bridge',
+            'dHealth Bridge',
+            'Unidirectional Bridge for ERC20-DHP (Ethereum) to native DHP (dHealth)',
+            'dHealth Network',
+            true,
+        ),
+        pluginFactory(
+            '@yourdlt/plugin-dummy',
+            'Dummy',
+            'Example Plugin for YourDLT / dHealth / Symbol Wallets.',
+            'YourDLT by Using Blockchain Ltd',
+            false,
+        ),
+        pluginFactory(
+            '@yourdlt/plugin-librarian',
+            'Librarian',
+            'Librarian helps organize your on-chain data with YourDLT.',
+            'YourDLT by Using Blockchain Ltd',
+            false,
+        ),
+        pluginFactory(
+            '@yourdlt/plugin-ninjazzz',
+            'NinjaZZZ',
+            'NinjaZZZ enlightens your lazy times. Hint: **Idle time**.',
+            'YourDLT by Using Blockchain Ltd',
+            false,
+        ),
     ],
 };
 const resolvedPluginsConfig: PluginsConfig = window['pluginsConfig'] || defaultPluginsConfig;

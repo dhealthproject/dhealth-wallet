@@ -7,7 +7,15 @@
 
         <!-- SECOND COLUMN -->
         <div class="address-cell">
-            <ActionDisplay :transaction="transaction" />
+            <ActionDisplay
+                :transaction="transaction"
+                :aggregate-transaction-sender-address="
+                    aggregateTransactionDetails &&
+                    aggregateTransactionDetails.innerTransactions &&
+                    !!aggregateTransactionDetails.innerTransactions.length &&
+                    aggregateTransactionDetails.innerTransactions[0].signer.address
+                "
+            />
         </div>
 
         <!-- THIRD COLUMN -->

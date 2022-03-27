@@ -347,8 +347,7 @@ export default {
                     ) {
                         await dispatch('CONNECT_TO_A_VALID_NODE', nodeNetworkModelResult);
                         nodeFound = true;
-                    }
-                    else {
+                    } else {
                         nodesList.splice(inx, 1);
                         if (waitBetweenTrials) {
                             await CommonHelpers.sleep(1000); // labor illusion

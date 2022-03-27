@@ -51,19 +51,19 @@
         }
 
         .text1 {
-            color: @purpleDark;
+            color: @primary;
             font-size: 30px;
             font-family: @normalFont;
             margin-bottom: 5%;
         }
 
         .text {
-            color: @purpleDark;
+            color: @primary;
             font-size: @bigFont;
             margin-bottom: 2%;
         }
         .text_red {
-            color: @purpleDark;
+            color: @primary;
             font-family: @symbolFontSemiBold;
             font-size: @bigFont;
         }
@@ -102,7 +102,7 @@
                     }
                 }
                 &.done {
-                    color: @purpleDark;
+                    color: @primary;
                     display: flex;
                     align-items: center;
                     .check-container img {
@@ -110,7 +110,7 @@
                     }
                 }
                 &.active {
-                    background: linear-gradient(315.55deg, #44004e -1.68%, #5200c6 110.7%);
+                    background: @themeGradient;
                     color: @white;
                 }
             }
@@ -151,7 +151,7 @@
 
     .accounts-container-title {
         font-size: 22px;
-        color: @purpleDark;
+        color: @primary;
         font-weight: bolder;
     }
 
@@ -191,7 +191,7 @@
     .table-title {
         width: 100%;
         padding: 5px 0;
-        color: @purpleDark;
+        color: @primary;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -310,5 +310,5 @@
 }
 .success-title {
     font-size: @biggestFont;
-    color: @purpleDark;
+    color: @primary;
 }

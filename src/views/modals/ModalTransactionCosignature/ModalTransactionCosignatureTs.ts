@@ -44,6 +44,7 @@ import QRCodeDisplay from '@/components/QRCode/QRCodeDisplay/QRCodeDisplay.vue';
 import { AccountService } from '@/services/AccountService';
 import { LedgerService } from '@/services/LedgerService';
 import { AccountMetadataTransaction } from 'symbol-sdk';
+import { MultisigService } from '@/services/MultisigService';
 
 @Component({
     components: {
@@ -59,6 +60,7 @@ import { AccountMetadataTransaction } from 'symbol-sdk';
             networkType: 'network/networkType',
             generationHash: 'network/generationHash',
             currentAccountMultisigInfo: 'account/currentAccountMultisigInfo',
+            multisigAccountGraph: 'account/multisigAccountGraph',
         }),
     },
 })
@@ -117,10 +119,19 @@ export class ModalTransactionCosignatureTs extends Vue {
      */
     public currentAccountMultisigInfo: MultisigAccountInfo;
 
+    public multisigAccountGraph: Map<number, MultisigAccountInfo[]>;
+
     /**
      * Whether transaction has expired
      */
     public expired: boolean = false;
+
+    /**
+     * Whether to hide unknown cosigner warning
+     */
+    public hideCosignerWarning = false;
+
+    public wantToProceed = false;
 
     /// region computed properties
     /**
@@ -171,6 +182,17 @@ export class ModalTransactionCosignatureTs extends Vue {
                     cosignList.push((t as AccountMetadataTransaction).targetAddress);
                 }
             });
+
+            const msigAccModificationCurrentAddressAdded =
+                this.transaction.innerTransactions?.length === 1 &&
+                this.transaction.innerTransactions[0].type === TransactionType.MULTISIG_ACCOUNT_MODIFICATION &&
+                (this.transaction.innerTransactions[0] as MultisigAccountModificationTransaction).addressAdditions.some(
+                    (addr) => addr.plain() === this.currentAccount.address,
+                );
+            this.hideCosignerWarning =
+                msigAccModificationCurrentAddressAdded ||
+                (this.multisigAccountGraph &&
+                    MultisigService.isAddressInMultisigTree(this.multisigAccountGraph, this.transaction.signer.address.plain()));
 
             if (cosignList.find((m) => this.currentAccount.address === m.plain()) !== undefined) {
                 return true;

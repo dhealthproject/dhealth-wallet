@@ -3,6 +3,32 @@ All notable changes to this project will be documented in this file.
 
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.3.1][1.3.1] - 01-Mar-2022
+
+#### Added
+
+- feat/ui: Adds secret lock & secret proof transaction views 
+- feat/ui: Adds warning message on co-signature modal
+- fix: Fixes transaction contact mismatch (fixes #18)
+- fix: Fixes issues with swaps amounts in plugins
+
+#### Changed
+
+- deps: Updates dependencies to remove warnings (fixes #13)
+- ui: Changes theme colors and fixes static colors to use theme
+- ui: Updates colorway to changed colors for dHealth
+
+## [1.3.0][1.3.0] - 01-Feb-2022
+
+#### Added
+
+- plugins: Adds @dhealthdapps/bridge in version `v1.0.0`.
+- plugins: Improves plugins list with human-friendly names
+
+#### Changed
+
+- deps: Updates @dhealthdapps/bridge to version v1.0.0.
+
 ## [1.2.2][1.2.2] - 08-Dec-2021
 
 #### Added
@@ -68,6 +94,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 - Some missing re-branding items for dHealth logos.
 
+[1.3.1]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.1.4...v1.2.1
 [1.1.4]: https://github.com/dhealthproject/dhealth-wallet/compare/v1.0.0...v1.1.4

@@ -19,13 +19,7 @@ import { URLHelpers } from '@/core/utils/URLHelpers';
 import { HarvestingService } from '@/services/HarvestingService';
 import { PageInfo } from '@/store/Transaction';
 import { map, reduce } from 'rxjs/operators';
-import {
-    AccountInfo,
-    ReceiptType,
-    RepositoryFactoryHttp,
-    SignedTransaction,
-    UInt64,
-} from 'symbol-sdk';
+import { AccountInfo, ReceiptType, RepositoryFactoryHttp, SignedTransaction, UInt64 } from 'symbol-sdk';
 
 // @FIXME: @dhealth/sdk@1.0.3-alpha-202110081200 includes a fix for `PaginationStreamer` to use
 //         the correct rxjs imports (v6) for `defer` and `from` method. Next wallet version should
@@ -256,9 +250,8 @@ export default {
             // for testing => const targetAddress = Address.createFromRawAddress('TD5YTEJNHOMHTMS6XESYAFYUE36COQKPW6MQQQY');
 
             commit('isFetchingHarvestedBlockStats', true);
-            let totalBlockCount = 0,
-                totalFeesEarned = UInt64.fromUint(0),
-                seed = { totalBlockCount, totalFeesEarned };
+            let totalBlockCount = 0;
+            const seed = { totalBlockCount, totalFeesEarned: UInt64.fromUint(0) };
             streamer
                 .search({
                     targetAddress: targetAddress,
@@ -267,20 +260,17 @@ export default {
                     pageSize: 50,
                 } as TransactionStatementSearchCriteria)
                 .pipe(
-                    map(
-                        (t) => {
-                            return ({
-                                blockNo: t.height,
-                                fee: (t.receipts as BalanceChangeReceipt[]).find(
-                                    (r) => r.targetAddress.plain() === targetAddress.plain(),
-                                )?.amount,
-                            } as unknown) as HarvestedBlock;
-                        },
-                    ),
+                    map((t) => {
+                        return ({
+                            blockNo: t.height,
+                            fee: (t.receipts as BalanceChangeReceipt[]).find((r) => r.targetAddress.plain() === targetAddress.plain())
+                                ?.amount,
+                        } as unknown) as HarvestedBlock;
+                    }),
                     reduce(
                         (acc, harvestedBlock) => ({
                             totalBlockCount: ++totalBlockCount,
-                            totalFeesEarned: acc.totalFeesEarned.add(harvestedBlock.fee)
+                            totalFeesEarned: acc.totalFeesEarned.add(harvestedBlock.fee),
                         }),
                         seed,
                     ),
@@ -290,14 +280,12 @@ export default {
                         commit('harvestedBlockStats', harvestedBlockStats);
                     },
                     error: (err) => {
-                        dispatch(
-                            'notification/ADD_ERROR',
-                            `An error happened requesting harvesting statistics: ${err.toString()}`,
-                            { root: true }
-                        );
+                        dispatch('notification/ADD_ERROR', `An error happened requesting harvesting statistics: ${err.toString()}`, {
+                            root: true,
+                        });
 
                         commit('harvestedBlockStats', seed);
-                        commit('isFetchingHarvestedBlockStats', false)
+                        commit('isFetchingHarvestedBlockStats', false);
                     },
                     complete: () => commit('isFetchingHarvestedBlockStats', false),
                 });

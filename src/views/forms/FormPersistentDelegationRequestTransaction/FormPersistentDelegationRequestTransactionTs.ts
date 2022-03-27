@@ -274,7 +274,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
     protected get isNodeKeyLinked(): boolean {
         return !!this.currentSignerAccountInfo?.supplementalPublicKeys.node;
     }
-    
+
     public get hasAccountUnlockModal(): boolean {
         return this.isUnlockingAccount;
     }
@@ -341,8 +341,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
             if (this.currentSignerHarvestingModel?.selectedHarvestingNode) {
                 this.formItems.nodeModel = this.currentSignerHarvestingModel.selectedHarvestingNode;
             }
-        } 
-        else {
+        } else {
             this.formItems.nodeModel = { nodePublicKey: '' } as NodeModel;
         }
 
@@ -447,9 +446,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
     /**
      * To get persistent delegation request transaction
      */
-    protected getPersistentDelegationRequestTransaction(
-        transactionSigner: TransactionSigner = this.tempTransactionSigner,
-    ): Transaction[] {
+    protected getPersistentDelegationRequestTransaction(transactionSigner: TransactionSigner = this.tempTransactionSigner): Transaction[] {
         const maxFee = UInt64.fromUint(this.formItems.maxFee) || UInt64.fromUint(this.feesConfig.fast);
         if (this.action !== HarvestingAction.STOP) {
             const persistentDelegationReqTx = PersistentDelegationRequestTransaction.createPersistentDelegationRequestTransaction(
@@ -483,8 +480,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
                     maxFee,
                 ),
             ];
-        }
-        else if (type === 'vrf') {
+        } else if (type === 'vrf') {
             this.vrfPrivateKeyTemp = this.newVrfKeyAccount?.privateKey;
             return [
                 this.createVrfKeyLinkTx(
@@ -569,7 +565,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
             this.vrfPrivateKeyTemp = this.newVrfKeyAccount?.privateKey;
         }
 
-        if (! this.isMultisigMode()) {
+        if (!this.isMultisigMode()) {
             const aggregate = AggregateTransaction.createComplete(
                 Deadline.create(this.epochAdjustment),
                 txs.map((t) => t.toAggregate(this.currentSignerAccount)),
@@ -597,9 +593,9 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
             return this.getKeyLinkTransactions();
         }
     }
-/// end-region protected API
+    /// end-region protected API
 
-/// region event listeners
+    /// region event listeners
     public onSingleKeyOperation(type: string) {
         this.action = HarvestingAction.SINGLE_KEY;
         this.type = type;
@@ -608,8 +604,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
         if (this.type === 'account' && !this.isAccountKeyLinked) {
             this.modalImportKeyTitle = PublicKeyTitle.REMOTE;
             this.showModalImportKey = true;
-        }
-        else if (this.type === 'vrf' && !this.isVrfKeyLinked) {
+        } else if (this.type === 'vrf' && !this.isVrfKeyLinked) {
             this.modalImportKeyTitle = PublicKeyTitle.VRF;
             this.showModalImportKey = true;
         }
@@ -627,8 +622,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
         // store copy of accounts being linked
         if (accountObject.type === 'vrf') {
             this.newVrfKeyAccount = accountObject.account;
-        }
-        else if (accountObject.type === 'account') {
+        } else if (accountObject.type === 'account') {
             this.newRemoteAccount = accountObject.account;
         }
 
@@ -645,7 +639,6 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
      * @see {FormTransactionBase.onSubmit}
      */
     public onSubmit() {
-
         // bail out on invalid node
         if (
             !this.isAllKeysLinked &&
@@ -659,22 +652,22 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
         // keeps state about key changes
         switch (this.action) {
             case HarvestingAction.SINGLE_KEY:
-            this.hasNodeKeyChange = this.type === 'node';
-            this.hasAccountKeyChange = this.type === 'account';
-            this.hasVrfKeyChange = this.type === 'vrf';
-            break;
+                this.hasNodeKeyChange = this.type === 'node';
+                this.hasAccountKeyChange = this.type === 'account';
+                this.hasVrfKeyChange = this.type === 'vrf';
+                break;
 
             case HarvestingAction.ACTIVATE:
-            Vue.set(this, 'isActivatingHarvesting', true);
-            break;
+                Vue.set(this, 'isActivatingHarvesting', true);
+                break;
 
             default:
             case HarvestingAction.START:
             case HarvestingAction.STOP:
-            this.hasNodeKeyChange = !this.isNodeKeyLinked;
-            this.hasAccountKeyChange = !this.isAccountKeyLinked;
-            this.hasVrfKeyChange = !this.isVrfKeyLinked;
-            break;
+                this.hasNodeKeyChange = !this.isNodeKeyLinked;
+                this.hasAccountKeyChange = !this.isAccountKeyLinked;
+                this.hasVrfKeyChange = !this.isVrfKeyLinked;
+                break;
         }
 
         // updates component state
@@ -690,19 +683,18 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
     /**
      * Listener called when FormTransactionBase emits a `on-confirmation-success`
      * event which means the transactions were [successfully] signed.
-     * 
+     *
      * Broadcating is yet to happen in a parallel thread.
-     * 
+     *
      * @see {FormTransactionBase.onConfirmationSuccess}
      */
     public onHarvestingActionSubmitted() {
-
         const accountAddress = this.currentSignerHarvestingModel.accountAddress;
 
         // if we had a remote key change, save it
         if (this.hasAccountKeyChange) {
             let encRemotePrivateKey = null;
-            if (!! this.remotePrivateKeyTemp) {
+            if (!!this.remotePrivateKeyTemp) {
                 encRemotePrivateKey = Crypto.encrypt(this.remotePrivateKeyTemp, this.password);
             }
 
@@ -713,7 +705,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
         // if we had a vrf key change, save it
         if (this.hasVrfKeyChange) {
             let encVrfPrivateKey = null;
-            if (!! this.vrfPrivateKeyTemp) {
+            if (!!this.vrfPrivateKeyTemp) {
                 encVrfPrivateKey = Crypto.encrypt(this.vrfPrivateKeyTemp, this.password);
             }
 
@@ -736,8 +728,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
             });
 
             Vue.set(this, 'isActivatingHarvesting', false);
-        }
-        else {
+        } else {
             this.$store.dispatch('harvesting/UPDATE_ACCOUNT_IS_PERSISTENT_DEL_REQ_SENT', {
                 accountAddress,
                 isPersistentDelReqSent: false,
@@ -789,9 +780,9 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
         }
 
         // checks for non-zero importance
-        if (this.accountsInfo.find(
-            (k) => k.address.plain() === this.currentSignerHarvestingModel.accountAddress
-        ).importance.compact() === 0) {
+        if (
+            this.accountsInfo.find((k) => k.address.plain() === this.currentSignerHarvestingModel.accountAddress).importance.compact() === 0
+        ) {
             this.$store.dispatch('notification/ADD_ERROR', this.$t('harvesting_account_has_zero_importance'));
             return;
         }
@@ -799,7 +790,7 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
         // trigger unlock window for HW
         if (this.isLedger) {
             this.hasLedgerAccountUnlockModal = true;
-            return ;
+            return;
         }
 
         // prepare harvesting action submission
@@ -827,5 +818,5 @@ export class FormPersistentDelegationRequestTransactionTs extends FormTransactio
     public onActivate() {
         this.hasAccountUnlockModal = true;
     }
-/// end-region event listeners´
+    /// end-region event listeners´
 }

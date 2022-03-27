@@ -41,7 +41,7 @@ export class PluginTableService extends AssetTableService {
      * Return table values to be displayed in a table rows
      */
     public getTableRows(): any[] {
-        if (! this.plugins) {
+        if (!this.plugins) {
             return [];
         }
 
@@ -51,10 +51,7 @@ export class PluginTableService extends AssetTableService {
                 // - map table fields
                 return {
                     status: pluginInfo.status,
-                    name: (!!pluginInfo.friendlyName && pluginInfo.friendlyName.length
-                        ? pluginInfo.friendlyName
-                        : pluginInfo.name
-                    ),
+                    name: !!pluginInfo.friendlyName && pluginInfo.friendlyName.length ? pluginInfo.friendlyName : pluginInfo.name,
                     version: `v${pluginInfo.version}`,
                     description: pluginInfo.description,
                     author: !!pluginInfo.author && 'name' in pluginInfo.author ? pluginInfo.author.name : 'Unknown',

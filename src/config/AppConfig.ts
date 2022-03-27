@@ -48,14 +48,14 @@ const defaultAppConfig: AppConfig = {
         SEED_ACCOUNT_NAME_PREFIX: 'Identity-',
         ANNOUNCE_TRANSACTION_TIMEOUT: 240000,
         DECIMAL_SEPARATOR: Number('1.1').toLocaleString().substring(1, 2),
-        MIN_HARVESTER_BALANCE: 2000000000
+        MIN_HARVESTER_BALANCE: 2000000000,
     },
     languages: [
         { value: 'en-US', label: 'English' },
         { value: 'zh-CN', label: '中文' },
         { value: 'ja-JP', label: '日本語' },
         { value: 'fr-FR', label: 'Français' },
-        { value: 'de-DE', label: 'Deutsch' }
+        { value: 'de-DE', label: 'Deutsch' },
     ],
     marketServerUrl: 'http://app.nemcn.io',
     articlesFeedUrl: 'https://dhealth.network/feed',

@@ -1,10 +1,7 @@
 <template>
     <div v-if="!!selectedPlugin" class="plugin-page-container">
         <div v-if="pluginComponent !== null">
-            <Component
-                :is="pluginComponent"
-                @prepared="onTransactionPrepared"
-                @account-request="onAccountRequestIntercepted"></Component>
+            <Component :is="pluginComponent" @prepared="onTransactionPrepared" @account-request="onAccountRequestIntercepted"></Component>
         </div>
         <div v-else>
             <span>This plugin does not include a page.</span>

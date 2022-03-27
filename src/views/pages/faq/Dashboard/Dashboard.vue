@@ -357,7 +357,6 @@
                                 </div>
                                 <div class="faq-category-subtext">{{ $t('faq_category_sub_fifth') }}</div>
                             </div>
-
                         </div>
                     </div>
                 </div>

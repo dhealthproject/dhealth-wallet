@@ -1,12 +1,6 @@
 <template>
     <div>
-        <TableDisplay
-            asset-type="plugin"
-            class="table-section"
-            :pagination-type="'scroll'"
-            :page-size="20"
-            @on-clicked-row="onRowClick"
-        >
+        <TableDisplay asset-type="plugin" class="table-section" :pagination-type="'scroll'" :page-size="20" @on-clicked-row="onRowClick">
             <template v-slot:table-title>
                 <h1 class="section-title">
                     {{ $t('title_plugin_manager') }}

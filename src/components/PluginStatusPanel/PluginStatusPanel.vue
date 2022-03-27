@@ -1,9 +1,11 @@
 <template>
     <div class="plugin-status-wrapper">
-        <div :class="{
-            'plugin-status-inner-container': true,
-            'justify-center': !pluginUsageDescriptor.action,
-        } ">
+        <div
+            :class="{
+                'plugin-status-inner-container': true,
+                'justify-center': !pluginUsageDescriptor.action,
+            }"
+        >
             <div class="status-container">
                 <div class="title">
                     <span class="title_txt">{{ pluginActionDescriptor.label }}</span>
@@ -27,9 +29,7 @@
                 </div>
             </div>
 
-            <div
-                v-if="pluginUsageDescriptor.action"
-                class="version-container">
+            <div v-if="pluginUsageDescriptor.action" class="version-container">
                 <div class="title">
                     <span class="title_txt">{{ $t('plugins_panel_usenow') }}</span>
                 </div>
