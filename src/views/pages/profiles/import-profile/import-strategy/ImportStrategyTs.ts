@@ -37,12 +37,12 @@ export default class ImportStrategyTs extends Vue {
             description: 'import_mnemonic_passphrase_create_profile',
             route: 'profiles.importProfile.info',
         },
-        // {
-        //     image: walletTypeImages.ledgerImg,
-        //     title: 'access_ledger',
-        //     description: 'access_your_ledger_account',
-        //     route: 'profiles.accessLedger.info',
-        // },
+        {
+            image: walletTypeImages.ledgerImg,
+            title: 'access_ledger',
+            description: 'access_your_ledger_account',
+            route: 'profiles.accessLedger.info',
+        },
     ];
 
     /**

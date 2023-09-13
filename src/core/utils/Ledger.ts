@@ -27,7 +27,7 @@ const CLA_FIELD = 0xe0;
  * @example
  * import { SymbolLedger } from '@/core/utils/Ledger'
  * const sym = new SymbolLedger();
- "44'/4343'/account'/change/accountIndex"
+ "44'/10111'/account'/change/accountIndex"
  */
 
 export class SymbolLedger {
