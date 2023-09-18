@@ -123,8 +123,6 @@ export default class AccessLedgerTs extends Vue {
     async mounted() {
         this.accountService = new AccountService();
         await this.$store.dispatch('temporary/initialize');
-        this.$store.commit('account/resetSelectedAddressesToInteract');
-        this.$store.commit('account/resetSelectedAddressesOptInToInteract');
     }
 
     /**
