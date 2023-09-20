@@ -389,7 +389,10 @@ export class ModalTransactionConfirmationTs extends Vue {
         if (signerPublicKey === this.currentAccount.publicKey.toLowerCase()) {
             const publicKey = signerPublicKey;
             const ledgerAccount = PublicAccount.createFromPublicKey(publicKey.toUpperCase(), networkType);
-            const multisigAccount = PublicAccount.createFromPublicKey(this.command.signerPublicKey, this.networkType);
+            let multisigAccount;
+            if (this.command.signerPublicKey) {
+                multisigAccount = PublicAccount.createFromPublicKey(this.command.signerPublicKey, this.networkType);
+            }
             const stageTransactions = this.command.stageTransactions;
             const maxFee = stageTransactions.sort((a, b) => a.maxFee.compare(b.maxFee))[0].maxFee;
             // - open signature modal

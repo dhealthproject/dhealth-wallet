@@ -527,7 +527,11 @@ export default {
             // update the partial transaction cosignatures
             transactions[index] = transactions[index].addCosignatures([cosignature]);
 
-            commit('partialTransactions', transactions);
+            commit('partialTransactions', {
+                transactions: transactions,
+                refresh: true,
+                pageInfo: getters['currentConfirmedPage'],
+            });
             commit('setAllTransactions');
             commit('filterTransactions', {
                 filterOption: null,

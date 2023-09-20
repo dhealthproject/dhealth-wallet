@@ -32,7 +32,7 @@ export class AccountService {
      * Default account derivation path
      * @var {string}
      */
-    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/4343'/0'/0'/0'`;
+    private static readonly DEFAULT_ACCOUNT_PATH_MAIN_NET = `m/44'/10111'/0'/0'/0'`;
     private static readonly DEFAULT_ACCOUNT_PATH_TEST_NET = `m/44'/1'/0'/0'/0'`;
 
     public getAccounts(): AccountModel[] {

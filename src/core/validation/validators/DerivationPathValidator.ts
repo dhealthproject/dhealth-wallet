@@ -28,7 +28,7 @@ export class DerivationPathValidator {
      */
     public static validate(value: any, networkType: NetworkType): boolean {
         if (networkType === NetworkType.MAIN_NET) {
-            if (value.match(/^m\/44'\/4343'\/[0-9]+'\/[0-9]+'\/[0-9]+'/)) {
+            if (value.match(/^m\/44'\/10111'\/[0-9]+'\/[0-9]+'\/[0-9]+'/)) {
                 return value;
             }
         } else {

@@ -20,6 +20,8 @@ import createImg from '@/views/resources/img/icons/Read.svg';
 // @ts-ignore
 import seedImg from '@/views/resources/img/icons/Incoming.svg';
 // @ts-ignore
+import ledgerImg from '@/views/resources/img/login/ledger.png';
+// @ts-ignore
 import importStepImage1 from '@/views/resources/img/login/1_4.png';
 // @ts-ignore
 import importStepImage2 from '@/views/resources/img/login/2_4.png';
@@ -125,6 +127,7 @@ import infoWhite from '@/views/resources/img/icons/info-white.png';
 export const walletTypeImages = {
     createImg,
     seedImg,
+    ledgerImg,
 };
 
 export const importStepImage = {
